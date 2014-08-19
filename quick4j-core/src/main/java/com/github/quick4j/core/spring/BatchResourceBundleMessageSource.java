@@ -8,6 +8,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 /**
+ * 支持Ant-style风格的国际化文件批量加载。
  * @author zhaojh
  */
 public class BatchResourceBundleMessageSource extends ResourceBundleMessageSource {
