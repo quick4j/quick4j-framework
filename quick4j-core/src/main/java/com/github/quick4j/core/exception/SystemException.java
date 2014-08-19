@@ -1,7 +1,22 @@
 package com.github.quick4j.core.exception;
 
 /**
- * Created by zhaojh on 14-8-19.
+ * @author zhaojh
  */
-public class SystemException {
+public class SystemException extends BaseException{
+    public SystemException(String message) {
+        super(message);
+    }
+
+    public SystemException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public SystemException(Throwable cause) {
+        super(cause);
+    }
+
+    public SystemException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

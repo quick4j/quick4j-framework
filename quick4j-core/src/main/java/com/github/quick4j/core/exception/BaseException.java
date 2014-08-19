@@ -1,7 +1,22 @@
 package com.github.quick4j.core.exception;
 
 /**
- * Created by zhaojh on 14-8-19.
+ * @author zhaojh
  */
-public class BaseException {
+public class BaseException extends RuntimeException{
+    public BaseException(String message) {
+        super(message);
+    }
+
+    public BaseException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public BaseException(Throwable cause) {
+        super(cause);
+    }
+
+    public BaseException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

@@ -1,7 +1,31 @@
 package com.github.quick4j.core.exception;
 
 /**
- * Created by zhaojh on 14-8-19.
+ * @author zhaojh
  */
-public class BizException {
+public class BizException extends BaseException{
+    private String code;
+    private Object[] args;
+
+    public BizException(String message) {
+        super(message);
+        this.code = message;
+    }
+
+    public BizException(String message, Object[] args){
+        super(message);
+        this.code = message;
+        this.args = args;
+    }
+
+    public BizException(String message, Object[] args, Throwable cause) {
+        super(message, cause);
+        this.code = message;
+        this.args = args;
+    }
+
+    @Override
+    public String getMessage() {
+        return "";
+    }
 }

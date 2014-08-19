@@ -1,7 +1,18 @@
 package com.github.quick4j.core.exception;
 
 /**
- * Created by zhaojh on 14-8-19.
+ * @author zhaojh
  */
-public class NotFoundException {
+public class NotFoundException extends BizException {
+    public NotFoundException(String message) {
+        super(message);
+    }
+
+    public NotFoundException(String message, Object[] args) {
+        super(message, args);
+    }
+
+    public NotFoundException(String message, Object[] args, Throwable cause) {
+        super(message, args, cause);
+    }
 }
