@@ -1,9 +1,9 @@
-package com.github.quick4j.core.mybatis.pagination;
+package com.github.quick4j.core.mybatis.interceptor;
 
-import com.github.quick4j.core.mybatis.pagination.dialect.Dialect;
-import com.github.quick4j.core.mybatis.pagination.dialect.support.DialectFactory;
-import com.github.quick4j.core.mybatis.pagination.helper.SqlHelper;
-import com.github.quick4j.core.mybatis.pagination.util.PatternMatchUtils;
+import com.github.quick4j.core.mybatis.interceptor.dialect.Dialect;
+import com.github.quick4j.core.mybatis.interceptor.dialect.support.DialectFactory;
+import com.github.quick4j.core.mybatis.interceptor.helper.SqlHelper;
+import com.github.quick4j.core.mybatis.interceptor.util.PatternMatchUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
