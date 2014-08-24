@@ -1,7 +1,19 @@
 package com.github.quick4j.core.util;
 
+import java.util.UUID;
+
 /**
- * Created by zhaojh on 14-8-21.
+ * @author zhaojh
  */
-public class UUIDGenerator {
+public final class UUIDGenerator {
+    private UUIDGenerator(){}
+
+    public static String generate32RandomUUID(){
+        String uuid = generateRandomUUID();
+        return uuid.replaceAll("-", "").toUpperCase();
+    }
+
+    public static String generateRandomUUID(){
+        return UUID.randomUUID().toString();
+    }
 }
