@@ -106,7 +106,8 @@ public class AutomaticRegistrationSpringServlet implements WebApplicationInitial
             sb.append(contextConfigLocation);
         }
 
-        sb.append(",classpath*:config/*-configure.xml,classpath*:config/*-context.xml");
+        sb.append(",classpath*:config/spring-config-*.xml");
+        logger.info("contextConfigLocation: {}", sb.toString());
         servletContext.setInitParameter("contextConfigLocation", sb.toString());
     }
 
