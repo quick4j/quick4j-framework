@@ -57,7 +57,6 @@ public class PaginationInterceptor implements Interceptor {
 
         int offset = rowBounds.getOffset();
         int limit = rowBounds.getLimit();
-
         logger.info("offset: {} , limit: {}", offset, limit);
 
         boolean intercept = PatternMatchUtils.simpleMatch(pagingSqlIdRegex, mappedStatement.getId());
@@ -107,11 +106,13 @@ public class PaginationInterceptor implements Interceptor {
 
     @Override
     public Object plugin(Object target) {
-        if(target instanceof StatementHandler){
-            return Plugin.wrap(target, this);
-        }else{
-            return target;
-        }
+//        if(target instanceof StatementHandler){
+//            return Plugin.wrap(target, this);
+//        }else{
+//            return target;
+//        }
+
+        return Plugin.wrap(target, this);
     }
 
     private String getDialectTypeValidValues(){
