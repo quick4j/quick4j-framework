@@ -1,6 +1,6 @@
 {
     "name": "dictionary",
-    "dataModel": "com.github.jwadp.module.dictionary.model.DicItem",
+    "dataModel": "com.github.quick4j.plugin.dictionary.entity.DicItem",
     "columns": [
         [
             {
