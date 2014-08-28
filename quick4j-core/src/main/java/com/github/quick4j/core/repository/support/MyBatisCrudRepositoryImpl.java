@@ -76,9 +76,9 @@ public class MyBatisCrudRepositoryImpl<T extends Entity, P> implements MyBatisCr
     public void insert(List<T> entities) {
         if(null == entities || entities.isEmpty()) return;
 
-        String mapperNamespace = getInsertSql(entities.get(0));
-        for(Entity entity : entities){
-            sqlSessionTemplate.insert(mapperNamespace, entity);
+//        String mapperNamespace = getInsertSql(entities.get(0));
+        for(T entity : entities){
+            insert(entity);
         }
     }
 
@@ -91,9 +91,9 @@ public class MyBatisCrudRepositoryImpl<T extends Entity, P> implements MyBatisCr
     public void update(List<T> entities) {
         if(null == entities || entities.isEmpty()) return;
 
-        String mapperNamespace = getUpdateOneSql(entities.get(0));
-        for (Entity entity : entities){
-            sqlSessionTemplate.update(mapperNamespace, entity);
+//        String mapperNamespace = getUpdateOneSql(entities.get(0));
+        for (T entity : entities){
+            update(entity);
         }
     }
 
