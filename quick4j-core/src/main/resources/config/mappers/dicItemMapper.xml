@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.quick4j.plugin.dictionary.entity.DicItemMapper">
+    <resultMap id="dicItemResult" type="com.github.quick4j.plugin.dictionary.entity.DicItem">
+        <constructor>
+            <arg column="dic_code" javaType="String"/>
+            <arg column="dic_name" javaType="String"/>
+            <arg column="dic_item_text" javaType="String"/>
+            <arg column="dic_item_value" javaType="String"/>
+            <arg column="dic_item_index" javaType="int"/>
+        </constructor>
+        <result property="id" column="id"/>
+    </resultMap>
+
+    <select id="selectOne" resultMap="dicItemResult" parameterType="string">
+        select id, dic_code, dic_name, dic_item_text, dic_item_value, dic_item_index
+        from sys_dictionary
+        where id = #{id}
+    </select>
+
+    <select id="selectList" resultMap="dicItemResult" parameterType="map">
+        select id, dic_code, dic_name, dic_item_text, dic_item_value, dic_item_index
+        from sys_dictionary
+        where dic_code = #{code}
+    </select>
+
+    <select id="selectPaging" resultMap="dicItemResult" parameterType="map">
+        select id, dic_code, dic_name, dic_item_text, dic_item_value, dic_item_index
+        from sys_dictionary
+        <where>
+            <if test="code != null and code != ''">
+                dic_code = #{code}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="com.github.quick4j.plugin.dictionary.entity.DicItem">
+        insert into sys_dictionary(
+          id, dic_code, dic_name, dic_item_text, dic_item_value, dic_item_index
+        )values(#{id}, #{code}, #{name}, #{text}, #{value}, #{index})
+    </insert>
+
+    <update id="updateOne" parameterType="com.github.quick4j.plugin.dictionary.entity.DicItem">
+        update sys_dictionary
+        <set>
+            <if test="name != null and name != ''">
+                dic_name = #{name},
+            </if>
+            <if test="text != null and text != ''">
+                dic_item_text = #{text},
+            </if>
+            <if test="value != null and value != ''">
+                dic_item_value = #{value},
+            </if>
+            <if test="index != null and index != ''">
+                dic_item_index = #{index},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOne" parameterType="string">
+        delete from sys_dictionary where id = #{id}
+    </delete>
+</mapper>
