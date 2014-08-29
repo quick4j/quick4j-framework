@@ -63,6 +63,10 @@ public class AutomaticRegistrationSpringServlet implements WebApplicationInitial
     }
 
     private String getServletNameFromConfigFilename(String servletConfigFilename){
+        if(servletConfigFilename.indexOf('-') == -1){
+            String message = "[%s]命名不符合规范，请按[servlet-name]-servlet.xml格式修改。";
+            throw new RuntimeException(String.format(message, servletConfigFilename));
+        }
         return servletConfigFilename.split("-")[0];
     }
 
