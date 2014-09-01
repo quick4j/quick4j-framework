@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.quick4j.plugin.logging.entity.OperationLogMapper">
+    <resultMap id="logResult" type="com.github.quick4j.plugin.logging.entity.OperationLog">
+        <constructor>
+            <arg column="user_id" javaType="String"/>
+            <arg column="user_name" javaType="String"/>
+            <arg column="create_time" javaType="long"/>
+            <arg column="content" javaType="String"/>
+            <arg column="method_args" javaType="int"/>
+        </constructor>
+        <result property="id" column="id"/>
+    </resultMap>
+
+    <select id="selectPaging" resultMap="logResult" parameterType="map">
+        select id, user_id, user_name, create_time, content, method_args
+        from sys_operation_log
+        <where>
+          <if test="beginTime != null">
+              <![CDATA[ creat_time >= beginTime ]]>
+          </if>
+          <if test="endTime != null">
+              <![CDATA[ create_time < endTime ]]>
+          </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insert" parameterType="com.github.quick4j.plugin.logging.entity.OperationLog">
+        insert into sys_operation_log(id, user_id, user_name, create_time, content, method_args)
+        values(#{id}, #{userid}, #{username}, #{createTime}, #{content}, #{data})
+    </insert>
+</mapper>
