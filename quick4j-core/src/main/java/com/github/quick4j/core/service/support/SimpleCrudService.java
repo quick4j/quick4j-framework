@@ -38,7 +38,7 @@ public class SimpleCrudService<T extends Entity, P> implements CrudService<T, P>
 
     @Override
     public T save(T entity) {
-        if(StringUtils.isBlank(entity.getId())){
+        if(entity.isNew()){
             return insert(entity);
         }else{
             return update(entity);
@@ -51,7 +51,7 @@ public class SimpleCrudService<T extends Entity, P> implements CrudService<T, P>
         List<T> updating = new ArrayList<T>();
 
         for(T entity : entities){
-            if(StringUtils.isBlank(entity.getId())){
+            if(entity.isNew()){
                 entity.setId(UUIDGenerator.generate32RandomUUID());
                 inserting.add(entity);
             }else{
