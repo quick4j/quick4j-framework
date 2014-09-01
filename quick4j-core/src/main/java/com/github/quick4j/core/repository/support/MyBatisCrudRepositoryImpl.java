@@ -8,7 +8,6 @@ import com.github.quick4j.core.mybatis.interceptor.PaginationInterceptor;
 import com.github.quick4j.core.mybatis.interceptor.model.DataPaging;
 import com.github.quick4j.core.mybatis.interceptor.model.Pageable;
 import com.github.quick4j.core.repository.MyBatisCrudRepository;
-import com.github.quick4j.core.util.JsonUtils;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -125,7 +124,7 @@ public class MyBatisCrudRepositoryImpl<T extends Entity, P> implements MyBatisCr
     protected String getMapperNamespace(Class<T> clazz){
         MapperNamespace mapperNamespace = clazz.getAnnotation(MapperNamespace.class);
         if(null != mapperNamespace){
-//            logger.info("mapperNamespace: {}", mapperNamespace);
+//            logging.info("mapperNamespace: {}", mapperNamespace);
             return mapperNamespace.value();
         }else{
             throw new NotFoundException("entity.mappernamespace.notfound", new Object[]{clazz.getName()});
