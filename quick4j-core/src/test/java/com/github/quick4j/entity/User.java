@@ -2,10 +2,12 @@ package com.github.quick4j.entity;
 
 import com.github.quick4j.core.entity.Entity;
 import com.github.quick4j.core.mybatis.annotation.MapperNamespace;
+import com.github.quick4j.plugin.logging.annontation.Auditable;
 
 /**
  * @author zhaojh
  */
+@Auditable
 @MapperNamespace("com.github.quick4j.entity.UserMapper")
 public class User extends Entity{
     private String loginName;
