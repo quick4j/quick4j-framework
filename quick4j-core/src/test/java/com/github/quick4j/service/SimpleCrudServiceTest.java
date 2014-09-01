@@ -92,6 +92,7 @@ public class SimpleCrudServiceTest {
     @Test
     @Transactional
     @Rollback
+    @Ignore
     public void selectPagingTest(){
         List<User> users = prepare();
         simpleCrudService.save(users);
