@@ -13,6 +13,7 @@ public abstract class AbstractEntity {
 
     public abstract void setId(String id);
 
+    @JsonIgnore
     public boolean isNew(){
         return null == getId();
     }
