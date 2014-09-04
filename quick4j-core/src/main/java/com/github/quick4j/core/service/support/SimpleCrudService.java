@@ -63,6 +63,14 @@ public class SimpleCrudService<T extends Entity, P> implements CrudService<T, P>
 
     private T insert(T entity){
         mybatisRepository.insert(entity);
+
+        List<Entity> slaveList = (List<Entity>) entity.getSlave();
+        if(null != slaveList){
+            for (Entity slave : slaveList){
+                mybatisRepository.insert(slave);
+            }
+        }
+
         return (T) mybatisRepository.findOne(entity.getClass(), entity.getId());
     }
 
