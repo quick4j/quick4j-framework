@@ -1,7 +1,7 @@
 package com.github.quick4j.core.service.support;
 
 import com.github.quick4j.core.entity.Entity;
-import com.github.quick4j.core.repository.MyBatisCrudRepository;
+import com.github.quick4j.core.repository.mybatis.MyBatisRepository;
 import com.github.quick4j.core.service.Criteria;
 
 import java.util.List;
@@ -11,39 +11,39 @@ import java.util.List;
  */
 public class MyBatisCriteria<T extends Entity, P> implements Criteria<T, P>{
     private Class<T> entity;
-    private MyBatisCrudRepository<T, P> myBatisCrudRepository;
+    private MyBatisRepository myBatisRepository;
 
-    MyBatisCriteria(Class<T> entity, MyBatisCrudRepository<T, P> myBatisCrudRepository) {
+    MyBatisCriteria(Class<T> entity, MyBatisRepository myBatisCrudRepository) {
         this.entity = entity;
-        this.myBatisCrudRepository = myBatisCrudRepository;
+        this.myBatisRepository = myBatisCrudRepository;
     }
 
     @Override
     public T findOne(String id) {
-        return myBatisCrudRepository.findOne(entity, id);
+        return myBatisRepository.findOne(entity, id);
     }
 
     @Override
-    public List<T> list() {
-        return myBatisCrudRepository.findAll(entity);
+    public List<T> findAll() {
+        return myBatisRepository.findAll(entity);
     }
 
     @Override
-    public List<T> list(P parameters) {
-        return myBatisCrudRepository.findAll(entity, parameters);
+    public List<T> findAll(P parameters) {
+        return myBatisRepository.findAll(entity, parameters);
     }
 
     @Override
     public void delete(String id) {
-        myBatisCrudRepository.delete(entity, id);
+        myBatisRepository.delete(entity, id);
     }
 
     @Override
     public void delete(String[] ids) {
-        myBatisCrudRepository.delete(entity, ids);
+        myBatisRepository.delete(entity, ids);
     }
 
-    protected MyBatisCrudRepository<T, P> getMyBatisCrudRepository(){
-        return myBatisCrudRepository;
+    protected MyBatisRepository getMyBatisRepository(){
+        return myBatisRepository;
     }
 }

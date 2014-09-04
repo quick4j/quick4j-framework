@@ -3,7 +3,7 @@ package com.github.quick4j.core.service.support;
 import com.github.quick4j.core.entity.Entity;
 import com.github.quick4j.core.mybatis.interceptor.model.DataPaging;
 import com.github.quick4j.core.mybatis.interceptor.model.Pageable;
-import com.github.quick4j.core.repository.MyBatisCrudRepository;
+import com.github.quick4j.core.repository.mybatis.MyBatisRepository;
 import com.github.quick4j.core.service.PagingCriteria;
 
 /**
@@ -12,13 +12,13 @@ import com.github.quick4j.core.service.PagingCriteria;
 public class MyBatisPagingCriteria <T extends Entity, P> extends MyBatisCriteria<T, P> implements PagingCriteria<T, P>{
     private Class<T> entity;
 
-    MyBatisPagingCriteria(Class<T> entity, MyBatisCrudRepository<T, P> myBatisCrudRepository) {
-        super(entity, myBatisCrudRepository);
+    MyBatisPagingCriteria(Class<T> entity, MyBatisRepository myBatisRepository) {
+        super(entity, myBatisRepository);
         this.entity = entity;
     }
 
     @Override
-    public DataPaging<T> list(Pageable<P> pageable) {
-        return getMyBatisCrudRepository().findAll(entity, pageable);
+    public DataPaging<T> findAll(Pageable<P> pageable) {
+        return getMyBatisRepository().findAll(entity, pageable);
     }
 }

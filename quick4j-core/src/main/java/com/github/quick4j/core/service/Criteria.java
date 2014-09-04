@@ -8,9 +8,9 @@ import java.util.List;
 public interface Criteria<T, P> {
     T findOne(String id);
 
-    List<T> list();
+    List<T> findAll();
 
-    List<T> list(P parameters);
+    List<T> findAll(P parameters);
 
     void delete(String id);
 
