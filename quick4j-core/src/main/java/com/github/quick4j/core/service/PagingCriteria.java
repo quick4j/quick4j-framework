@@ -7,5 +7,5 @@ import com.github.quick4j.core.mybatis.interceptor.model.Pageable;
  * @author zhaojh
  */
 public interface PagingCriteria<T, P> extends Criteria<T, P>{
-    DataPaging<T> list(Pageable<P> pageable);
+    DataPaging<T> findAll(Pageable<P> pageable);
 }
