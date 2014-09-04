@@ -33,10 +33,4 @@ public interface CrudService<T, P> {
      * @return entites
      */
     List<T> save(List<T> entites);
-
-    /**
-     *
-     * @param entity
-     */
-    void delete(T entity);
 }
