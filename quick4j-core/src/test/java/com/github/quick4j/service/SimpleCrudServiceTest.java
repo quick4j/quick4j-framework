@@ -7,6 +7,8 @@ import com.github.quick4j.core.mybatis.interceptor.model.PageRequest;
 import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.CrudService;
 import com.github.quick4j.core.service.PagingCriteria;
+import com.github.quick4j.entity.Student;
+import com.github.quick4j.entity.Teacher;
 import com.github.quick4j.entity.User;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -34,10 +36,13 @@ public class SimpleCrudServiceTest {
     @Resource
     private CrudService<User, Map> simpleCrudService;
 
+    @Resource
+    private CrudService<Teacher, Map> baseCrudService;
+
     @Test
     @Transactional
     @Rollback
-    public void crudTest(){
+    public void testCrud(){
         User jack = new User();
         jack.setLoginName("jack");
         jack.setName("Jack Chen");
@@ -61,7 +66,7 @@ public class SimpleCrudServiceTest {
     @Test
     @Transactional
     @Rollback
-    public void saveListTest(){
+    public void testSaveList(){
         User jack = new User();
         jack.setLoginName("jack");
         jack.setName("Jack Chen");
@@ -92,13 +97,51 @@ public class SimpleCrudServiceTest {
     @Test
     @Transactional
     @Rollback
+    public void testBatchDelete(){
+        User jack = new User();
+        jack.setLoginName("jack");
+        jack.setName("Jack Chen");
+        jack.setPassword("456");
+
+        User tom = new User();
+        tom.setLoginName("tom");
+        tom.setName("Tom");
+        tom.setPassword("123");
+
+        List<User> list = new ArrayList<User>();
+        list.add(jack);
+        list.add(tom);
+        simpleCrudService.save(list);
+
+        Criteria<User, Map> criteria = simpleCrudService.createCriteria(User.class);
+        criteria.delete(new String[]{jack.getId(), tom.getId()});
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void testSaveMasterAndSlave(){
+        Teacher wang = new Teacher("wang");
+        Student jack = new Student("Jack");
+        Student marry = new Student("Marry");
+
+        wang.addStudent(jack);
+        wang.addStudent(marry);
+
+        baseCrudService.save(wang);
+
+    }
+
+    @Test
+    @Transactional
+    @Rollback
     @Ignore
     public void selectPagingTest(){
         List<User> users = prepare();
         simpleCrudService.save(users);
 
         PagingCriteria<User, Map> criteria = simpleCrudService.createPagingCriteria(User.class);
-        DataPaging<User> dataPaging = criteria.list(new PageRequest<Map>(1, 10));
+        DataPaging<User> dataPaging = criteria.findAll(new PageRequest<Map>(1, 10));
 
         Assert.assertThat(dataPaging.getRows(), hasItem(users.get(11)));
     }
