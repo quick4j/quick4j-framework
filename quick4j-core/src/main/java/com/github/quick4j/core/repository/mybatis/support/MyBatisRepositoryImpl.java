@@ -1,31 +1,30 @@
-package com.github.quick4j.core.repository.support;
+package com.github.quick4j.core.repository.mybatis.support;
 
 import com.github.quick4j.core.entity.Entity;
 import com.github.quick4j.core.exception.NotFoundException;
-import com.github.quick4j.core.exception.SystemException;
 import com.github.quick4j.core.mybatis.annotation.MapperNamespace;
 import com.github.quick4j.core.mybatis.interceptor.PaginationInterceptor;
 import com.github.quick4j.core.mybatis.interceptor.model.DataPaging;
 import com.github.quick4j.core.mybatis.interceptor.model.Pageable;
-import com.github.quick4j.core.repository.MyBatisCrudRepository;
-import org.apache.ibatis.session.ExecutorType;
+import com.github.quick4j.core.repository.mybatis.MyBatisRepository;
+import com.github.quick4j.core.util.UUIDGenerator;
 import org.apache.ibatis.session.RowBounds;
-import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
+ * 此类仅支持最大50（包含50）条数据的批处理，
+ * 大量数据的批处理请使用JdbcTemplate处理。
+ * 注意MyBatis的批处理回产生一个新的数据库
+ * 连接，影响Spring事务。
+ *
  * @author zhaojh
  */
-@Repository
-public class MyBatisCrudRepositoryImpl<T extends Entity, P> implements MyBatisCrudRepository<T, P> {
-    private static final Logger logger = LoggerFactory.getLogger(MyBatisCrudRepositoryImpl.class);
-
+@Repository("myBatisCrudRepository")
+public class MyBatisRepositoryImpl implements MyBatisRepository {
     public static final String SELECT_ONE_STATEMENT_ID = ".selectOne";
     public static final String SELECT_LIST_STATEMENT_ID = ".selectList";
     public static final String SELECT_PAGING_STATEMENT_ID = ".selectPaging";
@@ -42,22 +41,22 @@ public class MyBatisCrudRepositoryImpl<T extends Entity, P> implements MyBatisCr
     }
 
     @Override
-    public T findOne(Class<T> clazz, String id) {
+    public <T extends Entity> T findOne(Class<T> clazz, String id) {
         return sqlSessionTemplate.selectOne(getSelectOneSql(clazz), id);
     }
 
     @Override
-    public List<T> findAll(Class<T> clazz) {
+    public <T extends Entity> List<T> findAll(Class<T> clazz) {
         return sqlSessionTemplate.selectList(getSelectListSql(clazz));
     }
 
     @Override
-    public List<T> findAll(Class<T> clazz, P parameters) {
-        return sqlSessionTemplate.selectList(getSelectListSql(clazz), parameters);
+    public <T extends Entity, P> List<T> findAll(Class<T> clazz, P parameter) {
+        return sqlSessionTemplate.selectList(getSelectListSql(clazz), parameter);
     }
 
     @Override
-    public DataPaging<T> findAll(Class<T> clazz, Pageable pageable) {
+    public <T extends Entity> DataPaging<T> findAll(Class<T> clazz, Pageable pageable) {
         RowBounds rowBounds = new RowBounds(pageable.getOffset(), pageable.getLimit());
         List<T> rows = sqlSessionTemplate.selectList(getSelectPagingSql(clazz), pageable.getParameters(), rowBounds);
         int total = PaginationInterceptor.getPaginationTotal();
@@ -67,92 +66,84 @@ public class MyBatisCrudRepositoryImpl<T extends Entity, P> implements MyBatisCr
     }
 
     @Override
-    public void insert(T entity) {
+    public <T extends Entity> void insert(T entity) {
+        entity.setId(UUIDGenerator.generate32RandomUUID());
         sqlSessionTemplate.insert(getInsertSql(entity), entity);
     }
 
     @Override
-    public void insert(List<T> entities) {
+    public <T extends Entity> void insert(List<T> entities) {
         if(null == entities || entities.isEmpty()) return;
 
-//        String mapperNamespace = getInsertSql(entities.get(0));
+        if(entities.size() > 50) throw new RuntimeException("仅支持不超过50(包括50)条数据的批处理。");
+
         for(T entity : entities){
             insert(entity);
         }
     }
 
     @Override
-    public void update(T entity) {
+    public <T extends Entity> void update(T entity) {
         sqlSessionTemplate.update(getUpdateOneSql(entity), entity);
     }
 
     @Override
-    public void update(List<T> entities) {
+    public <T extends Entity> void update(List<T> entities) {
         if(null == entities || entities.isEmpty()) return;
 
-//        String mapperNamespace = getUpdateOneSql(entities.get(0));
+        if(entities.size() > 50) throw new RuntimeException("仅支持不超过50(包括50)条数据的批处理。");
+
         for (T entity : entities){
             update(entity);
         }
     }
 
     @Override
-    public void delete(Class<T> clazz, String id) {
+    public <T extends Entity> void delete(Class<T> clazz, String id) {
         sqlSessionTemplate.delete(getDeleteOneSql(clazz), id);
     }
 
     @Override
-    public void delete(Class<T> clazz, String[] ids) {
+    public <T extends Entity> void delete(Class<T> clazz, String[] ids) {
         if(null == ids || ids.length == 0) return;
 
-        SqlSession sqlSession = sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH);
-        try {
-            String mapperNamespace = getDeleteOneSql(clazz);
-            for(String id : ids){
-                sqlSessionTemplate.delete(mapperNamespace, id);
-            }
+        if(ids.length > 50) throw new RuntimeException("仅支持不超过50(包括50)条数据的批处理。");
 
-            sqlSession.commit();
-        }catch (Exception e){
-            sqlSession.rollback();
-            throw new SystemException("delete data failure", e);
-        }finally {
-            sqlSession.close();
+        for(String id : ids){
+            delete(clazz, id);
         }
     }
 
-    protected String getMapperNamespace(Class<T> clazz){
-        MapperNamespace mapperNamespace = clazz.getAnnotation(MapperNamespace.class);
+    protected String getMapperNamespace(Class clazz){
+        MapperNamespace mapperNamespace = (MapperNamespace) clazz.getAnnotation(MapperNamespace.class);
         if(null != mapperNamespace){
-//            logging.info("mapperNamespace: {}", mapperNamespace);
             return mapperNamespace.value();
         }else{
             throw new NotFoundException("entity.mappernamespace.notfound", new Object[]{clazz.getName()});
         }
     }
 
-    private String getSelectOneSql(Class<T> clazz){
+    private String getSelectOneSql(Class clazz){
         return getMapperNamespace(clazz) + SELECT_ONE_STATEMENT_ID;
     }
 
-    private String getSelectListSql(Class<T> clazz){
+    private String getSelectListSql(Class clazz){
         return getMapperNamespace(clazz) + SELECT_LIST_STATEMENT_ID;
     }
 
-    private String getSelectPagingSql(Class<T> clazz){
+    private String getSelectPagingSql(Class clazz){
         return getMapperNamespace(clazz) + SELECT_PAGING_STATEMENT_ID;
     }
 
-    private String getInsertSql(T entity){
-        return entity.getMapperNamespace() + INSERT_STATEMENT_ID;
+    private String getInsertSql(Entity object){
+        return object.getMapperNamespace() + INSERT_STATEMENT_ID;
     }
 
-    private String getUpdateOneSql(T entity){
-        return entity.getMapperNamespace() + UPDATE_ONE_STATEMENT_ID;
+    private String getUpdateOneSql(Entity object){
+        return object.getMapperNamespace() + UPDATE_ONE_STATEMENT_ID;
     }
 
-    private String getDeleteOneSql(Class<T> clazz){
+    private String getDeleteOneSql(Class clazz){
         return getMapperNamespace(clazz) + DELETE_ONE_STATEMENT_ID;
     }
-
 }
