@@ -18,6 +18,20 @@ public class EntityLogParser {
         return logConfig;
     }
 
+    public LogConfig parse(Class<Entity> clazz, OperationType type, Object param) throws IllegalAccessException, InstantiationException {
+        if(clazz.isAnnotationPresent(Auditable.class)){
+            Auditable auditable = clazz.getAnnotation(Auditable.class);
+            boolean isAudit = auditable != null;
+            String metaData = clazz.newInstance().getMetaData();
+            if(isAudit){
+                LogConfig logConfig = new LogConfig(isAudit, auditable.to(), metaData, new Object[]{param});
+                logConfig.setAuditContent(getLogContent(type, logConfig.getAuditContent()));
+                return logConfig;
+            }
+        }
+        return new LogConfig();
+    }
+
     private String getLogContent(OperationType type, final String value){
         String content;
         switch (type){

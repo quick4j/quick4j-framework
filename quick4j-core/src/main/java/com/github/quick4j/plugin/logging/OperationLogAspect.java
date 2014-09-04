@@ -31,7 +31,7 @@ public class OperationLogAspect {
     @Resource
     private LogRecorder logDBRecorder;
 
-    @Around(value = "execution(* com.github.quick4j.core.repository.MyBatisCrudRepository.insert(*))&& args(entity)")
+    @Around(value = "execution(* com.github.quick4j.core.repository.mybatis.MyBatisRepository.insert(*))&&args(entity)")
     public Object doRecordEntityCreate(ProceedingJoinPoint pjp, Object entity) throws Throwable {
         try {
             Object rtnValue = pjp.proceed();
@@ -42,7 +42,7 @@ public class OperationLogAspect {
         }
     }
 
-    @Around(value = "execution(* com.github.quick4j.core.repository.MyBatisCrudRepository.update(*))&& args(entity)")
+    @Around(value = "execution(* com.github.quick4j.core.repository.mybatis.MyBatisRepository.update(*))&&args(entity)")
     public Object doRecordEntityModify(ProceedingJoinPoint pjp, Object entity) throws Throwable {
         try {
             Object rtnValue = pjp.proceed();
@@ -53,11 +53,11 @@ public class OperationLogAspect {
         }
     }
 
-    @Around(value = "execution(* com.github.quick4j.core.repository.MyBatisCrudRepository.delete(*))&& args(entity)")
-    public Object doRecordEntityDelete(ProceedingJoinPoint pjp, Object entity) throws Throwable {
+    @Around(value = "execution(* com.github.quick4j.core.repository.mybatis.MyBatisRepository.delete(Class, *))&&args(clazz, id)")
+    public Object doRecordEntityDelete(ProceedingJoinPoint pjp, Class clazz, Object id) throws Throwable {
         try {
             Object rtnValue = pjp.proceed();
-            writeLog(entityLogParser.parse(entity, OperationType.DELETE));
+            writeLog(entityLogParser.parse(clazz, OperationType.DELETE, id));
             return rtnValue;
         } catch (Throwable throwable) {
             throw throwable;
@@ -77,9 +77,13 @@ public class OperationLogAspect {
 
     private void writeLog(LogConfig logConfig){
         if(!logConfig.isAudit()) return;
-        System.out.println("日志内容：" + logConfig.getAuditContent());
-        System.out.println("操作数据：" + JsonUtils.toJson(logConfig.getArgs()));
-        System.out.println("存储介质：" + logConfig.getStorageMedium());
+//        System.out.println("日志内容：" + logConfig.getAuditContent());
+//        System.out.println("操作数据：" + JsonUtils.toJson(logConfig.getArgs()));
+//        System.out.println("存储介质：" + logConfig.getStorageMedium());
+
+        logger.info("日志内容：{}", logConfig.getAuditContent());
+        logger.info("操作数据：{}", JsonUtils.toJson(logConfig.getArgs()));
+        logger.info("存储介质：{}", logConfig.getStorageMedium());
 
         OperationLog log = new OperationLog("123456", "guset", new Date().getTime(), logConfig.getAuditContent(), JsonUtils.toJson(logConfig.getArgs()));
 
