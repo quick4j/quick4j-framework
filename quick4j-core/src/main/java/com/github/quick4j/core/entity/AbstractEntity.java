@@ -14,12 +14,12 @@ public abstract class AbstractEntity {
     public abstract void setId(String id);
 
     @JsonIgnore
+    public abstract String getMetaData();
+
+    @JsonIgnore
     public boolean isNew(){
         return null == getId();
     }
-
-    @JsonIgnore
-    public abstract String getMetaData();
 
     @Override
     public boolean equals(Object obj) {

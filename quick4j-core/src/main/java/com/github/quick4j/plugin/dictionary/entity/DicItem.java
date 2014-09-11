@@ -1,7 +1,10 @@
 package com.github.quick4j.plugin.dictionary.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.quick4j.core.entity.Entity;
 import com.github.quick4j.core.mybatis.annotation.MapperNamespace;
+
+import java.util.List;
 
 /**
  * @author zhaojh
@@ -32,8 +35,14 @@ public class DicItem extends Entity{
     }
 
     @Override
+    @JsonIgnore
     public String getMetaData() {
         return "字典条目";
+    }
+
+    @Override
+    public List<? extends Entity> getSlave() {
+        return null;
     }
 
     public String getCode() {

@@ -1,7 +1,5 @@
 package com.github.quick4j.core.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.List;
 
 /**
@@ -20,8 +18,5 @@ public abstract class Entity extends AbstractEntity{
         this.id = id;
     }
 
-    @JsonIgnore
-    public List<? extends Entity> getSlave(){
-        return null;
-    }
+    public abstract List<? extends Entity> getSlave();
 }
