@@ -34,6 +34,16 @@ public class MyBatisCriteria<T extends Entity, P> implements Criteria<T, P>{
     }
 
     @Override
+    public List<T> findAll(List<String> ids) {
+        return myBatisRepository.findAll(entity, ids);
+    }
+
+    @Override
+    public List<T> findAll(String statementShortName, P paramerters) {
+        return myBatisRepository.findAll(entity, statementShortName, paramerters);
+    }
+
+    @Override
     public void delete(String id) {
         myBatisRepository.delete(entity, id);
     }
