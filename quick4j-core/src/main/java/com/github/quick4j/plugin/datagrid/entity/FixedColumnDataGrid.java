@@ -70,7 +70,7 @@ public class FixedColumnDataGrid extends AbstractDataGrid{
             FixedColumnDataGrid dataGrid = new FixedColumnDataGrid(getName(), getEntity());
 
             //frozen columns
-            for (Header frozenHeader : dataGrid.getFrozenColumns()){
+            for (Header frozenHeader : getFrozenColumns()){
                 Header header = dataGrid.newFrozenHeader();
                 for(Column column : frozenHeader){
                     header.addColumn(column.clone());
@@ -78,7 +78,7 @@ public class FixedColumnDataGrid extends AbstractDataGrid{
             }
 
             //normal columns
-            for (Header normalHeader : dataGrid.getColumns()){
+            for (Header normalHeader : getColumns()){
                 Header header = dataGrid.newHeader();
                 for(Column column : normalHeader){
                     header.addColumn(column.clone());
