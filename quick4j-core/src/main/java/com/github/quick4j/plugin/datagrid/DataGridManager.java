@@ -2,24 +2,29 @@ package com.github.quick4j.plugin.datagrid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.github.quick4j.core.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @author zhaojh
  */
-@Service("dataGridFactory")
-public class DataGridFactoryBean implements InitializingBean {
-    private static final Logger logger = LoggerFactory.getLogger(DataGridFactoryBean.class);
+@Component("dataGridManager")
+public class DataGridManager implements InitializingBean, BeanPostProcessor {
+    private static final Logger logger = LoggerFactory.getLogger(DataGridManager.class);
+
     private Map<String, DataGrid> dataGridMap = new ConcurrentHashMap<String, DataGrid>();
     private ObjectMapper mapper = null;
     private SimpleModule module = null;
@@ -31,10 +36,14 @@ public class DataGridFactoryBean implements InitializingBean {
 
     public DataGrid buildCopy(String name){
         if(dataGridMap.containsKey(name)){
-            return dataGridMap.get(name).clone();
+            return dataGridMap.get(name).copySelf();
         }else{
             return null;
         }
+    }
+
+    public DataGrid getDataGrid(String name){
+        return dataGridMap.get(name);
     }
 
     public void build(String configLocations){
@@ -46,13 +55,24 @@ public class DataGridFactoryBean implements InitializingBean {
             for (Resource resource : resources){
                 logger.info(resource.getFilename());
                 DataGrid dataGrid = mapper.readValue(resource.getFile(), DataGrid.class);
-                if(!dataGridMap.containsKey(dataGrid.getName())){
-                    dataGridMap.put(dataGrid.getName(), dataGrid);
-                }
+                registDataGrid(dataGrid);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        if(bean instanceof DataGrid){
+            registDataGrid((DataGrid) bean);
+        }
+        return bean;
     }
 
     @Override
@@ -63,5 +83,12 @@ public class DataGridFactoryBean implements InitializingBean {
         mapper.registerModule(module);
         logger.info("configLocations: {}", configLocations);
         build(configLocations);
+    }
+
+    private void registDataGrid(DataGrid dataGrid){
+        if(!dataGridMap.containsKey(dataGrid.getName())){
+            logger.info("regist dataGrid: {}", JsonUtils.toJson(dataGrid));
+            dataGridMap.put(dataGrid.getName(), dataGrid);
+        }
     }
 }

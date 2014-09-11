@@ -8,7 +8,7 @@ import com.github.quick4j.core.service.CrudService;
 import com.github.quick4j.core.service.PagingCriteria;
 import com.github.quick4j.core.web.http.AjaxResponse;
 import com.github.quick4j.plugin.datagrid.DataGrid;
-import com.github.quick4j.plugin.datagrid.DataGridFactoryBean;
+import com.github.quick4j.plugin.datagrid.DataGridManager;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class DataGridAPIController {
     private static final Logger logger = LoggerFactory.getLogger(DataGridAPIController.class);
 
     @Resource
-    private DataGridFactoryBean dataGridFactory;
+    private DataGridManager dataGridManager;
     @Resource
     private CrudService<Entity, Map> simpleCrudService;
 
@@ -46,7 +46,7 @@ public class DataGridAPIController {
     )
     @ResponseBody
     public AjaxResponse getOptions(@PathVariable("name") String name){
-        DataGrid dataGrid = dataGridFactory.buildCopy(name);
+        DataGrid dataGrid = dataGridManager.buildCopy(name);
         if(null == dataGrid){
             throw new NotFoundException("datagrid.options.notfound", new Object[]{name});
         }
@@ -70,7 +70,7 @@ public class DataGridAPIController {
                                      @RequestParam(value = "rows", required = false) String limit,
                                      HttpServletRequest request){
 
-        DataGrid dataGrid = dataGridFactory.buildCopy(name);
+        DataGrid dataGrid = dataGridManager.buildCopy(name);
 
         int _page = 1, _size = Integer.MAX_VALUE;
         if(StringUtils.isNotBlank(page) && StringUtils.isNotBlank(limit)){
@@ -84,16 +84,16 @@ public class DataGridAPIController {
             throw new NotFoundException("datagrid.notfound", new Object[]{name});
         }
 
-        String dataModelFullName = dataGrid.getDataModel();
+        String dataModelFullName = dataGrid.getEntity();
         try {
             Class clazz = Class.forName(dataModelFullName);
             PagingCriteria criteria = simpleCrudService.createPagingCriteria(clazz);
             PageRequest pageRequest = new PageRequest(_page, _size, wrapRequestMap(request));
-            DataPaging dataPaging = criteria.list(pageRequest);
+            DataPaging dataPaging = criteria.findAll(pageRequest);
             return new AjaxResponse(AjaxResponse.Status.OK, dataPaging);
 
         } catch (ClassNotFoundException e) {
-            logger.error("dataModel '{}' no exist.", dataGrid.getDataModel(), e);
+            logger.error("dataModel '{}' no exist.", dataGrid.getEntity(), e);
             throw new NotFoundException("datagrid.datamodel.notfound", new Object[]{dataModelFullName, name});
         }
     }

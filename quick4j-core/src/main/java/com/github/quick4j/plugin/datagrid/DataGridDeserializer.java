@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.quick4j.plugin.datagrid.entity.FixedColumnDataGrid;
 import com.github.quick4j.plugin.datagrid.meta.Column;
 import com.github.quick4j.plugin.datagrid.meta.Header;
 import com.github.quick4j.plugin.datagrid.meta.Toolbar;
@@ -34,16 +35,24 @@ public class DataGridDeserializer extends JsonDeserializer {
         JsonNode root = jsonParser.getCodec().readTree(jsonParser);
         String name = root.get("name").asText();
         String dataModel = root.get("dataModel").asText();
-        JsonNode columnsNode = root.get("columns");
+        JsonNode frozenColumnsNode = root.get("frozenColumns");
+        JsonNode normalColumnsNode = root.get("columns");
         JsonNode toolbarNode = root.get("toolbar");
 
         logger.debug("name: {}", name);
         logger.debug("dataModel: {}", dataModel);
 
-        List<Header> columns = deserializeColumns(columnsNode);
-        Toolbar toolbar = deserializeToolbar(toolbarNode);
+//        List<Header> frozenColumns = deserializeColumns(frozenColumnsNode);
+//        List<Header> normalColumns = deserializeColumns(normalColumnsNode);
+//        Toolbar toolbar = deserializeToolbar(toolbarNode);
 
-        return new DataGrid(name, dataModel, columns, toolbar);
+        FixedColumnDataGrid dataGrid = new FixedColumnDataGrid(name, dataModel);
+        dataGrid.setToolbar(deserializeToolbar(toolbarNode));
+
+        fillColumns(frozenColumnsNode, dataGrid.getFrozenColumns());
+        fillColumns(normalColumnsNode, dataGrid.getColumns());
+
+        return dataGrid;
     }
 
     private List<Header> deserializeColumns(JsonNode columnsNode) throws IOException {
@@ -65,6 +74,24 @@ public class DataGridDeserializer extends JsonDeserializer {
             return columns;
         }else{
             return null;
+        }
+    }
+
+    private void fillColumns(JsonNode columnsNode, List<Header> columns) throws IOException {
+        if(null != columnsNode){
+            for(Iterator<JsonNode> iterator = columnsNode.iterator(); iterator.hasNext();){
+                JsonNode node = iterator.next();
+                Header header = new Header();
+                for(Iterator<JsonNode> it = node.iterator(); it.hasNext();){
+                    String colJson = it.next().toString();
+
+                    logger.debug("column:{}", colJson);
+
+                    Column column = mapper.readValue(colJson, Column.class);
+                    header.add(column);
+                }
+                columns.add(header);
+            }
         }
     }
 

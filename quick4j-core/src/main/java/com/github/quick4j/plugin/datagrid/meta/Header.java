@@ -19,6 +19,11 @@ public class Header extends ArrayList<Column> {
         return this;
     }
 
+    public Header addColumn(Column column){
+        this.add(column);
+        return this;
+    }
+
     public Column getColumn(String field){
         for(Column column : this){
             if(field.equals(column.getField())){
