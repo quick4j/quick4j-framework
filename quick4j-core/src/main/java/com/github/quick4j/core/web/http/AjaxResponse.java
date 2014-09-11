@@ -8,6 +8,7 @@ public class AjaxResponse {
     private Object data;
     private String message;
     private String url;
+    private String method;
 
     public AjaxResponse(Status status) {
         this.status = status.value;
@@ -23,10 +24,15 @@ public class AjaxResponse {
         this.data = data;
     }
 
-    public AjaxResponse(Status status, String message, String url) {
+    public AjaxResponse(Status status, String message, String url, String method) {
         this.status = status.value;
         this.message = message;
         this.url = url;
+        this.method = method;
+    }
+
+    public String getMethod() {
+        return method;
     }
 
     public int getStatus() {
