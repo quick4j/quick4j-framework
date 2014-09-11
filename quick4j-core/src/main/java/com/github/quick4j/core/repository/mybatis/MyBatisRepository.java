@@ -15,8 +15,11 @@ public interface MyBatisRepository {
     SqlSessionTemplate getSqlSessionTemplate();
     <T extends Entity> T findOne(Class<T> clazz, String id);
     <T extends Entity> List<T> findAll(Class<T> clazz);
+    <T extends Entity> List<T> findAll(Class<T> clazz, List<String> ids);
     <T extends Entity, P> List<T> findAll(Class<T> clazz, P parameter);
+    <T extends Entity> List<T> findAll(Class<T> clazz, String statement, Object parameter);
     <T extends Entity> DataPaging<T> findAll(Class<T> clazz, Pageable pageable);
+    <T> List<T> selectList(Class<? extends Entity> clazz, String statement, Object parameter);
     <T extends Entity> void insert(T entity);
     <T extends Entity> void insert(List<T> entities);
     <T extends Entity> void update(T entity);

@@ -13,6 +13,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +28,7 @@ import java.util.List;
 public class MyBatisRepositoryImpl implements MyBatisRepository {
     public static final String SELECT_ONE_STATEMENT_ID = ".selectOne";
     public static final String SELECT_LIST_STATEMENT_ID = ".selectList";
+    public static final String SELECT_LIST_BY_IDS_STATEMENT_ID = ".selectListByIds";
     public static final String SELECT_PAGING_STATEMENT_ID = ".selectPaging";
     public static final String INSERT_STATEMENT_ID = ".insert";
     public static final String UPDATE_ONE_STATEMENT_ID = ".updateOne";
@@ -51,8 +53,19 @@ public class MyBatisRepositoryImpl implements MyBatisRepository {
     }
 
     @Override
+    public <T extends Entity> List<T> findAll(Class<T> clazz, List<String> ids) {
+        if(null == ids || ids.isEmpty()) return new ArrayList<T>();
+        return sqlSessionTemplate.selectList(getSelectListByIdsSql(clazz), ids);
+    }
+
+    @Override
     public <T extends Entity, P> List<T> findAll(Class<T> clazz, P parameter) {
         return sqlSessionTemplate.selectList(getSelectListSql(clazz), parameter);
+    }
+
+    @Override
+    public <T extends Entity> List<T> findAll(Class<T> clazz, String statement, Object parameter) {
+        return sqlSessionTemplate.selectList(getOtherSql(clazz, statement), parameter);
     }
 
     @Override
@@ -63,6 +76,11 @@ public class MyBatisRepositoryImpl implements MyBatisRepository {
         PaginationInterceptor.clean();
         DataPaging<T> dataPaging = new DataPaging<T>(rows, total);
         return dataPaging;
+    }
+
+    @Override
+    public <T> List<T> selectList(Class<? extends Entity> clazz, String statement, Object parameter) {
+        return sqlSessionTemplate.selectList(getOtherSql(clazz, statement), parameter);
     }
 
     @Override
@@ -145,5 +163,18 @@ public class MyBatisRepositoryImpl implements MyBatisRepository {
 
     private String getDeleteOneSql(Class clazz){
         return getMapperNamespace(clazz) + DELETE_ONE_STATEMENT_ID;
+    }
+
+    private String getOtherSql(Class clazz, String statementShortName){
+        if(statementShortName.startsWith("\\.")){
+            return getMapperNamespace(clazz) + statementShortName;
+        }else{
+            return getMapperNamespace(clazz) + '.' + statementShortName;
+        }
+
+    }
+
+    private String getSelectListByIdsSql(Class clazz){
+        return getMapperNamespace(clazz) + SELECT_LIST_BY_IDS_STATEMENT_ID;
     }
 }
