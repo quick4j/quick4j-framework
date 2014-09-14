@@ -9,6 +9,7 @@ import com.github.quick4j.core.service.PagingCriteria;
 import com.github.quick4j.core.web.http.AjaxResponse;
 import com.github.quick4j.plugin.datagrid.DataGrid;
 import com.github.quick4j.plugin.datagrid.DataGridManager;
+import com.github.quick4j.plugin.datagrid.DataGridPostProcessException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,18 +81,18 @@ public class DataGridAPIController {
 
         logger.info("dataGrid: {}, page: {}, size: {}", name, _page, _size);
 
-        if(null == dataGrid){
-            throw new NotFoundException("datagrid.notfound", new Object[]{name});
-        }
-
         String dataModelFullName = dataGrid.getEntity();
         try {
             Class clazz = Class.forName(dataModelFullName);
             PagingCriteria criteria = simpleCrudService.createPagingCriteria(clazz);
             PageRequest pageRequest = new PageRequest(_page, _size, wrapRequestMap(request));
             DataPaging dataPaging = criteria.findAll(pageRequest);
-            return new AjaxResponse(AjaxResponse.Status.OK, dataPaging);
 
+            if(dataGrid.isSupportPostProcess()){
+                dataGrid.getPostProcessor().process(dataPaging.getRows());
+            }
+
+            return new AjaxResponse(AjaxResponse.Status.OK, dataPaging);
         } catch (ClassNotFoundException e) {
             logger.error("dataModel '{}' no exist.", dataGrid.getEntity(), e);
             throw new NotFoundException("datagrid.datamodel.notfound", new Object[]{dataModelFullName, name});

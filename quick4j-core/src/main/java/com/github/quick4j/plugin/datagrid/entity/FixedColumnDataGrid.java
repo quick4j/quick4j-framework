@@ -93,6 +93,10 @@ public class FixedColumnDataGrid extends AbstractDataGrid{
                 }
             }
 
+            if(isSupportPostProcess()){
+                dataGrid.setPostProcessor(getPostProcessor());
+            }
+
             return dataGrid;
         }catch (Exception e){
             throw new RuntimeException(e);

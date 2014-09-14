@@ -2,6 +2,7 @@ package com.github.quick4j.plugin.datagrid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.github.quick4j.core.exception.NotFoundException;
 import com.github.quick4j.core.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,15 +36,7 @@ public class DataGridManager implements InitializingBean, BeanPostProcessor {
     }
 
     public DataGrid buildCopy(String name){
-        if(dataGridMap.containsKey(name)){
-            return dataGridMap.get(name).copySelf();
-        }else{
-            return null;
-        }
-    }
-
-    public DataGrid getDataGrid(String name){
-        return dataGridMap.get(name);
+        return getDataGrid(name).copySelf();
     }
 
     public void build(String configLocations){
@@ -72,6 +65,14 @@ public class DataGridManager implements InitializingBean, BeanPostProcessor {
         if(bean instanceof DataGrid){
             registDataGrid((DataGrid) bean);
         }
+
+        if(bean instanceof DataGridPostProcessor){
+            DataGridPostProcessor postProcessor = (DataGridPostProcessor)bean;
+            String dataGridName = postProcessor.getName();
+            DataGrid dataGrid = getDataGrid(dataGridName);
+            dataGrid.setPostProcessor(postProcessor);
+            logger.info("{}被注册到{}", postProcessor.getClass().getName(), dataGridName);
+        }
         return bean;
     }
 
@@ -90,5 +91,12 @@ public class DataGridManager implements InitializingBean, BeanPostProcessor {
             logger.info("regist dataGrid: {}", JsonUtils.toJson(dataGrid));
             dataGridMap.put(dataGrid.getName(), dataGrid);
         }
+    }
+
+    private DataGrid getDataGrid(String name){
+        if(!dataGridMap.containsKey(name)){
+            throw new NotFoundException("datagrid.notfound", new Object[]{name});
+        }
+        return dataGridMap.get(name);
     }
 }

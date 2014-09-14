@@ -2,6 +2,7 @@ package com.github.quick4j.plugin.datagrid.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.quick4j.plugin.datagrid.DataGrid;
+import com.github.quick4j.plugin.datagrid.DataGridPostProcessor;
 import com.github.quick4j.plugin.datagrid.meta.Toolbar;
 
 /**
@@ -11,16 +12,19 @@ public abstract class AbstractDataGrid implements DataGrid {
     private String name;
     private String entity;
     private Toolbar toolbar;
+    private DataGridPostProcessor postProcessor;
 
     protected AbstractDataGrid(String name, String entity) {
         this.name = name;
         this.entity = entity;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     @JsonIgnore
     public String getEntity() {
         return entity;
@@ -29,6 +33,21 @@ public abstract class AbstractDataGrid implements DataGrid {
     @Override
     public Toolbar getToolbar() {
         return toolbar;
+    }
+
+    @Override
+    public void setPostProcessor(DataGridPostProcessor postProcessor) {
+        this.postProcessor = postProcessor;
+    }
+
+    @Override
+    public DataGridPostProcessor getPostProcessor() {
+        return postProcessor;
+    }
+
+    @Override
+    public boolean isSupportPostProcess() {
+        return null != postProcessor;
     }
 
     public void setToolbar(Toolbar toolbar) {

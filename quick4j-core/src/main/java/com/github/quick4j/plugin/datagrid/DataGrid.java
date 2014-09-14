@@ -15,4 +15,7 @@ public interface DataGrid{
     List<Header> getFrozenColumns();
     Toolbar getToolbar();
     DataGrid copySelf();
+    boolean isSupportPostProcess();
+    void setPostProcessor(DataGridPostProcessor postProcessor);
+    DataGridPostProcessor getPostProcessor();
 }
