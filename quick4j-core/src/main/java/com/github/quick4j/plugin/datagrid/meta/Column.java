@@ -14,6 +14,7 @@ public class Column implements Cloneable{
     private boolean hidden;
     private boolean checkbox;
     private String formatter;
+    private Editor editor;
 
     public Column(){}
 
@@ -92,10 +93,25 @@ public class Column implements Cloneable{
         this.formatter = formatter;
     }
 
+    public Editor getEditor() {
+        return editor;
+    }
+
+    public void setEditor(Editor editor) {
+        this.editor = editor;
+    }
+
     @Override
     public Column clone() throws CloneNotSupportedException {
         Column column = new Column();
         BeanUtils.copyProperties(this, column);
+
+        column.setEditor(null);
+        if(null != this.editor){
+            Editor editor = this.editor.clone();
+            column.setEditor(editor);
+        }
+
         return column;
     }
 
