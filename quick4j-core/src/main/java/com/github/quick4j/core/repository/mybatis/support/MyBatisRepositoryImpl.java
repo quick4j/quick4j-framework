@@ -72,8 +72,13 @@ public class MyBatisRepositoryImpl implements MyBatisRepository {
     public <T extends Entity> DataPaging<T> findAll(Class<T> clazz, Pageable pageable) {
         RowBounds rowBounds = new RowBounds(pageable.getOffset(), pageable.getLimit());
         List<T> rows = sqlSessionTemplate.selectList(getSelectPagingSql(clazz), pageable.getParameters(), rowBounds);
-        int total = PaginationInterceptor.getPaginationTotal();
-        PaginationInterceptor.clean();
+
+        int total = rows.size();
+        if(rowBounds.getOffset() != 0 || rowBounds.getLimit() != Integer.MAX_VALUE){
+            total = PaginationInterceptor.getPaginationTotal();
+            PaginationInterceptor.clean();
+        }
+
         DataPaging<T> dataPaging = new DataPaging<T>(rows, total);
         return dataPaging;
     }
