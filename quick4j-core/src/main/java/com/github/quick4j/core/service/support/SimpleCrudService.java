@@ -67,6 +67,7 @@ public class SimpleCrudService<T extends Entity, P> implements CrudService<T, P>
         List<Entity> slaveList = (List<Entity>) entity.getSlave();
         if(null != slaveList){
             for (Entity slave : slaveList){
+                slave.setMasterId(entity.getId());
                 mybatisRepository.insert(slave);
             }
         }
