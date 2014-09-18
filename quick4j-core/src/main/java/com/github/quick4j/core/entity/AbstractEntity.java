@@ -13,6 +13,10 @@ public abstract class AbstractEntity {
 
     public abstract void setId(String id);
 
+    public abstract void setMasterId(String id);
+
+    public abstract String getMasterId();
+
     @JsonIgnore
     public abstract String getMetaData();
 
