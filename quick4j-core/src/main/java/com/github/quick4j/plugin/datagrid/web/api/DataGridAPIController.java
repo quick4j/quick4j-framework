@@ -62,7 +62,7 @@ public class DataGridAPIController {
      */
     @RequestMapping(
             value = "/{name}",
-            method = RequestMethod.POST,
+//            method = RequestMethod.POST,
             produces = "application/json;charset=utf-8"
     )
     @ResponseBody
@@ -85,11 +85,11 @@ public class DataGridAPIController {
         try {
             Class clazz = Class.forName(dataModelFullName);
             PagingCriteria criteria = simpleCrudService.createPagingCriteria(clazz);
-            PageRequest pageRequest = new PageRequest(_page, _size, wrapRequestMap(request));
+            PageRequest<Map<String, Object>> pageRequest = new PageRequest(_page, _size, wrapRequestMap(request));
             DataPaging dataPaging = criteria.findAll(pageRequest);
 
             if(dataGrid.isSupportPostProcess()){
-                dataGrid.getPostProcessor().process(dataPaging.getRows());
+                dataPaging = dataGrid.getPostProcessor().process(dataPaging, pageRequest);
             }
 
             return new AjaxResponse(AjaxResponse.Status.OK, dataPaging);
