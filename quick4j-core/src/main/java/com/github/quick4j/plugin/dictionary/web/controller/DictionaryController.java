@@ -1,5 +1,6 @@
 package com.github.quick4j.plugin.dictionary.web.controller;
 
+import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.CrudService;
 import com.github.quick4j.core.web.http.AjaxResponse;
 import com.github.quick4j.plugin.dictionary.entity.DicItem;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.swing.text.MaskFormatter;
 import java.util.Map;
 
 /**
@@ -101,9 +103,8 @@ public class DictionaryController {
     )
     @ResponseBody
     public AjaxResponse doDelete(@PathVariable("id") String id){
-        DicItem dicItem = new DicItem();
-        dicItem.setId(id);
-        simpleCrudService.delete(dicItem);
+        Criteria<DicItem, Map> criteria = simpleCrudService.createCriteria(DicItem.class);
+        criteria.delete(id);
         return new AjaxResponse(AjaxResponse.Status.OK);
     }
 }
