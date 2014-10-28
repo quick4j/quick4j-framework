@@ -10,18 +10,35 @@ public class AjaxResponse {
     private String url;
     private String method;
 
+
+
     public AjaxResponse(Status status) {
-        this.status = status.value;
+        this(status, null);
     }
 
     public AjaxResponse(Status status, String message) {
-        this.status = status.value;
-        this.message = message;
+        this(status, message, null, null);
     }
 
     public AjaxResponse(Status status, Object data) {
         this.status = status.value;
         this.data = data;
+    }
+
+    public AjaxResponse(boolean status){
+        this(status, null);
+    }
+
+    public AjaxResponse(boolean status, String message) {
+        this(status, message, null, null);
+    }
+
+    public AjaxResponse(boolean status, Object data) {
+        this(status ? Status.OK : Status.ERROR, data);
+    }
+
+    public AjaxResponse(boolean status, String message, String url, String method) {
+        this(status ? Status.OK : Status.ERROR, message, url, method);
     }
 
     public AjaxResponse(Status status, String message, String url, String method) {
