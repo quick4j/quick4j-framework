@@ -4,6 +4,8 @@ import com.github.quick4j.core.entity.Entity;
 import com.github.quick4j.core.mybatis.annotation.MapperNamespace;
 import com.github.quick4j.plugin.logging.annontation.Auditable;
 
+import java.util.List;
+
 /**
  * @author zhaojh
  */
@@ -17,6 +19,11 @@ public class User extends Entity{
     @Override
     public String getMetaData() {
         return "User ";
+    }
+
+    @Override
+    public List<? extends Entity> getSlave() {
+        return null;
     }
 
     public String getLoginName() {
