@@ -1,0 +1,52 @@
+{
+    "name": "dictionary",
+    "dataModel": "com.github.quick4j.plugin.dictionary.entity.DicItem",
+    "frozenColumns": [[
+        {"field": "column1", "title": "Column1", "width": 100}
+    ]],
+    "columns": [
+        [
+            {
+                "field": "chk",
+                "checkbox": true
+            },
+            {
+                "field":"code",
+                "title":"类别码",
+                "width":200
+            },
+            {
+                "field":"name",
+                "title":"类别名称",
+                "width":200
+            },
+            {
+                "field":"value",
+                "title":"代码",
+                "width":200
+            },
+            {
+                "field":"text",
+                "title":"名称",
+                "width":200
+            },
+            {
+                "field": "operation",
+                "title": "操作",
+                "width": 200,
+                "formatter": "doBuildButton"
+            }
+        ]
+    ],
+    "toolbar": [
+        {
+            "iconCls": "icon-add",
+            "text": "New",
+            "handler": "doNew"
+        },
+        {
+            "iconCls": "icon-edit",
+            "text": "Edit"
+        }
+    ]
+}
