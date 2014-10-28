@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <title></title>
-        <link rel="stylesheet" href="static/js/vender/easyui/themes/bootstrap/easyui.css">
+        <link rel="stylesheet" href="static/js/vender/easyui/themes/metro/easyui.css">
         <link rel="stylesheet" href="static/js/vender/easyui/themes/icon.css">
         <style>
             .datagrid-operation-button{
