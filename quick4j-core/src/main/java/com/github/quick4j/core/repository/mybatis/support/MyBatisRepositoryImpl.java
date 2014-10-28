@@ -137,6 +137,11 @@ public class MyBatisRepositoryImpl implements MyBatisRepository {
         }
     }
 
+    @Override
+    public void delete(Class<? extends Entity> clazz, String statement, Object parameter) {
+        sqlSessionTemplate.delete(getOtherSql(clazz, statement), parameter);
+    }
+
     protected String getMapperNamespace(Class clazz){
         MapperNamespace mapperNamespace = (MapperNamespace) clazz.getAnnotation(MapperNamespace.class);
         if(null != mapperNamespace){
