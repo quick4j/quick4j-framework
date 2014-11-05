@@ -35,7 +35,6 @@ public class MyBatisRepositoryImpl implements MyBatisRepository {
     public static final String UPDATE_ONE_STATEMENT_ID = ".updateOne";
     public static final String DELETE_ONE_STATEMENT_ID = ".deleteOne";
     public static final String DELETE_MANY_STATEMENT_ID = ".deleteMany";
-    public static final String DELETE_MANY_BY_PARAMETER_STATEMENT_ID = ".deleteManyByParameter";
 
     @Resource
     private SqlSessionTemplate sqlSessionTemplate;
@@ -158,11 +157,6 @@ public class MyBatisRepositoryImpl implements MyBatisRepository {
     }
 
     @Override
-    public <T extends Entity> void delete(Class<T> clazz, Object parameter) {
-        sqlSessionTemplate.delete(getDeleteManyByParameterStatementId(clazz), parameter);
-    }
-
-    @Override
     public void delete(Class<? extends Entity> clazz, String statement, Object parameter) {
         sqlSessionTemplate.delete(getOtherStatementId(clazz, statement), parameter);
     }
@@ -212,17 +206,12 @@ public class MyBatisRepositoryImpl implements MyBatisRepository {
         return entity.getMapperNamespace() + DELETE_MANY_STATEMENT_ID;
     }
 
-    private String getDeleteManyByParameterStatementId(Class clazz){
-        return getMapperNamespace(clazz) + DELETE_MANY_BY_PARAMETER_STATEMENT_ID;
-    }
-
     private String getOtherStatementId(Class clazz, String statementShortName){
         if(statementShortName.startsWith("\\.")){
             return getMapperNamespace(clazz) + statementShortName;
         }else{
             return getMapperNamespace(clazz) + '.' + statementShortName;
         }
-
     }
 
     private String getSelectListByIdsStatementId(Class clazz){

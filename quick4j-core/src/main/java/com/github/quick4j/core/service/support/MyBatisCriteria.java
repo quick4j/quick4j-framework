@@ -63,11 +63,6 @@ public class MyBatisCriteria<T extends Entity, P> implements Criteria<T, P>{
         myBatisRepository.delete(entities);
     }
 
-    @Override
-    public void deleteByParameter(Object parameter) {
-        myBatisRepository.delete(clazz, parameter);
-    }
-
     protected MyBatisRepository getMyBatisRepository(){
         return myBatisRepository;
     }

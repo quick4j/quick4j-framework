@@ -15,5 +15,4 @@ public interface Criteria<T, P> {
     void delete(String[] ids);
     void delete(T entity);
     void delete(List<T> entities);
-    void deleteByParameter(Object parameter);
 }
