@@ -10,7 +10,10 @@ public interface Criteria<T, P> {
     List<T> findAll();
     List<T> findAll(P parameters);
     List<T> findAll(List<String> ids);
-    List<T> findAll(String statementShortName, P paramerters);
+    List<T> findAll(String statementId, P paramerters);
     void delete(String id);
     void delete(String[] ids);
+    void delete(T entity);
+    void delete(List<T> entities);
+    void deleteByParameter(Object parameter);
 }

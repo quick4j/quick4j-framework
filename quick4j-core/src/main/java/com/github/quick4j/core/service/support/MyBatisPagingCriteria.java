@@ -10,15 +10,15 @@ import com.github.quick4j.core.service.PagingCriteria;
  * @author zhaojh
  */
 public class MyBatisPagingCriteria <T extends Entity, P> extends MyBatisCriteria<T, P> implements PagingCriteria<T, P>{
-    private Class<T> entity;
+    private Class<T> clazz;
 
-    MyBatisPagingCriteria(Class<T> entity, MyBatisRepository myBatisRepository) {
-        super(entity, myBatisRepository);
-        this.entity = entity;
+    MyBatisPagingCriteria(Class<T> clazz, MyBatisRepository myBatisRepository) {
+        super(clazz, myBatisRepository);
+        this.clazz = clazz;
     }
 
     @Override
     public DataPaging<T> findAll(Pageable<P> pageable) {
-        return getMyBatisRepository().findAll(entity, pageable);
+        return getMyBatisRepository().findAll(clazz, pageable);
     }
 }
