@@ -35,6 +35,20 @@
         </where>
     </select>
 
+    <select id="selectListByIds" resultMap="userResult" parameterType="list">
+        select
+            id,
+            user_name,
+            user_loginname,
+            user_pwd
+        from hr_user_info
+        <where>
+            <foreach collection="list" item="id" index="index" open="(" separator="or" close=")">
+                id = #{id}
+            </foreach>
+        </where>
+    </select>
+
     <select id="selectPaging" resultMap="userResult" parameterType="map">
         select
             id,
@@ -81,5 +95,14 @@
 
     <delete id="deleteOne" parameterType="String">
         delete from hr_user_info where id = #{id}
+    </delete>
+
+    <delete id="deleteMany" parameterType="list">
+        delete from hr_user_info
+        <where>
+            <foreach collection="list" item="id" index="index" open="(" separator="or" close=")">
+                id = #{id}
+            </foreach>
+        </where>
     </delete>
 </mapper>

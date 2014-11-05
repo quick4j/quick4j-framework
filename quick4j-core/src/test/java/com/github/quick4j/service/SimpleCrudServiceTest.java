@@ -137,7 +137,7 @@ public class SimpleCrudServiceTest {
     @Rollback
     @Ignore
     public void selectPagingTest(){
-        List<User> users = prepare();
+        List<User> users = prepare(20);
         simpleCrudService.save(users);
 
         PagingCriteria<User, Map> criteria = simpleCrudService.createPagingCriteria(User.class);
@@ -146,10 +146,44 @@ public class SimpleCrudServiceTest {
         Assert.assertThat(dataPaging.getRows(), hasItem(users.get(11)));
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    public void deleteEntityTest(){
+        List<User> users = prepare(5);
+        simpleCrudService.save(users);
 
-    private List<User> prepare(){
+        Criteria<User, Map> criteria = simpleCrudService.createCriteria(User.class);
+        User deleted = users.get(0);
+        criteria.delete(deleted);
+        List<User> all = criteria.findAll();
+        Assert.assertThat(all, not(hasItem(deleted)));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void deleteEntitiesTest(){
+        List<User> users = prepare(5);
+        simpleCrudService.save(users);
+
+        List<User> deletedUsers = new ArrayList<User>();
+        for(int i=0; i<3; i++){
+            deletedUsers.add(users.get(i));
+        }
+
+        Criteria<User, Map> criteria = simpleCrudService.createCriteria(User.class);
+        criteria.delete(deletedUsers);
+        List<User> all = criteria.findAll();
+        for (User user : deletedUsers){
+            Assert.assertThat(all, not(hasItem(user)));
+        }
+    }
+
+
+    private List<User> prepare(int num){
         List<User> list = new ArrayList<User>();
-        for(int i=0; i<20; i++){
+        for(int i=1; i<=num; i++){
             User user = new User();
             user.setName("user"+i);
             user.setLoginName("user"+i);
