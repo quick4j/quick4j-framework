@@ -2,23 +2,12 @@ package com.github.quick4j.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.quick4j.core.exception.NotFoundException;
-import com.github.quick4j.core.mybatis.annotation.MapperNamespace;
+import com.github.quick4j.core.mybatis.annotation.Mapper;
 
 /**
  * @author zhaojh
  */
-public abstract class AbstractEntity {
-
-    public abstract String getId();
-
-    public abstract void setId(String id);
-
-    public abstract void setMasterId(String id);
-
-    public abstract String getMasterId();
-
-    @JsonIgnore
-    public abstract String getMetaData();
+public abstract class AbstractEntity implements Entity{
 
     @JsonIgnore
     public boolean isNew(){
@@ -31,7 +20,7 @@ public abstract class AbstractEntity {
 
         if(null == obj || getClass() != obj.getClass()) return false;
 
-        AbstractEntity that = (AbstractEntity) obj;
+        Entity that = (Entity) obj;
         return null == this.getId() ? false : this.getId().equals(that.getId());
     }
 
@@ -42,16 +31,4 @@ public abstract class AbstractEntity {
         return hashCode;
     }
 
-    @JsonIgnore
-    public String getMapperNamespace(){
-        String namespace ;
-        MapperNamespace annotation = this.getClass().getAnnotation(MapperNamespace.class);
-        if(null != annotation){
-            namespace = annotation.value();
-        }else{
-            String className = this.getClass().getName();
-            throw new NotFoundException("model.notfound.mappernamespace", new Object[]{className});
-        }
-        return namespace;
-    }
 }
