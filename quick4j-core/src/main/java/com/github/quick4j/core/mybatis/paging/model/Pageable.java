@@ -1,4 +1,4 @@
-package com.github.quick4j.core.mybatis.interceptor.model;
+package com.github.quick4j.core.mybatis.paging.model;
 
 /**
  * @author zhaojh

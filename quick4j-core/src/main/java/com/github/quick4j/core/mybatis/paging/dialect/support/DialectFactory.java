@@ -1,6 +1,6 @@
-package com.github.quick4j.core.mybatis.interceptor.dialect.support;
+package com.github.quick4j.core.mybatis.paging.dialect.support;
 
-import com.github.quick4j.core.mybatis.interceptor.dialect.Dialect;
+import com.github.quick4j.core.mybatis.paging.dialect.Dialect;
 
 /**
  * @author zhaojh

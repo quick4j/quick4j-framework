@@ -1,4 +1,4 @@
-package com.github.quick4j.core.mybatis.interceptor.dialect;
+package com.github.quick4j.core.mybatis.paging.dialect;
 
 /**
  * @author zhaojh

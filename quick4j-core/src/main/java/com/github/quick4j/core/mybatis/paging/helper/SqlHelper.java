@@ -1,6 +1,6 @@
-package com.github.quick4j.core.mybatis.interceptor.helper;
+package com.github.quick4j.core.mybatis.paging.helper;
 
-import com.github.quick4j.core.mybatis.interceptor.dialect.Dialect;
+import com.github.quick4j.core.mybatis.paging.dialect.Dialect;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
