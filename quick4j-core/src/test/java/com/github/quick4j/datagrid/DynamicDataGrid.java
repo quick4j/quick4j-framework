@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @author zhaojh
  */
-//@Component
+@Component
 public class DynamicDataGrid extends DynamicColumnDataGrid {
     @Resource
     private Repository repository;
