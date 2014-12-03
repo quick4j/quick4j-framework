@@ -1,6 +1,8 @@
 package com.github.quick4j.core.mybatis.mapping.builder;
 
 import com.github.quick4j.core.entity.Entity;
+import com.github.quick4j.core.repository.mybatis.support.Order;
+import com.github.quick4j.core.repository.mybatis.support.Sort;
 import org.apache.ibatis.jdbc.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,9 +65,10 @@ public class SqlBuilder {
 
     public String buildSelectByIdsSql(Map<String, Object> parameter){
         Class entityClass = (Class) parameter.get("type");
-        final List<String> ids = (List<String>) parameter.get("ids");
+        final String[] ids = (String[]) parameter.get("ids");
+        final Sort sort = (Sort) parameter.get("sort");
 
-        EntityPersistentInfo entityPersistentInfo = EntityAssistant.parse(entityClass);
+        final EntityPersistentInfo entityPersistentInfo = EntityAssistant.parse(entityClass);
         final String tableName = entityPersistentInfo.getTableName();
         final String[] columnNames = entityPersistentInfo.getColumns();
 
@@ -82,21 +85,38 @@ public class SqlBuilder {
             FROM(tableName);
 
             StringBuilder where = new StringBuilder();
-            for(int i=0, length = ids.size(); i<length; i++){
+            for(int i=0, length = ids.length; i<length; i++){
                 where.append(String.format("id = #{ids[%d]}", i));
                 if(i < length - 1){
                     where.append(" or ");
                 }
             }
-            WHERE(where.toString());
-        }}.toString();
 
+            String whereString = where.toString();
+            if(whereString.length() > 0){
+                WHERE(where.toString());
+            }else{
+                WHERE("id=null");
+            }
+
+            if(null != sort){
+                List<Order> orders = sort.getOrders();
+                for (Order order : orders){
+                    String column = entityPersistentInfo.getColumnByProperty(order.getProperty());
+                    if(null != column){
+                        ORDER_BY(column + " " + order.getDirection());
+                    }
+                }
+            }
+        }}.toString();
+        logger.info("=========>sql: {}", sql);
         return sql;
     }
 
     public String buildSelectListSql(Map<String, Object> parameter){
         Class entityClass = (Class) parameter.get("type");
         final Object queriedParams = parameter.get("parameters");
+        final Sort sort = (Sort) parameter.get("sort");
         final EntityPersistentInfo entityPersistentInfo = EntityAssistant.parse(entityClass);
         final String tableName = entityPersistentInfo.getTableName();
         final String[] columnNames = entityPersistentInfo.getColumns();
@@ -112,6 +132,7 @@ public class SqlBuilder {
         String sql = new SQL(){{
             SELECT(convertQueriedColumns(columnNames));
             FROM(tableName);
+
             if(null != queriedParams){
                 List<EntityPersistentInfo.MappedColumn> mappedColumns = entityPersistentInfo.getMappedColumns();
                 for (EntityPersistentInfo.MappedColumn mappedColumn : mappedColumns){
@@ -133,6 +154,15 @@ public class SqlBuilder {
                 }
             }
 
+            if(null != sort){
+                List<Order> orders = sort.getOrders();
+                for (Order order : orders){
+                    String column = entityPersistentInfo.getColumnByProperty(order.getProperty());
+                    if(null != column){
+                        ORDER_BY(column + " " + order.getDirection());
+                    }
+                }
+            }
         }}.toString();
         logger.info("====> sql: {}", sql);
         return sql;

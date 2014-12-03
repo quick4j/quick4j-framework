@@ -1,20 +1,27 @@
 package com.github.quick4j.entity;
 
+import com.github.quick4j.core.entity.AbstractEntity;
 import com.github.quick4j.core.entity.Entity;
-import com.github.quick4j.core.mybatis.annotation.MapperNamespace;
-import com.github.quick4j.plugin.logging.annontation.Auditable;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.List;
 
 /**
  * @author zhaojh
  */
-@Auditable
-@MapperNamespace("com.github.quick4j.entity.UserMapper")
-public class User extends Entity{
+@Table(name = "hr_user_info")
+public class User extends AbstractEntity{
+    @Id
+    private String id;
+    @Column(name = "user_loginName")
     private String loginName;
+    @Column(name = "user_name")
     private String name;
+    @Column(name = "user_pwd")
     private String password;
+    private String masterId;
 
     @Override
     public String getMetaData() {
@@ -24,6 +31,26 @@ public class User extends Entity{
     @Override
     public List<? extends Entity> getSlave() {
         return null;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setMasterId(String id) {
+        this.masterId = id;
+    }
+
+    @Override
+    public String getMasterId() {
+        return masterId;
     }
 
     public String getLoginName() {

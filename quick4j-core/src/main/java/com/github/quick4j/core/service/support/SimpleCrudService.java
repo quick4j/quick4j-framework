@@ -1,10 +1,9 @@
 package com.github.quick4j.core.service.support;
 
 import com.github.quick4j.core.entity.Entity;
-import com.github.quick4j.core.repository.mybatis.MyBatisRepository;
+import com.github.quick4j.core.repository.mybatis.Repository;
 import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.CrudService;
-import com.github.quick4j.core.service.PagingCriteria;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,22 +14,17 @@ import java.util.List;
  * @author zhaojh
  */
 @Service
-public class SimpleCrudService<T extends Entity, P> implements CrudService<T, P>{
+public class SimpleCrudService<T extends Entity> implements CrudService<T>{
     @Resource
-    private MyBatisRepository mybatisRepository;
+    private Repository mybatisRepository;
 
-    protected MyBatisRepository getCrudRepository() {
+    protected Repository getCrudRepository() {
         return mybatisRepository;
     }
 
     @Override
-    public Criteria<T, P> createCriteria(Class<T> clazz) {
-        return new MyBatisCriteria<T, P>(clazz, mybatisRepository);
-    }
-
-    @Override
-    public PagingCriteria<T, P> createPagingCriteria(Class<T> clazz) {
-        return new MyBatisPagingCriteria<T, P>(clazz, mybatisRepository);
+    public <P extends Entity> Criteria<P> createCriteria(Class<P> clazz) {
+        return new DefaultCriteria<P>(clazz, mybatisRepository);
     }
 
     @Override
@@ -72,7 +66,7 @@ public class SimpleCrudService<T extends Entity, P> implements CrudService<T, P>
             }
         }
 
-        return (T) mybatisRepository.findOne(entity.getClass(), entity.getId());
+        return (T) mybatisRepository.find(entity.getClass(), entity.getId());
     }
 
     private void insert(List<T> entities){
@@ -80,12 +74,12 @@ public class SimpleCrudService<T extends Entity, P> implements CrudService<T, P>
     }
 
     public T update(T entity){
-        mybatisRepository.update(entity);
-        return (T) mybatisRepository.findOne(entity.getClass(), entity.getId());
+        mybatisRepository.updateById(entity);
+        return (T) mybatisRepository.find(entity.getClass(), entity.getId());
     }
 
     private void update(List<T> entities){
-        mybatisRepository.update(entities);
+        mybatisRepository.updateById(entities);
     }
 
 //    protected Class getGenericType(){

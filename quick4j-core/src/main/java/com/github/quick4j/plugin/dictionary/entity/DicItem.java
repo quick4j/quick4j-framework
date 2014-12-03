@@ -1,21 +1,32 @@
 package com.github.quick4j.plugin.dictionary.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.quick4j.core.entity.AbstractEntity;
 import com.github.quick4j.core.entity.Entity;
-import com.github.quick4j.core.mybatis.annotation.MapperNamespace;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.List;
 
 /**
  * @author zhaojh
  */
-@MapperNamespace("com.github.quick4j.plugin.dictionary.entity.DicItemMapper")
-public class DicItem extends Entity{
+@Table(name = "sys_dictionary")
+public class DicItem extends AbstractEntity{
+    @Id
+    private String id;
+    @Column(name = "dic_code")
     private String code;
+    @Column(name = "dic_name")
     private String name;
+    @Column(name = "dic_item_value")
     private String value;
+    @Column(name = "dic_item_text")
     private String text;
+    @Column(name = "dic_item_index")
     private int index=1;
+    private String masterId;
 
     public DicItem() {}
 
@@ -32,6 +43,27 @@ public class DicItem extends Entity{
         this.value = value;
         this.text = text;
         this.index = index;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setMasterId(String id) {
+        this.masterId = id;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getMasterId() {
+        return masterId;
     }
 
     @Override

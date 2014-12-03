@@ -3,18 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.github.quick4j.entity.TeacherMapper">
-    <resultMap id="result" type="com.github.quick4j.entity.Teacher">
-        <constructor>
-            <arg column="teacher_name" javaType="string"/>
-        </constructor>
-        <result column="id" property="id"/>
-    </resultMap>
+    <!--<resultMap id="result" type="com.github.quick4j.entity.Teacher">-->
+        <!--<constructor>-->
+            <!--<arg column="teacher_name" javaType="string"/>-->
+        <!--</constructor>-->
+        <!--<result column="id" property="id"/>-->
+        <!--<result column="teacher_age" property="age"/>-->
+        <!--<result column="teacher_tel" property="tel"/>-->
+    <!--</resultMap>-->
 
-    <select id="selectOne" resultMap="result" parameterType="string">
-        select id, teacher_name from test_teacher where id = #{id}
-    </select>
+    <!--<select id="selectById" resultMap="result" parameterType="string">-->
+        <!--select id, teacher_name, teacher_age, teacher_tel from test_teacher where id = #{id}-->
+    <!--</select>-->
 
-    <insert id="insert" parameterType="com.github.quick4j.entity.Teacher">
-        insert into test_teacher(id, teacher_name)values(#{id}, #{name})
-    </insert>
+    <!--<insert id="insert" parameterType="com.github.quick4j.entity.Teacher">-->
+        <!--insert into test_teacher(id, teacher_name, teacher_age, teacher_tel)values(#{id}, #{name}, #{age}, #{tel})-->
+    <!--</insert>-->
 </mapper>

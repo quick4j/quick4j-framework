@@ -5,5 +5,5 @@ import com.github.quick4j.core.service.CrudService;
 /**
  * @author zhaojh
  */
-public interface DictionaryService<T, P> extends CrudService<T, P>{
+public interface DictionaryService<T> extends CrudService<T>{
 }

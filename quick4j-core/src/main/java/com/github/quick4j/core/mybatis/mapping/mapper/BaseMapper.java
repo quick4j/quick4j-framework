@@ -1,7 +1,10 @@
 package com.github.quick4j.core.mybatis.mapping.mapper;
 
 import com.github.quick4j.core.mybatis.mapping.builder.SqlBuilder;
+import com.github.quick4j.core.repository.mybatis.support.Order;
+import com.github.quick4j.core.repository.mybatis.support.Sort;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 
@@ -13,13 +16,13 @@ public interface BaseMapper<T> {
     T selectById(@Param("type")Class<T> entityClass, @Param("id")String id);
 
     @SelectProvider(type = SqlBuilder.class, method = SqlBuilder.BUILD_SELECT_BY_IDS_SQL)
-    List<T> selectByIds(@Param("type")Class<T> entityClass, @Param("ids")List<String> ids);
+    List<T> selectByIds(@Param("type")Class<T> entityClass, @Param("ids")String[] ids, @Param("sort")Sort sort);
 
     @SelectProvider(type = SqlBuilder.class, method = SqlBuilder.BUILD_SELECT_LIST_SQL)
-    List<T> selectPaging(@Param("type")Class<T> entityClass, @Param("parameters")Object parameter);
+    List<T> selectPaging(@Param("type")Class<T> entityClass, @Param("parameters")Object parameter, @Param("sort")Sort sort, RowBounds rowBounds);
 
     @SelectProvider(type = SqlBuilder.class, method = SqlBuilder.BUILD_SELECT_LIST_SQL)
-    List<T> selectList(@Param("type")Class<T> entityClass, @Param("parameters")Object parameter);
+    List<T> selectList(@Param("type")Class<T> entityClass, @Param("parameters")Object parameter, @Param("sort")Sort sort);
 
     @InsertProvider(type = SqlBuilder.class, method = SqlBuilder.BUILD_INSERT_SQL)
     void insert(T entity);

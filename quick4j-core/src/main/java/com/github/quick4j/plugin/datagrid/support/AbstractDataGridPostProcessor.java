@@ -1,6 +1,6 @@
 package com.github.quick4j.plugin.datagrid.support;
 
-import com.github.quick4j.core.repository.mybatis.MyBatisRepository;
+import com.github.quick4j.core.repository.mybatis.Repository;
 import com.github.quick4j.plugin.datagrid.DataGridPostProcessor;
 
 import javax.annotation.Resource;
@@ -10,9 +10,9 @@ import javax.annotation.Resource;
  */
 public abstract class AbstractDataGridPostProcessor implements DataGridPostProcessor{
     @Resource
-    private MyBatisRepository myBatisRepository;
+    private Repository repository;
 
-    protected MyBatisRepository getMyBatisRepository() {
-        return myBatisRepository;
+    protected Repository getRepository() {
+        return repository;
     }
 }

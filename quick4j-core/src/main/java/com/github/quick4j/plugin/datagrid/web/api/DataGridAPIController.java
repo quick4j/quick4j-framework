@@ -2,14 +2,13 @@ package com.github.quick4j.plugin.datagrid.web.api;
 
 import com.github.quick4j.core.entity.Entity;
 import com.github.quick4j.core.exception.NotFoundException;
-import com.github.quick4j.core.mybatis.interceptor.model.DataPaging;
-import com.github.quick4j.core.mybatis.interceptor.model.PageRequest;
+import com.github.quick4j.core.mybatis.paging.model.DataPaging;
+import com.github.quick4j.core.mybatis.paging.model.PageRequest;
+import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.CrudService;
-import com.github.quick4j.core.service.PagingCriteria;
 import com.github.quick4j.core.web.http.AjaxResponse;
 import com.github.quick4j.plugin.datagrid.DataGrid;
 import com.github.quick4j.plugin.datagrid.DataGridManager;
-import com.github.quick4j.plugin.datagrid.DataGridPostProcessException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,7 @@ public class DataGridAPIController {
     @Resource
     private DataGridManager dataGridManager;
     @Resource
-    private CrudService<Entity, Map> simpleCrudService;
+    private CrudService<Entity> simpleCrudService;
 
     /**
      * 获取dataGrid的配置信息
@@ -83,8 +82,8 @@ public class DataGridAPIController {
 
         String dataModelFullName = dataGrid.getEntity();
         try {
-            Class clazz = Class.forName(dataModelFullName);
-            PagingCriteria criteria = simpleCrudService.createPagingCriteria(clazz);
+            Class entityClass = Class.forName(dataModelFullName);
+            Criteria  criteria = simpleCrudService.createCriteria(entityClass);
             PageRequest<Map<String, Object>> pageRequest = new PageRequest(_page, _size, wrapRequestMap(request));
             DataPaging dataPaging = criteria.findAll(pageRequest);
 

@@ -51,7 +51,7 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public <T extends Entity> T findOne(Class<T> entityClass, String id) {
+    public <T extends Entity> T find(Class<T> entityClass, String id) {
         String statementName = String.format("%sMapper.%s", entityClass.getName(), SqlBuilder.SELECT_BY_ID);
         if(MappedStatementAssistant.hasStatementInSqlSession(statementName, sqlSessionTemplate)
                 && isNotProviderSqlSource(statementName)){
@@ -64,12 +64,16 @@ public class RepositoryImpl implements Repository {
 
     @Override
     public <T extends Entity> List<T> findAll(Class<T> entityClass) {
-        Map paramters = null;
-        return findAll(entityClass, paramters);
+        return findByParams(entityClass, null);
     }
 
     @Override
-    public <T extends Entity> List<T> findAll(Class<T> entityClass, List<String> ids) {
+    public <T extends Entity> List<T> findByIds(Class<T> entityClass, String[] ids) {
+        return findByIdsAndSorting(entityClass, ids, new Sort());
+    }
+
+    @Override
+    public <T extends Entity> List<T> findByIdsAndSorting(Class<T> entityClass, String[] ids, Sort sort) {
         String entityClassName = entityClass.getName();
         String statementName = String.format("%sMapper.%s", entityClassName, SqlBuilder.SELECT_BY_IDS);
 
@@ -79,11 +83,16 @@ public class RepositoryImpl implements Repository {
         }
 
         BaseMapper<T> mapper = getEntityMapperFor(entityClass);
-        return mapper.selectByIds(entityClass, ids);
+        return mapper.selectByIds(entityClass, ids, sort);
     }
 
     @Override
-    public <T extends Entity> List<T> findAll(Class<T> entityClass, Object parameters) {
+    public <T extends Entity> List<T> findByParams(Class<T> entityClass, Object parameters) {
+        return findByParamsAndSorting(entityClass, parameters, new Sort());
+    }
+
+    @Override
+    public <T extends Entity> List<T> findByParamsAndSorting(Class<T> entityClass, Object parameters, Sort sort) {
         String entityClassName = entityClass.getName();
         String statementName = String.format("%sMapper.%s", entityClassName, SqlBuilder.SELECT_LIST);
 
@@ -93,11 +102,11 @@ public class RepositoryImpl implements Repository {
         }
 
         BaseMapper<T> mapper = getEntityMapperFor(entityClass);
-        return mapper.selectList(entityClass, parameters);
+        return mapper.selectList(entityClass, parameters, sort);
     }
 
     @Override
-    public <T extends Entity> DataPaging<T> findAll(Class<T> entityClass, Pageable pageable) {
+    public <T extends Entity> DataPaging<T> findPaging(Class<T> entityClass, Pageable pageable) {
         String entityClassName = entityClass.getName();
         String statementName = String.format("%sMapper.%s", entityClassName, SqlBuilder.SELECT_PAGING);
         List<T> rows = null;
@@ -108,7 +117,7 @@ public class RepositoryImpl implements Repository {
             rows = sqlSessionTemplate.selectList(statementName, pageable.getParameters(), rowBounds);
         }else{
             BaseMapper<T> mapper = getEntityMapperFor(entityClass);
-            rows = mapper.selectPaging(entityClass, pageable);
+            rows = mapper.selectPaging(entityClass, pageable.getParameters(), pageable.getSort(), rowBounds);
         }
 
         int total = rows.size();

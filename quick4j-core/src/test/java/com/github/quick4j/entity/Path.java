@@ -1,25 +1,35 @@
 package com.github.quick4j.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.quick4j.core.entity.AbstractEntity;
 import com.github.quick4j.core.entity.Entity;
-import com.github.quick4j.core.mybatis.annotation.MapperNamespace;
-import com.github.quick4j.plugin.logging.annontation.Auditable;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.List;
 import java.util.Map;
 
 /**
  * @author zhaojh
  */
-@MapperNamespace("com.github.quick4j.upm.paths.entity.PathMapper")
-@Auditable
-public class Path extends Entity {
+@Table(name = "upm_paths")
+public class Path extends AbstractEntity {
+    @Id
+    private String id;
+    @Column(name = "path_name")
     private String name;
+    @Column(name = "path")
     private String path;
+    @Column(name = "path_icon")
     private String icon;
+    @Column(name = "pid")
     private String pid;
+    @Column(name = "path_index")
     private int index;
+    @Column(name = "application_id")
     private String applicationId;
+    private String masterId;
     private String[] actions;
     private Map<String, Action> actionMap;
 
@@ -34,52 +44,24 @@ public class Path extends Entity {
         return null;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public String getId() {
+        return id;
     }
 
-    public String getPath() {
-        return path;
+    @Override
+    public void setMasterId(String id) {
+        this.masterId = id;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getPid() {
-        return pid;
-    }
-
-    public void setPid(String pid) {
-        this.pid = pid;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    public String getApplicationId() {
-        return applicationId;
-    }
-
-    public void setApplicationId(String applicationId) {
-        this.applicationId = applicationId;
+    @Override
+    public String getMasterId() {
+        return masterId;
     }
 
     public String[] getActions() {

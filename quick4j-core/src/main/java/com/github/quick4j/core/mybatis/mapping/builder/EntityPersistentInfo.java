@@ -89,6 +89,15 @@ public class EntityPersistentInfo {
         return mappedColumns;
     }
 
+    public String getColumnByProperty(String property){
+        for (MappedColumn mappedColumn : mappedColumns){
+            if(mappedColumn.getProperty().equals(property)){
+                return mappedColumn.getName();
+            }
+        }
+        return null;
+    }
+
     private void parse(){
         List<String> columnNames = new ArrayList<String>();
 

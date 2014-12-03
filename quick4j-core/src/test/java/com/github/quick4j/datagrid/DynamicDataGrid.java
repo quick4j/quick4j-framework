@@ -1,6 +1,7 @@
 package com.github.quick4j.datagrid;
 
-import com.github.quick4j.core.repository.mybatis.MyBatisRepository;
+import com.github.quick4j.core.repository.mybatis.Repository;
+import com.github.quick4j.core.repository.mybatis.support.Sort;
 import com.github.quick4j.entity.Action;
 import com.github.quick4j.plugin.datagrid.DataGrid;
 import com.github.quick4j.plugin.datagrid.entity.DynamicColumnDataGrid;
@@ -16,25 +17,25 @@ import java.util.List;
 /**
  * @author zhaojh
  */
-@Component
+//@Component
 public class DynamicDataGrid extends DynamicColumnDataGrid {
     @Resource
-    private MyBatisRepository myBatisRepository;
+    private Repository repository;
 
     public DynamicDataGrid() {
         super("dynamic", "com.github.quick4j.entity.Path");
         newToolbar().addToolbutton("Add", "icon-add", "doAdd");
-        myBatisRepository = getMyBatisRepository();
+        repository = getRepository();
     }
 
-    public DynamicDataGrid(String name, String entity, MyBatisRepository myBatisRepository) {
+    public DynamicDataGrid(String name, String entity, Repository repository) {
         super(name, entity);
-        this.myBatisRepository = myBatisRepository;
+        this.repository = repository;
     }
 
     @Override
     public List<Header> getColumns() {
-        List<Action> list = myBatisRepository.findAll(Action.class);
+        List<Action> list = repository.findAll(Action.class);
         List<Header> columns = new ArrayList<Header>();
         Header header = new Header();
         columns.add(header);
@@ -53,7 +54,7 @@ public class DynamicDataGrid extends DynamicColumnDataGrid {
     @Override
     public DataGrid copySelf(){
         try{
-            DynamicDataGrid dataGrid = new DynamicDataGrid(getName(), getEntity(), getMyBatisRepository());
+            DynamicDataGrid dataGrid = new DynamicDataGrid(getName(), getEntity(), getRepository());
 
             if(isExistToolbar()){
                 Toolbar toolbar = dataGrid.newToolbar();

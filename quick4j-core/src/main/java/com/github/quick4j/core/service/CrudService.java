@@ -1,24 +1,19 @@
 package com.github.quick4j.core.service;
 
+import com.github.quick4j.core.entity.Entity;
+
 import java.util.List;
 
 /**
  * @author zhaojh
  */
-public interface CrudService<T, P> {
+public interface CrudService<T> {
     /**
      *
-     * @param clazz
+     * @param entityClass
      * @return Criteria
      */
-    Criteria<T, P> createCriteria(Class<T> clazz);
-
-    /**
-     *
-     * @param clazz
-     * @return Criteria
-     */
-    PagingCriteria<T, P> createPagingCriteria(Class<T> clazz);
+    <P extends Entity> Criteria<P> createCriteria(Class<P> entityClass);
 
     /**
      * insert and update

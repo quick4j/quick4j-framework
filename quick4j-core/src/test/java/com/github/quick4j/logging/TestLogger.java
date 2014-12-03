@@ -22,7 +22,7 @@ import java.util.Map;
 @ContextConfiguration({"/spring-config.xml", "/spring-config-mybatis.xml"})
 public class TestLogger {
     @Resource
-    private CrudService<User, Map> simpleCrudService;
+    private CrudService<User> simpleCrudService;
     @Resource
     private HelloService helloService;
 

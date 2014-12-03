@@ -17,8 +17,8 @@ import java.util.Map;
  * @author zhaojh
  */
 @Service("DictionaryService")
-public class DictionaryServiceImpl extends SimpleCrudService<DicItem, Map>
-        implements DictionaryService<DicItem, Map>{
+public class DictionaryServiceImpl extends SimpleCrudService<DicItem>
+        implements DictionaryService<DicItem>{
     private static final Logger logger = LoggerFactory.getLogger(DictionaryServiceImpl.class);
 
 }

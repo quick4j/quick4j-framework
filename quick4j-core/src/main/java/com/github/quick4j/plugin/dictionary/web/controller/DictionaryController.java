@@ -25,7 +25,7 @@ public class DictionaryController {
     private final String LOCATION = "dictionary/";
 
     @Resource
-    private CrudService<DicItem, Map> simpleCrudService;
+    private CrudService<DicItem> simpleCrudService;
 
     /**
      * listing
@@ -103,7 +103,7 @@ public class DictionaryController {
     )
     @ResponseBody
     public AjaxResponse doDelete(@PathVariable("id") String id){
-        Criteria<DicItem, Map> criteria = simpleCrudService.createCriteria(DicItem.class);
+        Criteria<DicItem> criteria = simpleCrudService.createCriteria(DicItem.class);
         criteria.delete(id);
         return new AjaxResponse(AjaxResponse.Status.OK);
     }

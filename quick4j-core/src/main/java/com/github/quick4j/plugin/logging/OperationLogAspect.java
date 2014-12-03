@@ -31,7 +31,7 @@ public class OperationLogAspect {
     @Resource
     private LogRecorder logDBRecorder;
 
-    @Around(value = "execution(* com.github.quick4j.core.repository.mybatis.MyBatisRepository.insert(*))&&args(entity)")
+    @Around(value = "execution(* com.github.quick4j.core.repository.mybatis.Repository.insert(*))&&args(entity)")
     public Object doRecordEntityCreate(ProceedingJoinPoint pjp, Object entity) throws Throwable {
         try {
             Object rtnValue = pjp.proceed();
@@ -42,7 +42,7 @@ public class OperationLogAspect {
         }
     }
 
-    @Around(value = "execution(* com.github.quick4j.core.repository.mybatis.MyBatisRepository.update(*))&&args(entity)")
+    @Around(value = "execution(* com.github.quick4j.core.repository.mybatis.Repository.update(*))&&args(entity)")
     public Object doRecordEntityModify(ProceedingJoinPoint pjp, Object entity) throws Throwable {
         try {
             Object rtnValue = pjp.proceed();
@@ -53,7 +53,7 @@ public class OperationLogAspect {
         }
     }
 
-    @Around(value = "execution(* com.github.quick4j.core.repository.mybatis.MyBatisRepository.delete(Class, *))&&args(clazz, id)")
+    @Around(value = "execution(* com.github.quick4j.core.repository.mybatis.Repository.delete(Class, *))&&args(clazz, id)")
     public Object doRecordEntityDelete(ProceedingJoinPoint pjp, Class clazz, Object id) throws Throwable {
         try {
             Object rtnValue = pjp.proceed();

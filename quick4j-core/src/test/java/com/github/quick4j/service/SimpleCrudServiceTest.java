@@ -2,11 +2,10 @@ package com.github.quick4j.service;
 
 import static org.hamcrest.CoreMatchers.*;
 
-import com.github.quick4j.core.mybatis.interceptor.model.DataPaging;
-import com.github.quick4j.core.mybatis.interceptor.model.PageRequest;
+import com.github.quick4j.core.mybatis.paging.model.DataPaging;
+import com.github.quick4j.core.mybatis.paging.model.PageRequest;
 import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.CrudService;
-import com.github.quick4j.core.service.PagingCriteria;
 import com.github.quick4j.entity.Student;
 import com.github.quick4j.entity.Teacher;
 import com.github.quick4j.entity.User;
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -34,92 +34,199 @@ import java.util.Map;
 })
 public class SimpleCrudServiceTest {
     @Resource
-    private CrudService<User, Map> simpleCrudService;
-
-    @Resource
-    private CrudService<Teacher, Map> baseCrudService;
+    private CrudService<Teacher> crudService;
 
     @Test
     @Transactional
-    @Rollback
-    public void testCrud(){
-        User jack = new User();
-        jack.setLoginName("jack");
-        jack.setName("Jack Chen");
+    public void testSaveOne(){
+        Teacher teacher = new Teacher("zhang");
+        teacher.setAge(30);
+        teacher.setTel("110");
+        crudService.save(teacher);
 
-        simpleCrudService.save(jack);
+        Criteria<Teacher> criteria = crudService.createCriteria(Teacher.class);
+        Teacher another = criteria.findOne(teacher.getId());
+        Assert.assertEquals(another, teacher);
 
-        Criteria<User, Map> criteria = simpleCrudService.createCriteria(User.class);
-        User user1 = criteria.findOne(jack.getId());
-        Assert.assertThat(user1.getLoginName(), is("jack"));
-
-        jack.setPassword("1234");
-        User user2 = simpleCrudService.save(jack);
-        Assert.assertThat(user2.getPassword(), is("1234"));
-
-        criteria.delete(user1.getId());
-
-        User user3 = criteria.findOne(jack.getId());
-        Assert.assertNull(user3);
+        teacher.setTel("122");
+        crudService.save(teacher);
+        another = criteria.findOne(teacher.getId());
+        Assert.assertThat(another.getTel(), is("122"));
     }
 
     @Test
     @Transactional
-    @Rollback
-    public void testSaveList(){
-        User jack = new User();
-        jack.setLoginName("jack");
-        jack.setName("Jack Chen");
-        simpleCrudService.save(jack);
+    public void testBatchInsert(){
+        List<Teacher> teachers = new ArrayList<Teacher>();
+        String[] teacherNames = new String[]{"zhang", "wang", "zhao"};
 
-        User tom = new User();
-        tom.setLoginName("tom");
-        tom.setName("Tom");
-        tom.setPassword("123");
+        for (int i=0; i<teacherNames.length; i++){
+            Teacher teacher = new Teacher(teacherNames[i]);
+            teacher.setAge(20+i+1);
+            teacher.setTel(String.valueOf((i+1)*100));
+            teachers.add(teacher);
+        }
+        crudService.save(teachers);
 
-        List<User> list = new ArrayList<User>();
-        jack.setPassword("456");
-        list.add(jack);
-        list.add(tom);
-        simpleCrudService.save(list);
-
-        Criteria<User, Map> criteria = simpleCrudService.createCriteria(User.class);
-        User jack1 = criteria.findOne(jack.getId());
-        User tom1 = criteria.findOne(tom.getId());
-
-        System.out.println(jack1);
-        System.out.println(tom1);
-
-        Assert.assertThat(jack1.getPassword(), is("456"));
-        Assert.assertThat(tom1.getLoginName(), is("tom"));
+        Criteria<Teacher> criteria = crudService.createCriteria(Teacher.class);
+        List<Teacher> teacherList = criteria.findAll();
+        for (Teacher teacher : teacherList){
+            boolean isContains = teachers.contains(teacher);
+            Assert.assertTrue(isContains);
+        }
     }
 
     @Test
     @Transactional
-    @Rollback
+    public void testBatchUpdate(){
+        List<Teacher> teachers = new ArrayList<Teacher>();
+        String[] teacherNames = new String[]{"zhang", "wang", "zhao"};
+
+        for (int i=0; i<teacherNames.length; i++){
+            Teacher teacher = new Teacher(teacherNames[i]);
+            teacher.setAge(20+i+1);
+            teacher.setTel(String.valueOf((i+1)*100));
+            teachers.add(teacher);
+        }
+        crudService.save(teachers);
+
+        Criteria<Teacher> criteria = crudService.createCriteria(Teacher.class);
+        List<Teacher> teacherList = criteria.findAll();
+        for (Teacher teacher : teachers){
+            teacher.setTel("6000");
+        }
+        crudService.save(teachers);
+
+        teacherList = criteria.findAll();
+        Assert.assertThat(teacherList.size(), is(3));
+        for (Teacher teacher : teacherList){
+            Assert.assertThat(teacher.getTel(), is("6000"));
+        }
+    }
+
+    @Test
+    @Transactional
+    public void testMixedSave(){
+        List<Teacher> teachers = new ArrayList<Teacher>();
+        String[] teacherNames = new String[]{"zhang", "wang"};
+
+        for (int i=0; i<teacherNames.length; i++){
+            Teacher teacher = new Teacher(teacherNames[i]);
+            teacher.setAge(20+i+1);
+            teacher.setTel(String.valueOf((i+1)*100));
+            teachers.add(teacher);
+        }
+        crudService.save(teachers);
+
+        for (Teacher teacher : teachers){
+            teacher.setTel("911");
+        }
+
+        Teacher teacherLi = new Teacher("Li");
+        teacherLi.setAge(30);
+        teacherLi.setTel("119");
+        teachers.add(teacherLi);
+        crudService.save(teachers);
+
+        Criteria<Teacher> criteria = crudService.createCriteria(Teacher.class);
+        List<Teacher> result = criteria.findAll();
+
+        Assert.assertThat(result.size(), is(3));
+        for (Teacher teacher : result){
+            if(Arrays.asList(teacherNames).contains(teacher.getName())){
+                Assert.assertThat(teacher.getTel(), is("911"));
+            }else{
+                Assert.assertThat(teacher.getTel(), is("119"));
+            }
+        }
+    }
+
+    @Test
+    @Transactional
+    public void testDeleteById(){
+        Teacher teacher = new Teacher("zhang");
+        teacher.setAge(30);
+        teacher.setTel("200");
+        crudService.save(teacher);
+
+        Criteria<Teacher>criteria = crudService.createCriteria(Teacher.class);
+        Teacher another = criteria.findOne(teacher.getId());
+        Assert.assertEquals(teacher, another);
+
+        criteria.delete(teacher.getId());
+        another = criteria.findOne(teacher.getId());
+        Assert.assertNull(another);
+    }
+
+    @Test
+    @Transactional
+    public void testDeleteEntity(){
+        Teacher teacher = new Teacher("zhang");
+        teacher.setAge(30);
+        teacher.setTel("200");
+        crudService.save(teacher);
+
+        Criteria<Teacher>criteria = crudService.createCriteria(Teacher.class);
+        Teacher another = criteria.findOne(teacher.getId());
+        Assert.assertEquals(teacher, another);
+
+        criteria.delete(teacher);
+        another = criteria.findOne(teacher.getId());
+        Assert.assertNull(another);
+    }
+
+    @Test
+    @Transactional
+    public void testDeleteByIds(){
+        List<Teacher> teachers = new ArrayList<Teacher>();
+        String[] teacherNames = new String[]{"zhang", "wang", "zhao"};
+
+        for (int i=0; i<teacherNames.length; i++){
+            Teacher teacher = new Teacher(teacherNames[i]);
+            teacher.setAge(20+i+1);
+            teacher.setTel(String.valueOf((i+1)*100));
+            teachers.add(teacher);
+        }
+        crudService.save(teachers);
+
+
+        List<String> ids = new ArrayList<String>();
+        Criteria<Teacher> criteria = crudService.createCriteria(Teacher.class);
+        List<Teacher> teacherList = criteria.findAll();
+        for (Teacher teacher : teacherList){
+            ids.add(teacher.getId());
+            boolean isContains = teachers.contains(teacher);
+            Assert.assertTrue(isContains);
+        }
+
+        criteria.delete(ids.toArray(new String[]{}));
+        List list = criteria.findAll();
+        Assert.assertTrue(list.isEmpty());
+    }
+
+    @Test
+    @Transactional
     public void testBatchDelete(){
-        User jack = new User();
-        jack.setLoginName("jack");
-        jack.setName("Jack Chen");
-        jack.setPassword("456");
+        List<Teacher> teachers = new ArrayList<Teacher>();
+        String[] teacherNames = new String[]{"zhang", "wang", "zhao"};
 
-        User tom = new User();
-        tom.setLoginName("tom");
-        tom.setName("Tom");
-        tom.setPassword("123");
+        for (int i=0; i<teacherNames.length; i++){
+            Teacher teacher = new Teacher(teacherNames[i]);
+            teacher.setAge(20+i+1);
+            teacher.setTel(String.valueOf((i+1)*100));
+            teachers.add(teacher);
+        }
+        crudService.save(teachers);
 
-        List<User> list = new ArrayList<User>();
-        list.add(jack);
-        list.add(tom);
-        simpleCrudService.save(list);
-
-        Criteria<User, Map> criteria = simpleCrudService.createCriteria(User.class);
-        criteria.delete(new String[]{jack.getId(), tom.getId()});
+        Criteria<Teacher> criteria = crudService.createCriteria(Teacher.class);
+        criteria.delete(teachers);
+        List list = criteria.findAll();
+        Assert.assertTrue(list.isEmpty());
     }
+
 
     @Test
     @Transactional
-    @Rollback
     public void testSaveMasterAndSlave(){
         Teacher wang = new Teacher("wang");
         Student jack = new Student("Jack");
@@ -128,68 +235,17 @@ public class SimpleCrudServiceTest {
         wang.addStudent(jack);
         wang.addStudent(marry);
 
-        baseCrudService.save(wang);
+        crudService.save(wang);
 
+        Criteria<Teacher> teacherCriteria = crudService.createCriteria(Teacher.class);
+        Teacher teacher = teacherCriteria.findOne(wang.getId());
+        Assert.assertNotNull(teacher);
+
+        Criteria<Student> studentCriteria = crudService.createCriteria(Student.class);
+        Student stu1 = studentCriteria.findOne(jack.getId());
+        Student stu2 = studentCriteria.findOne(marry.getId());
+        Assert.assertNotNull(stu1);
+        Assert.assertNotNull(stu2);
     }
 
-    @Test
-    @Transactional
-    @Rollback
-    @Ignore
-    public void selectPagingTest(){
-        List<User> users = prepare(20);
-        simpleCrudService.save(users);
-
-        PagingCriteria<User, Map> criteria = simpleCrudService.createPagingCriteria(User.class);
-        DataPaging<User> dataPaging = criteria.findAll(new PageRequest<Map>(1, 10));
-
-        Assert.assertThat(dataPaging.getRows(), hasItem(users.get(11)));
-    }
-
-    @Test
-    @Transactional
-    @Rollback
-    public void deleteEntityTest(){
-        List<User> users = prepare(5);
-        simpleCrudService.save(users);
-
-        Criteria<User, Map> criteria = simpleCrudService.createCriteria(User.class);
-        User deleted = users.get(0);
-        criteria.delete(deleted);
-        List<User> all = criteria.findAll();
-        Assert.assertThat(all, not(hasItem(deleted)));
-    }
-
-    @Test
-    @Transactional
-    @Rollback
-    public void deleteEntitiesTest(){
-        List<User> users = prepare(5);
-        simpleCrudService.save(users);
-
-        List<User> deletedUsers = new ArrayList<User>();
-        for(int i=0; i<3; i++){
-            deletedUsers.add(users.get(i));
-        }
-
-        Criteria<User, Map> criteria = simpleCrudService.createCriteria(User.class);
-        criteria.delete(deletedUsers);
-        List<User> all = criteria.findAll();
-        for (User user : deletedUsers){
-            Assert.assertThat(all, not(hasItem(user)));
-        }
-    }
-
-
-    private List<User> prepare(int num){
-        List<User> list = new ArrayList<User>();
-        for(int i=1; i<=num; i++){
-            User user = new User();
-            user.setName("user"+i);
-            user.setLoginName("user"+i);
-            user.setPassword("123");
-            list.add(user);
-        }
-        return list;
-    }
 }

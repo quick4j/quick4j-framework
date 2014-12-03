@@ -1,21 +1,22 @@
 package com.github.quick4j.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.quick4j.core.entity.AbstractEntity;
 import com.github.quick4j.core.entity.Entity;
-import com.github.quick4j.core.mybatis.annotation.MapperNamespace;
+import com.github.quick4j.core.mybatis.annotation.Mapper;
 
+import javax.persistence.Table;
 import java.util.List;
 
 /**
  * @author zhaojh
  */
-@MapperNamespace("com.github.quick4j.upm.paths.entity.PathInfoMapper")
-public class PathInfo extends Entity {
+public class PathInfo extends AbstractEntity {
     private String id;
     private String name;
     private String icon;
     private String pid;
     private List<Action> actions;
+    private String masterId;
 
     @Override
     public String getMetaData() {
@@ -65,5 +66,15 @@ public class PathInfo extends Entity {
 
     public void setActions(List<Action> actions) {
         this.actions = actions;
+    }
+
+    @Override
+    public void setMasterId(String id) {
+        this.masterId = id;
+    }
+
+    @Override
+    public String getMasterId() {
+        return masterId;
     }
 }
