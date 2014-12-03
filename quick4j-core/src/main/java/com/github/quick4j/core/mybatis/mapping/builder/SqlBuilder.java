@@ -266,7 +266,7 @@ public class SqlBuilder {
 
     public String buildDeleteByIdsSql(Map<String, Object> parameter){
         Class entityClass = (Class) parameter.get("type");
-        final List<String> ids = (List<String>) parameter.get("ids");
+        final String[] ids = (String[]) parameter.get("ids");
 
         EntityPersistentInfo entityPersistentInfo = EntityAssistant.parse(entityClass);
         final String tableName = entityPersistentInfo.getTableName();
@@ -280,7 +280,7 @@ public class SqlBuilder {
             throw new RuntimeException(message);
         }
 
-        if(null == ids || ids.isEmpty()){
+        if(null == ids || ids.length == 0){
             String message = String.format(
                     "不建议使用[%s.deleteByIds]执行清表操作，请单独使用不带条件的delete from 语句。如果不是请检查调用参数。",
                     entityClass.getName()
@@ -292,7 +292,7 @@ public class SqlBuilder {
             DELETE_FROM(tableName);
 
             StringBuilder where = new StringBuilder();
-            for(int i=0, length = ids.size(); i<length; i++){
+            for(int i=0, length = ids.length; i<length; i++){
                 where.append(String.format("id = #{ids[%d]}", i));
                 if(i < length - 1){
                     where.append(" or ");

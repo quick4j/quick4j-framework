@@ -131,7 +131,7 @@ public class repositoryTest {
             Assert.assertTrue(isContains);
         }
 
-        repository.delete(Teacher.class, ids);
+        repository.delete(Teacher.class, ids.toArray(new String[]{}));
         anotherList = repository.findAll(Teacher.class);
         Assert.assertTrue(anotherList.isEmpty());
     }

@@ -60,7 +60,7 @@ public class DefaultCriteria<T extends Entity> implements Criteria<T>{
 
     @Override
     public void delete(String[] ids) {
-        repository.delete(entityClass, Arrays.asList(ids));
+        repository.delete(entityClass, ids);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class DefaultCriteria<T extends Entity> implements Criteria<T>{
         for (T entity : entities){
             ids.add(entity.getId());
         }
-        repository.delete(entityClass, ids);
+        repository.delete(entityClass, ids.toArray(new String[]{}));
     }
 
     @Override

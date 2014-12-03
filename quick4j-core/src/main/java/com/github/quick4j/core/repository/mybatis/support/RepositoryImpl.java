@@ -198,7 +198,7 @@ public class RepositoryImpl implements Repository {
     }
 
     @Override
-    public <T extends Entity> void delete(Class<T> entityClass, List<String> ids) {
+    public <T extends Entity> void delete(Class<T> entityClass, String[] ids) {
         String entityClassName = entityClass.getName();
         String statementName = String.format("%sMapper.%s", entityClassName, SqlBuilder.DELETE_BY_IDS);
 

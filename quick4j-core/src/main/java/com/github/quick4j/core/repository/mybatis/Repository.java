@@ -30,7 +30,7 @@ public interface Repository {
     <T extends Entity> void updateById(List<T> entities);
 
     <T extends Entity> void delete(Class<T> entityClass, String id);
-    <T extends Entity> void delete(Class<T> entityClass, List<String> ids);
+    <T extends Entity> void delete(Class<T> entityClass, String[] ids);
     <T extends Entity> void delete(T entity);
 
     <T> List<T> findAll(Class<T> entityClass, String statement, Object parameters);
