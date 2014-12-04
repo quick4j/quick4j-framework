@@ -35,7 +35,7 @@ public class MappingInterceptor implements Interceptor{
         final Object parameter = queryArgs[PARAMETER_INDEX];
         final String sql = ms.getBoundSql(parameter).getSql();
 
-        logger.info("===> statement id: {}", ms.getId());
+        logger.debug("===> statement id: {}", ms.getId());
         logger.info("===> parameter: {}", parameter);
         logger.info("===> sql: {}", sql);
 

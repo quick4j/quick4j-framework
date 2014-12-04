@@ -51,9 +51,6 @@ public class SqlBuilder {
             throw new RuntimeException(message);
         }
 
-        logger.info("===> table name: {}", tableName);
-        logger.info("===> columns: {}", Arrays.asList(columnNames));
-
         String sql = new SQL(){{
             SELECT(convertQueriedColumns(columnNames));
             FROM(tableName);
@@ -109,7 +106,6 @@ public class SqlBuilder {
                 }
             }
         }}.toString();
-        logger.info("=========>sql: {}", sql);
         return sql;
     }
 
@@ -164,7 +160,6 @@ public class SqlBuilder {
                 }
             }
         }}.toString();
-        logger.info("====> sql: {}", sql);
         return sql;
     }
 
@@ -188,9 +183,6 @@ public class SqlBuilder {
             );
             throw new RuntimeException(message);
         }
-
-        logger.info("table name: {}", tableName);
-        logger.info("mappedColumns: {}", mappedColumns);
 
         String sql = new SQL(){{
             INSERT_INTO(tableName);
@@ -299,34 +291,6 @@ public class SqlBuilder {
                 }
             }
             WHERE(where.toString());
-        }}.toString();
-        return sql;
-    }
-
-    public String buildDeleteByParameters(final Entity entity){
-        final EntityPersistentInfo entityPersistentInfo = EntityAssistant.parse(entity.getClass());
-        final String tableName = entityPersistentInfo.getTableName();
-        final List<EntityPersistentInfo.MappedColumn> mappedColumns = entityPersistentInfo.getMappedColumns();
-
-        if(!StringUtils.hasText(tableName)){
-            String message = String.format(
-                    "找不到[%s]在数据库中对应的表名，请检查该类中有关Table的定义。",
-                    entity.getClass().getName()
-            );
-            throw new RuntimeException(message);
-        }
-
-        String sql = new SQL(){{
-            DELETE_FROM(tableName);
-
-            List<EntityPersistentInfo.MappedColumn> mappedColumns = entityPersistentInfo.getMappedColumns();
-            for (EntityPersistentInfo.MappedColumn mappedColumn : mappedColumns){
-                String column = mappedColumn.getName();
-                String variable = String.format("#{%s}", mappedColumn.getProperty());
-                if(null != mappedColumn.getValue(entity)){
-                    WHERE(String.format("%s = %s", column, variable));
-                }
-            }
         }}.toString();
         return sql;
     }

@@ -32,7 +32,7 @@ import java.util.Map;
  *
  * @author zhaojh
  */
-@org.springframework.stereotype.Repository("myBatisCrudRepository")
+@org.springframework.stereotype.Repository
 public class RepositoryImpl implements Repository {
     private static final Logger logger = LoggerFactory.getLogger(RepositoryImpl.class);
 
@@ -210,20 +210,6 @@ public class RepositoryImpl implements Repository {
 
         BaseMapper<T> mapper = getEntityMapperFor(entityClass);
         mapper.deleteByIds(entityClass, ids);
-    }
-
-    @Override
-    public <T extends Entity> void delete(T entity) {
-        Class entityClass = entity.getClass();
-        String statementName = String.format("%sMapper.%s", entityClass.getName(), SqlBuilder.DELETE_BY_PARAMETERS);
-
-        if(MappedStatementAssistant.hasStatementInSqlSession(statementName, sqlSessionTemplate)){
-            sqlSessionTemplate.delete(statementName, entity);
-            return;
-        }
-
-        BaseMapper<T> mapper = getEntityMapperFor(entityClass);
-        mapper.deleteByParameters(entity);
     }
 
     @Override

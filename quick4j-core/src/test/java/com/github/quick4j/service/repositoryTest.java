@@ -136,22 +136,6 @@ public class repositoryTest {
         Assert.assertTrue(anotherList.isEmpty());
     }
 
-    @Test
-    @Transactional
-    public void testDeleteEntity(){
-        Teacher teacher = new Teacher("Jack");
-        teacher.setAge(30);
-        teacher.setTel("120");
-        repository.insert(teacher);
-
-        Teacher another = repository.find(Teacher.class, teacher.getId());
-        Assert.assertThat(another.getName(), is("Jack"));
-
-        repository.delete(another);
-
-        Teacher result = repository.find(Teacher.class, teacher.getId());
-        Assert.assertNull(result);
-    }
 
     @Test
     @Transactional
