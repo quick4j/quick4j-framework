@@ -65,7 +65,7 @@ public class DefaultCriteria<T extends Entity> implements Criteria<T>{
 
     @Override
     public void delete(T entity) {
-        repository.delete(entity);
+        repository.delete(entity.getClass(), entity.getId());
     }
 
     @Override
