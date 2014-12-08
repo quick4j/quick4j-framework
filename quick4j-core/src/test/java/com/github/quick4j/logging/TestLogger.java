@@ -1,5 +1,6 @@
 package com.github.quick4j.logging;
 
+import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.CrudService;
 import com.github.quick4j.entity.User;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,8 +30,7 @@ public class TestLogger {
 
     @Test
     @Transactional
-    @Rollback
-    public void testRecordSingleEntityCreate(){
+    public void testCreateEntity(){
         User jack = new User();
         jack.setName("Jack Chen");
         jack.setLoginName("jack");
@@ -40,8 +41,7 @@ public class TestLogger {
 
     @Test
     @Transactional
-    @Rollback
-    public void testRecordManyEntityCreate(){
+    public void testCreateManyEntity(){
         User jack = new User();
         jack.setName("Jack Chen");
         jack.setLoginName("jack");
@@ -61,8 +61,7 @@ public class TestLogger {
 
     @Test
     @Transactional
-    @Rollback
-    public void testRecordEntityModify(){
+    public void testModifyEntity(){
         User jack = new User();
         jack.setName("Jack Chen");
         jack.setLoginName("jack");
@@ -75,8 +74,7 @@ public class TestLogger {
 
     @Test
     @Transactional
-    @Rollback
-    public void testRecordEntityCreateAndModify(){
+    public void testModifyManyEntity(){
         User jack = new User();
         jack.setName("Jack Chen");
         jack.setLoginName("jack");
@@ -96,6 +94,19 @@ public class TestLogger {
         list.add(tom);
 
         simpleCrudService.save(list);
+    }
+
+    @Test
+    @Transactional
+    public void testDeleteEntity(){
+        User jack = new User();
+        jack.setName("Jack Chen");
+        jack.setLoginName("jack");
+        jack.setPassword("123");
+        simpleCrudService.save(jack);
+
+        Criteria<User> criteria = simpleCrudService.createCriteria(User.class);
+        criteria.delete(jack.getId());
     }
 
     @Test
@@ -118,6 +129,8 @@ public class TestLogger {
         Map<String, String> other = new HashMap<String, String>();
         other.put("name", "Marry");
         helloService.saySorry(one, other);
+
+        helloService.sayLala();
     }
 
 }

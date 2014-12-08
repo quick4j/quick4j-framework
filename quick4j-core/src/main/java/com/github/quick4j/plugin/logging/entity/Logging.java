@@ -12,8 +12,9 @@ import java.util.List;
 /**
  * @author zhaojh
  */
+@javax.persistence.Entity
 @Table(name = "sys_operation_log")
-public class OperationLog extends AbstractEntity{
+public class Logging extends AbstractEntity{
     @Id
     private String id;
     @Column(name = "user_id")
@@ -28,7 +29,7 @@ public class OperationLog extends AbstractEntity{
     private String data;
     private String masterId;
 
-    public OperationLog(String userid, String username, long createTime, String content, String data) {
+    public Logging(String userid, String username, long createTime, String content, String data) {
         this.userid = userid;
         this.username = username;
         this.createTime = createTime;
@@ -65,5 +66,25 @@ public class OperationLog extends AbstractEntity{
     @Override
     public String getMasterId() {
         return masterId;
+    }
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getData() {
+        return data;
     }
 }

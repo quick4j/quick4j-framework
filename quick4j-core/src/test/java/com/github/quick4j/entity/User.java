@@ -1,7 +1,9 @@
 package com.github.quick4j.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.quick4j.core.entity.AbstractEntity;
 import com.github.quick4j.core.entity.Entity;
+import com.github.quick4j.plugin.logging.annontation.Auditable;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -11,6 +13,7 @@ import java.util.List;
 /**
  * @author zhaojh
  */
+@Auditable
 @Table(name = "hr_user_info")
 public class User extends AbstractEntity{
     @Id
@@ -24,8 +27,9 @@ public class User extends AbstractEntity{
     private String masterId;
 
     @Override
+    @JsonIgnore
     public String getMetaData() {
-        return "User ";
+        return String.format("User|%s", name);
     }
 
     @Override
@@ -49,6 +53,7 @@ public class User extends AbstractEntity{
     }
 
     @Override
+    @JsonIgnore
     public String getMasterId() {
         return masterId;
     }

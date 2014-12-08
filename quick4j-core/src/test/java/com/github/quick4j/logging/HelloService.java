@@ -1,7 +1,6 @@
 package com.github.quick4j.logging;
 
 import com.github.quick4j.entity.User;
-import com.github.quick4j.plugin.logging.StorageMedium;
 import com.github.quick4j.plugin.logging.annontation.WriteLog;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,7 @@ public class HelloService {
         System.out.println("Hello " + user.getName());
     }
 
-    @WriteLog(value = "${args[0].name}向${args[1].name}说：I Love U!", data = "${args[0]},${args[1]}", to = StorageMedium.FILE)
+    @WriteLog(value = "${args[0].name}向${args[1].name}说：I Love U!", data = "${args[0]},${args[1]}")
     public void sayLove(User master, User customer){
         System.out.println("I Love U!");
     }
@@ -26,5 +25,10 @@ public class HelloService {
     @WriteLog("${args[0][name]}向${args[1][name]}道歉")
     public void saySorry(Map one, Map other){
         System.out.println("I'm sorry!");
+    }
+
+    @WriteLog("lala~")
+    public void sayLala(){
+        System.out.println("lalala~");
     }
 }

@@ -3,6 +3,7 @@ package com.github.quick4j.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.quick4j.core.entity.AbstractEntity;
 import com.github.quick4j.core.entity.Entity;
+import com.github.quick4j.plugin.logging.annontation.Auditable;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -15,6 +16,7 @@ import java.util.List;
 /**
  * @author zhaojh
  */
+@Auditable
 @Table(name = "test_teacher")
 public class Teacher extends AbstractEntity{
     @Id
