@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.Column;
 import javax.persistence.Table;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +29,13 @@ public class EntityPersistentInfo {
         private String name;
         private String property;
         private Class javaType;
+        private Field field;
 
-        public MappedColumn(String name, String property, Class javaType) {
+        public MappedColumn(String name, Field field) {
             this.name = name;
-            this.property = property;
-            this.javaType = javaType;
+            this.property = field.getName();
+            this.javaType = field.getType();
+            this.field = field;
         }
 
         public String getName() {
@@ -50,7 +53,6 @@ public class EntityPersistentInfo {
         public Object getValue(Object entity){
             Object value = null;
             try {
-                Field field = entity.getClass().getDeclaredField(property);
                 field.setAccessible(true);
                 value = field.get(entity);
             } catch (Exception e) {
@@ -101,17 +103,38 @@ public class EntityPersistentInfo {
     private void parse(){
         List<String> columnNames = new ArrayList<String>();
 
-        Field[] fields = entityClass.getDeclaredFields();
+        Field[] fields = getAllFields(entityClass, new ArrayList<Field>()).toArray(new Field[]{});
         for(Field field : fields){
+            System.out.println(field.getName());
             if(!field.isAnnotationPresent(Column.class)){
                 continue;
             }
 
             Column column = field.getAnnotation(Column.class);
-            mappedColumns.add(new MappedColumn(column.name(), field.getName(), field.getType()));
+            mappedColumns.add(new MappedColumn(column.name(), field));
             columnNames.add(column.name());
         }
 
         columns = columnNames.toArray(new String[]{});
+    }
+
+    private List<Field> getAllFields(Class entityClass, List<Field> fieldList){
+        if(entityClass.equals(Object.class)){
+            return fieldList;
+        }
+
+        Field[] fields = entityClass.getDeclaredFields();
+        for (Field field : fields){
+            if(!Modifier.isStatic(field.getModifiers())){
+                fieldList.add(field);
+            }
+        }
+
+        if(entityClass.getSuperclass() != null
+                && !entityClass.getSuperclass().equals(Object.class)){
+            return getAllFields(entityClass.getSuperclass(), fieldList);
+        }
+
+        return fieldList;
     }
 }
