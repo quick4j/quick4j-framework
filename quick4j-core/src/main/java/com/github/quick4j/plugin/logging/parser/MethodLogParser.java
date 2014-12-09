@@ -1,18 +1,26 @@
-package com.github.quick4j.plugin.logging;
+package com.github.quick4j.plugin.logging.parser;
 
+import com.github.quick4j.plugin.logging.LogBuilder;
+import com.github.quick4j.plugin.logging.LogParser;
+import com.github.quick4j.plugin.logging.annontation.Builder;
+import com.github.quick4j.plugin.logging.builder.AbstractLogBuilder;
+import com.github.quick4j.plugin.logging.builder.DefaultMethodLogBuilder;
 import com.github.quick4j.plugin.logging.annontation.WriteLog;
 import com.github.quick4j.plugin.logging.expression.ConvertAssistant;
 import com.github.quick4j.plugin.logging.expression.CustomTemplateParserContext;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
+import java.lang.reflect.Constructor;
+
 /**
  * @author zhaojh.
  */
-public class MethodLogParser implements LogParser{
+public class MethodLogParser implements LogParser {
     private WriteLog writeLog;
     private Object[] methodArgs;
     private ExpressionParser spelParser;
@@ -31,10 +39,21 @@ public class MethodLogParser implements LogParser{
     }
 
     @Override
-    public LogConfig parse() {
+    public LogBuilder parse() {
         String logContent = getLogContent();
         Object[] extraData = getExtraData();
-        return new LogConfig(true, logContent, extraData, LogConfig.LogType.OTHER);
+        Class<AbstractLogBuilder> logBuilderClass = getLogBuilder();
+        if(logBuilderClass.equals(DefaultMethodLogBuilder.class)){
+            return new DefaultMethodLogBuilder(logContent, extraData);
+        }else{
+            Constructor<AbstractLogBuilder> cons = null;
+            try {
+                cons = logBuilderClass.getConstructor(String.class, Object[].class);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+            return BeanUtils.instantiateClass(cons, new Object[]{logContent, extraData});
+        }
     }
 
     private String getLogContent(){
@@ -51,6 +70,10 @@ public class MethodLogParser implements LogParser{
         }
 
         return extraData;
+    }
+
+    private Class getLogBuilder(){
+        return writeLog.builder();
     }
 
     private Object parseExpression(String expressionString, EvaluationContext context){

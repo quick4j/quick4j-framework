@@ -110,6 +110,7 @@ public class TestLogger {
     }
 
     @Test
+    @Transactional
     public void testWriteLogAnnontation(){
         User boy = new User();
         boy.setName("Jack");
@@ -133,4 +134,9 @@ public class TestLogger {
         helloService.sayLala();
     }
 
+    @Test
+    @Transactional
+    public void testCustomLogBuilder(){
+        helloService.sayGoodbye();
+    }
 }

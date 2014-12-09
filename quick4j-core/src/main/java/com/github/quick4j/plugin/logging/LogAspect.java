@@ -3,8 +3,14 @@ package com.github.quick4j.plugin.logging;
 import com.github.quick4j.core.entity.Entity;
 import com.github.quick4j.core.repository.mybatis.Repository;
 import com.github.quick4j.plugin.logging.annontation.WriteLog;
+import com.github.quick4j.plugin.logging.entity.DefaultLogging;
 import com.github.quick4j.plugin.logging.entity.Logging;
+import com.github.quick4j.plugin.logging.exception.NotFoundLogException;
 import com.github.quick4j.plugin.logging.exception.ParseLogFailureException;
+import com.github.quick4j.plugin.logging.parser.CreateEntityLogParser;
+import com.github.quick4j.plugin.logging.parser.MethodLogParser;
+import com.github.quick4j.plugin.logging.parser.DeleteEntityLogParser;
+import com.github.quick4j.plugin.logging.parser.UpdateEntityLogParser;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,12 +39,8 @@ public class LogAspect {
         try {
             Object rtnValue = pjp.proceed();
 
-            try{
-                LogParser logParser = new EntityLogParser(EntityLogParser.HandleType.CREATE_ENTITY, pjp.getArgs());
-                writeLog(logParser);
-            }catch (ParseLogFailureException e){
-                logger.error(e.getMessage());
-            }
+            LogParser logParser = new CreateEntityLogParser(pjp.getArgs());
+            writeLog(logParser);
 
             return rtnValue;
         } catch (Throwable throwable) {
@@ -52,12 +54,8 @@ public class LogAspect {
 
             Object rtnValue = pjp.proceed();
 
-            try{
-                LogParser logParser = new EntityLogParser(EntityLogParser.HandleType.UPDATE_ENTITY, pjp.getArgs());
-                writeLog(logParser);
-            }catch (ParseLogFailureException e){
-                logger.error(e.getMessage());
-            }
+            LogParser logParser = new UpdateEntityLogParser(pjp.getArgs());
+            writeLog(logParser);
 
             return rtnValue;
         } catch (Throwable throwable) {
@@ -68,16 +66,12 @@ public class LogAspect {
     @Around(value = "execution(* com.github.quick4j.core.repository.mybatis.Repository.delete(Class, *))")
     public Object doRecordEntityDelete(ProceedingJoinPoint pjp) throws Throwable {
         try {
-            Object[] entities = findDeletedEntity(pjp.getArgs());
+            List<Entity> entities = findDeletedEntity(pjp.getArgs());
 
             Object rtnValue = pjp.proceed();
 
-            try{
-                LogParser logParser = new EntityLogParser(EntityLogParser.HandleType.DELETE_ENTITY, entities);
-                writeLog(logParser);
-            }catch (ParseLogFailureException e){
-                logger.error(e.getMessage());
-            }
+            LogParser logParser = new DeleteEntityLogParser(new Object[]{entities});
+            writeLog(logParser);
 
             return rtnValue;
         } catch (Throwable throwable) {
@@ -104,17 +98,27 @@ public class LogAspect {
     }
 
     private void writeLog(LogParser logParser){
-        LogConfig logConfig = logParser.parse();
-        if(!logConfig.isWritten()) return;
+        try{
+            LogBuilder logBuilder = logParser.parse();
+            List<Logging> loggings = logBuilder.getLoggings();
+            if(null == loggings) return;
 
-        List<Logging> loggings = logConfig.getLoggings();
-        for(Logging logging : loggings){
-            logger.info("===> 日志内容：{}", logging.getContent());
-            logger.info("===> 操作数据：{}", logging.getData());
-        }
+            for(Logging logging : loggings){
+                logger.info("===> 操作时间：{}", new Date(logging.getCreateTime()));
+                logger.info("===> 日志内容：{}", logging.getContent());
+                if(logging instanceof DefaultLogging){
+                    logger.info("===> 操作数据：{}", ((DefaultLogging)logging).getExtraData());
+                }
+
+                dbLogger.writeLog(logging);
+            }
+
+        }catch (ParseLogFailureException e){
+            // do nothing
+        }catch (NotFoundLogException e){}
     }
 
-    private Object[] findDeletedEntity(Object[] args){
+    private List<Entity> findDeletedEntity(Object[] args){
         Class entityClass = (Class) args[0];
         Object params = args[1];
         String[] ids ;
@@ -125,6 +129,6 @@ public class LogAspect {
             ids = (String[]) params;
         }
 
-        return repository.findByIds(entityClass, ids).toArray();
+        return repository.findByIds(entityClass, ids);
     }
 }

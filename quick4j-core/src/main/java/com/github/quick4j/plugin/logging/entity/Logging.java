@@ -6,14 +6,14 @@ import com.github.quick4j.core.entity.Entity;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
 import javax.persistence.Table;
 import java.util.List;
 
 /**
  * @author zhaojh
  */
-@javax.persistence.Entity
-@Table(name = "sys_operation_log")
+@Inheritance
 public class Logging extends AbstractEntity{
     @Id
     private String id;
@@ -25,16 +25,14 @@ public class Logging extends AbstractEntity{
     private long createTime;
     @Column(name = "content")
     private String content;
-    @Column(name = "method_args")
-    private String data;
+
     private String masterId;
 
-    public Logging(String userid, String username, long createTime, String content, String data) {
+    public Logging(String userid, String username, long createTime, String content) {
         this.userid = userid;
         this.username = username;
         this.createTime = createTime;
         this.content = content;
-        this.data = data;
     }
 
     @Override
@@ -50,7 +48,7 @@ public class Logging extends AbstractEntity{
 
     @Override
     public String getId() {
-        return null;
+        return id;
     }
 
     @Override
@@ -82,9 +80,5 @@ public class Logging extends AbstractEntity{
 
     public String getContent() {
         return content;
-    }
-
-    public String getData() {
-        return data;
     }
 }

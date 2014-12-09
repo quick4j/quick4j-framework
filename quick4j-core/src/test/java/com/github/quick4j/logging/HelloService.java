@@ -1,7 +1,10 @@
 package com.github.quick4j.logging;
 
 import com.github.quick4j.entity.User;
+import com.github.quick4j.plugin.logging.annontation.Builder;
 import com.github.quick4j.plugin.logging.annontation.WriteLog;
+import com.github.quick4j.plugin.logging.builder.DefaultMethodLogBuilder;
+import com.github.quick4j.plugin.logging.entity.Logging;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -27,8 +30,13 @@ public class HelloService {
         System.out.println("I'm sorry!");
     }
 
-    @WriteLog("lala~")
+    @WriteLog(value = "lala~")
     public void sayLala(){
         System.out.println("lalala~");
+    }
+
+    @WriteLog(value = "say Goodbye", builder = CustomLogBuilder.class)
+    public void sayGoodbye(){
+        System.out.println("Say~ Goodbye~~~");
     }
 }
