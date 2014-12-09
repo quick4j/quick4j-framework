@@ -103,7 +103,7 @@ public class EntityPersistentInfo {
     private void parse(){
         List<String> columnNames = new ArrayList<String>();
 
-        Field[] fields = getAllFields(entityClass, new ArrayList<Field>()).toArray(new Field[]{});
+        Field[] fields = getAllFields(entityClass).toArray(new Field[]{});
         for(Field field : fields){
             System.out.println(field.getName());
             if(!field.isAnnotationPresent(Column.class)){
@@ -116,6 +116,10 @@ public class EntityPersistentInfo {
         }
 
         columns = columnNames.toArray(new String[]{});
+    }
+
+    private List<Field> getAllFields(Class entityClass){
+        return getAllFields(entityClass, new ArrayList<Field>());
     }
 
     private List<Field> getAllFields(Class entityClass, List<Field> fieldList){
