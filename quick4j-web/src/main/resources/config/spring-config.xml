@@ -39,7 +39,7 @@
     </tx:advice>
 
     <aop:config expose-proxy="true" proxy-target-class="true">
-        <aop:pointcut id="txPointcut" expression="execution(* com.github.quick4j..service..*+.*(..))"/>
+        <aop:pointcut id="txPointcut" expression="execution(* com.github.quick4j..service..*+.*(..)) or execution(* com.github.quick4j.plugin.logging.support.DBLoggerImpl.*(..))"/>
         <aop:advisor id="txAdvisor" advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     </aop:config>
 
