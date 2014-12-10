@@ -64,9 +64,25 @@ public class LogAspect {
     }
 
     @Around(value = "execution(* com.github.quick4j.core.repository.mybatis.Repository.delete(Class, *))")
-    public Object doRecordEntityDelete(ProceedingJoinPoint pjp) throws Throwable {
+    public Object doRecordEntityDeleteById(ProceedingJoinPoint pjp) throws Throwable {
         try {
             List<Entity> entities = findDeletedEntity(pjp.getArgs());
+
+            Object rtnValue = pjp.proceed();
+
+            LogParser logParser = new DeleteEntityLogParser(new Object[]{entities});
+            writeLog(logParser);
+
+            return rtnValue;
+        } catch (Throwable throwable) {
+            throw throwable;
+        }
+    }
+
+    @Around(value = "execution(* com.github.quick4j.core.repository.mybatis.Repository.delete(com.github.quick4j.core.entity.Entity))&&args(entity)")
+    public Object doRecordEntityDelete(ProceedingJoinPoint pjp, Entity entity) throws Throwable {
+        try {
+            List<Entity> entities = findDeletedEntity(entity);
 
             Object rtnValue = pjp.proceed();
 
@@ -130,5 +146,9 @@ public class LogAspect {
         }
 
         return repository.findByIds(entityClass, ids);
+    }
+
+    private List<Entity> findDeletedEntity(Entity entity){
+        return (List<Entity>) repository.findByParams(entity.getClass(), entity);
     }
 }
