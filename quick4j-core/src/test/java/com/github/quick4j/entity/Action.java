@@ -23,11 +23,10 @@ public class Action extends AbstractEntity {
     private String icon;
     @Column(name = "action_index")
     private int index;
-    private String masterId;
-    
+
     @Override
-    public String getMetaData() {
-        return "操作按钮-" + this.name;
+    public String getChineseName() {
+        return "操作按钮";
     }
 
     @Override
@@ -43,16 +42,6 @@ public class Action extends AbstractEntity {
     @Override
     public String getId() {
         return id;
-    }
-
-    @Override
-    public void setMasterId(String id) {
-        this.masterId = id;
-    }
-
-    @Override
-    public String getMasterId() {
-        return masterId;
     }
 
     public String getCode() {

@@ -28,8 +28,13 @@ public class Student extends AbstractEntity{
     }
 
     @Override
-    public String getMetaData() {
-        return "学生-" + this.name;
+    public String getChineseName() {
+        return "学生";
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -45,15 +50,5 @@ public class Student extends AbstractEntity{
     @Override
     public String getId() {
         return id;
-    }
-
-    @Override
-    public void setMasterId(String id) {
-        this.masterId = id;
-    }
-
-    @Override
-    public String getMasterId() {
-        return masterId;
     }
 }

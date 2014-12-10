@@ -1,13 +1,29 @@
 package com.github.quick4j.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.quick4j.core.exception.NotFoundException;
-import com.github.quick4j.core.mybatis.annotation.Mapper;
 
 /**
  * @author zhaojh
  */
 public abstract class AbstractEntity implements Entity{
+    private String masterId;
+
+    @Override
+    public void setMasterId(String masterId) {
+        this.masterId = masterId;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getMasterId() {
+        return masterId;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getMetaData() {
+        return String.format("%s|%s", getChineseName(), getName());
+    }
 
     @JsonIgnore
     public boolean isNew(){

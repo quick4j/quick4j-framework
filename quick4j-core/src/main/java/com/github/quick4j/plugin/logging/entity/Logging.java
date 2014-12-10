@@ -1,19 +1,15 @@
 package com.github.quick4j.plugin.logging.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.quick4j.core.entity.AbstractEntity;
 import com.github.quick4j.core.entity.Entity;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.Table;
 import java.util.List;
 
 /**
  * @author zhaojh
  */
-@Inheritance
 public class Logging extends AbstractEntity{
     @Id
     private String id;
@@ -36,9 +32,13 @@ public class Logging extends AbstractEntity{
     }
 
     @Override
-    @JsonIgnore
-    public String getMetaData() {
+    public String getChineseName() {
         return "操作日志";
+    }
+
+    @Override
+    public String getName() {
+        return "";
     }
 
     @Override
@@ -54,16 +54,6 @@ public class Logging extends AbstractEntity{
     @Override
     public List<? extends Entity> getSlave() {
         return null;
-    }
-
-    @Override
-    public void setMasterId(String id) {
-        this.masterId = id;
-    }
-
-    @Override
-    public String getMasterId() {
-        return masterId;
     }
 
     public String getUserid() {

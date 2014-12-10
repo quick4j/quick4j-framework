@@ -27,12 +27,6 @@ public class User extends AbstractEntity{
     private String masterId;
 
     @Override
-    @JsonIgnore
-    public String getMetaData() {
-        return String.format("User|%s", name);
-    }
-
-    @Override
     public List<? extends Entity> getSlave() {
         return null;
     }
@@ -48,14 +42,8 @@ public class User extends AbstractEntity{
     }
 
     @Override
-    public void setMasterId(String id) {
-        this.masterId = id;
-    }
-
-    @Override
-    @JsonIgnore
-    public String getMasterId() {
-        return masterId;
+    public String getChineseName() {
+        return "User";
     }
 
     public String getLoginName() {

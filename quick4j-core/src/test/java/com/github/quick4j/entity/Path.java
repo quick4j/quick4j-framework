@@ -1,6 +1,5 @@
 package com.github.quick4j.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.quick4j.core.entity.AbstractEntity;
 import com.github.quick4j.core.entity.Entity;
 
@@ -29,14 +28,17 @@ public class Path extends AbstractEntity {
     private int index;
     @Column(name = "application_id")
     private String applicationId;
-    private String masterId;
     private String[] actions;
     private Map<String, Action> actionMap;
 
     @Override
-    @JsonIgnore
-    public String getMetaData() {
-        return "资源-" + this.name;
+    public String getChineseName() {
+        return "资源";
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -52,16 +54,6 @@ public class Path extends AbstractEntity {
     @Override
     public String getId() {
         return id;
-    }
-
-    @Override
-    public void setMasterId(String id) {
-        this.masterId = id;
-    }
-
-    @Override
-    public String getMasterId() {
-        return masterId;
     }
 
     public String[] getActions() {

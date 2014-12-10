@@ -39,6 +39,11 @@ public class Teacher extends AbstractEntity{
     }
 
     @Override
+    public String getChineseName() {
+        return "教师";
+    }
+
+    @Override
     public void setId(String id) {
         this.id = id;
     }
@@ -46,16 +51,6 @@ public class Teacher extends AbstractEntity{
     @Override
     public String getId() {
         return id;
-    }
-
-    @Override
-    public void setMasterId(String id) {
-        this.masterId = id;
-    }
-
-    @Override
-    public String getMasterId() {
-        return masterId;
     }
 
     public String getName() {
@@ -90,11 +85,6 @@ public class Teacher extends AbstractEntity{
         this.birthDay = birthDay;
     }
 
-    @Override
-    @JsonIgnore
-    public String getMetaData() {
-        return "教师-" + this.name;
-    }
 
     @Override
     @JsonIgnore

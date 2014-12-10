@@ -13,4 +13,6 @@ public interface Entity{
     String getMetaData();
     List<? extends Entity> getSlave();
     boolean isNew();
+    String getChineseName();
+    String getName();
 }

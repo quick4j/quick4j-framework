@@ -19,8 +19,8 @@ public class PathInfo extends AbstractEntity {
     private String masterId;
 
     @Override
-    public String getMetaData() {
-        return null;
+    public String getChineseName() {
+        return "资源";
     }
 
     @Override
@@ -66,15 +66,5 @@ public class PathInfo extends AbstractEntity {
 
     public void setActions(List<Action> actions) {
         this.actions = actions;
-    }
-
-    @Override
-    public void setMasterId(String id) {
-        this.masterId = id;
-    }
-
-    @Override
-    public String getMasterId() {
-        return masterId;
     }
 }

@@ -56,25 +56,13 @@ public class DicItem extends AbstractEntity{
     }
 
     @Override
-    public void setMasterId(String id) {
-        this.masterId = id;
-    }
-
-    @Override
-    @JsonIgnore
-    public String getMasterId() {
-        return masterId;
-    }
-
-    @Override
-    @JsonIgnore
-    public String getMetaData() {
-        return "字典条目";
-    }
-
-    @Override
     public List<? extends Entity> getSlave() {
         return null;
+    }
+
+    @Override
+    public String getChineseName() {
+        return "字典项";
     }
 
     public String getCode() {
