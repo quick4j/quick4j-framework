@@ -16,8 +16,8 @@ public class FixedColumnDataGrid extends AbstractDataGrid{
     private List<Header> normalHeaderContainer;
     private List<Header> frozenHeaderContainer;
 
-    public FixedColumnDataGrid(String name, String entity){
-        super(name, entity);
+    public FixedColumnDataGrid(String name, Class entityClass){
+        super(name, entityClass);
         this.normalHeaderContainer = new ArrayList<Header>();
         this.frozenHeaderContainer = new ArrayList<Header>();
     }

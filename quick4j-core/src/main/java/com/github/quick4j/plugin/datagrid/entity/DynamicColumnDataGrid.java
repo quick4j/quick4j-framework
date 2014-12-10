@@ -11,7 +11,7 @@ public abstract class DynamicColumnDataGrid extends AbstractDataGrid{
     @Resource
     private Repository repository;
 
-    protected DynamicColumnDataGrid(String name, String entity) {
+    protected DynamicColumnDataGrid(String name, Class entity) {
         super(name, entity);
     }
 

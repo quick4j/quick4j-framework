@@ -80,22 +80,17 @@ public class DataGridAPIController {
 
         logger.info("dataGrid: {}, page: {}, size: {}", name, _page, _size);
 
-        String dataModelFullName = dataGrid.getEntity();
-        try {
-            Class entityClass = Class.forName(dataModelFullName);
-            Criteria  criteria = simpleCrudService.createCriteria(entityClass);
-            PageRequest<Map<String, Object>> pageRequest = new PageRequest(_page, _size, wrapRequestMap(request));
-            DataPaging dataPaging = criteria.findAll(pageRequest);
 
-            if(dataGrid.isSupportPostProcess()){
-                dataPaging = dataGrid.getPostProcessor().process(dataPaging, pageRequest);
-            }
+        Class entityClass = dataGrid.getEntity();
+        Criteria  criteria = simpleCrudService.createCriteria(entityClass);
+        PageRequest<Map<String, Object>> pageRequest = new PageRequest(_page, _size, wrapRequestMap(request));
+        DataPaging dataPaging = criteria.findAll(pageRequest);
 
-            return new AjaxResponse(AjaxResponse.Status.OK, dataPaging);
-        } catch (ClassNotFoundException e) {
-            logger.error("dataModel '{}' no exist.", dataGrid.getEntity(), e);
-            throw new NotFoundException("datagrid.datamodel.notfound", new Object[]{dataModelFullName, name});
+        if(dataGrid.isSupportPostProcess()){
+            dataPaging = dataGrid.getPostProcessor().process(dataPaging, pageRequest);
         }
+
+        return new AjaxResponse(AjaxResponse.Status.OK, dataPaging);
     }
 
     private Map<String, Object> wrapRequestMap(HttpServletRequest request){

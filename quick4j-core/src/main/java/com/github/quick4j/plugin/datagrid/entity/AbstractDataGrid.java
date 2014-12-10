@@ -10,13 +10,13 @@ import com.github.quick4j.plugin.datagrid.meta.Toolbar;
  */
 public abstract class AbstractDataGrid implements DataGrid {
     private String name;
-    private String entity;
+    private Class entityClass;
     private Toolbar toolbar;
     private DataGridPostProcessor postProcessor;
 
-    protected AbstractDataGrid(String name, String entity) {
+    protected AbstractDataGrid(String name, Class entityClass) {
         this.name = name;
-        this.entity = entity;
+        this.entityClass = entityClass;
     }
 
     @Override
@@ -26,8 +26,8 @@ public abstract class AbstractDataGrid implements DataGrid {
 
     @Override
     @JsonIgnore
-    public String getEntity() {
-        return entity;
+    public Class getEntity() {
+        return entityClass;
     }
 
     @Override
@@ -41,6 +41,7 @@ public abstract class AbstractDataGrid implements DataGrid {
     }
 
     @Override
+    @JsonIgnore
     public DataGridPostProcessor getPostProcessor() {
         return postProcessor;
     }

@@ -3,6 +3,7 @@ package com.github.quick4j.datagrid;
 import com.github.quick4j.core.repository.mybatis.Repository;
 import com.github.quick4j.core.repository.mybatis.support.Sort;
 import com.github.quick4j.entity.Action;
+import com.github.quick4j.entity.Path;
 import com.github.quick4j.plugin.datagrid.DataGrid;
 import com.github.quick4j.plugin.datagrid.entity.DynamicColumnDataGrid;
 import com.github.quick4j.plugin.datagrid.meta.Header;
@@ -23,12 +24,12 @@ public class DynamicDataGrid extends DynamicColumnDataGrid {
     private Repository repository;
 
     public DynamicDataGrid() {
-        super("dynamic", "com.github.quick4j.entity.Path");
+        super("dynamic", Path.class);
         newToolbar().addToolbutton("Add", "icon-add", "doAdd");
         repository = getRepository();
     }
 
-    public DynamicDataGrid(String name, String entity, Repository repository) {
+    public DynamicDataGrid(String name, Class entity, Repository repository) {
         super(name, entity);
         this.repository = repository;
     }

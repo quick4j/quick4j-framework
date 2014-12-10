@@ -31,6 +31,37 @@ public class DataGridManager implements InitializingBean, BeanPostProcessor {
     private SimpleModule module = null;
     private String configLocations = "classpath*:config/datagrid/*.json";
 
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        return bean;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        mapper = new ObjectMapper();
+        module = new SimpleModule();
+        module.addDeserializer(DataGrid.class, new DataGridDeserializer(mapper));
+        mapper.registerModule(module);
+        logger.info("configLocations: {}", configLocations);
+        build(configLocations);
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        if(bean instanceof DataGrid){
+            registDataGrid((DataGrid) bean);
+        }
+
+        if(bean instanceof DataGridPostProcessor){
+            DataGridPostProcessor postProcessor = (DataGridPostProcessor)bean;
+            String dataGridName = postProcessor.getName();
+            DataGrid dataGrid = getDataGrid(dataGridName);
+            dataGrid.setPostProcessor(postProcessor);
+            logger.info("{}被注册到{}", postProcessor.getClass().getName(), dataGridName);
+        }
+        return bean;
+    }
+
     public void setConfigLocations(String configLocations) {
         this.configLocations = configLocations;
     }
@@ -53,37 +84,6 @@ public class DataGridManager implements InitializingBean, BeanPostProcessor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        return bean;
-    }
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if(bean instanceof DataGrid){
-            registDataGrid((DataGrid) bean);
-        }
-
-        if(bean instanceof DataGridPostProcessor){
-            DataGridPostProcessor postProcessor = (DataGridPostProcessor)bean;
-            String dataGridName = postProcessor.getName();
-            DataGrid dataGrid = getDataGrid(dataGridName);
-            dataGrid.setPostProcessor(postProcessor);
-            logger.info("{}被注册到{}", postProcessor.getClass().getName(), dataGridName);
-        }
-        return bean;
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        mapper = new ObjectMapper();
-        module = new SimpleModule();
-        module.addDeserializer(DataGrid.class, new DataGridDeserializer(mapper));
-        mapper.registerModule(module);
-        logger.info("configLocations: {}", configLocations);
-        build(configLocations);
     }
 
     private void registDataGrid(DataGrid dataGrid){

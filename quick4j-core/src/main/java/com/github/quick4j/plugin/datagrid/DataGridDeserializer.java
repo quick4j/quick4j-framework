@@ -31,22 +31,26 @@ public class DataGridDeserializer extends JsonDeserializer {
 
     @Override
     public Object deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-            throws IOException, JsonProcessingException {
+            throws IOException{
         JsonNode root = jsonParser.getCodec().readTree(jsonParser);
         String name = root.get("name").asText();
-        String dataModel = root.get("dataModel").asText();
+        String entity = root.get("entity").asText();
         JsonNode frozenColumnsNode = root.get("frozenColumns");
         JsonNode normalColumnsNode = root.get("columns");
         JsonNode toolbarNode = root.get("toolbar");
 
         logger.debug("name: {}", name);
-        logger.debug("dataModel: {}", dataModel);
+        logger.debug("entity: {}", entity);
 
-//        List<Header> frozenColumns = deserializeColumns(frozenColumnsNode);
-//        List<Header> normalColumns = deserializeColumns(normalColumnsNode);
-//        Toolbar toolbar = deserializeToolbar(toolbarNode);
-
-        FixedColumnDataGrid dataGrid = new FixedColumnDataGrid(name, dataModel);
+        Class entityClass = null;
+        try {
+            entityClass = Class.forName(entity);
+        } catch (ClassNotFoundException e) {
+            String message = String.format("找不到DataGrid[%s]中定义的Entity[].", name, entity);
+            logger.error(message);
+            throw new RuntimeException(message, e);
+        }
+        FixedColumnDataGrid dataGrid = new FixedColumnDataGrid(name, entityClass);
         dataGrid.setToolbar(deserializeToolbar(toolbarNode));
 
         fillColumns(frozenColumnsNode, dataGrid.getFrozenColumns());

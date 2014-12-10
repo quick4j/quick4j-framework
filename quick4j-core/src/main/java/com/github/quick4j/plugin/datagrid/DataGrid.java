@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface DataGrid{
     String getName();
-    String getEntity();
+    Class getEntity();
     List<Header> getColumns();
     List<Header> getFrozenColumns();
     Toolbar getToolbar();
