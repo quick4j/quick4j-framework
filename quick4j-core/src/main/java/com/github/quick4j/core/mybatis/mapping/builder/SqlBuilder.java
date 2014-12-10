@@ -1,6 +1,7 @@
 package com.github.quick4j.core.mybatis.mapping.builder;
 
 import com.github.quick4j.core.entity.Entity;
+import com.github.quick4j.core.mybatis.mapping.BuildSqlException;
 import com.github.quick4j.core.repository.mybatis.support.Order;
 import com.github.quick4j.core.repository.mybatis.support.Sort;
 import org.apache.ibatis.jdbc.SQL;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +50,8 @@ public class SqlBuilder {
                     "找不到[%s]在数据库中对应的表名，请检查该类中有关Table的定义。",
                     entityClass.getName()
             );
-            throw new RuntimeException(message);
+            logger.error(message);
+            throw new BuildSqlException(message);
         }
 
         String sql = new SQL(){{
@@ -74,7 +77,8 @@ public class SqlBuilder {
                     "找不到[%s]在数据库中对应的表名，请检查该类中有关Table的定义。",
                     entityClass.getName()
             );
-            throw new RuntimeException(message);
+            logger.error(message);
+            throw new BuildSqlException(message);
         }
 
         String sql = new SQL(){{
@@ -122,7 +126,8 @@ public class SqlBuilder {
                     "找不到[%s]在数据库中对应的表名，请检查该类中有关Table的定义。",
                     entityClass.getName()
             );
-            throw new RuntimeException(message);
+            logger.error(message);
+            throw new BuildSqlException(message);
         }
 
         String sql = new SQL(){{
@@ -173,7 +178,8 @@ public class SqlBuilder {
                     "找不到[%s]在数据库中对应的表名，请检查该类中有关Table的定义。",
                     entity.getClass().getName()
             );
-            throw new RuntimeException(message);
+            logger.error(message);
+            throw new BuildSqlException(message);
         }
 
         if (mappedColumns.isEmpty()){
@@ -181,7 +187,8 @@ public class SqlBuilder {
                     "为[%s]构建Insert语句失败。原因：缺少待插入的列，请检查该类中有关Column的定义。",
                     entity.getClass().getName()
             );
-            throw new RuntimeException(message);
+            logger.error(message);
+            throw new BuildSqlException(message);
         }
 
         String sql = new SQL(){{
@@ -209,7 +216,8 @@ public class SqlBuilder {
                     "找不到[%s]在数据库中对应的表名，请检查该类中有关Table的定义。",
                     entity.getClass().getName()
             );
-            throw new RuntimeException(message);
+            logger.error(message);
+            throw new BuildSqlException(message);
         }
 
         if (mappedColumns.isEmpty()){
@@ -217,7 +225,8 @@ public class SqlBuilder {
                     "为[%s]构建Update语句失败。原因：缺少待更新的列，请检查该类中有关Column的定义。",
                     entity.getClass().getName()
             );
-            throw new RuntimeException(message);
+            logger.error(message);
+            throw new BuildSqlException(message);
         }
 
         String sql = new SQL(){{
@@ -246,7 +255,8 @@ public class SqlBuilder {
                     "找不到[%s]在数据库中对应的表名，请检查该类中有关Table的定义。",
                     entityClass.getName()
             );
-            throw new RuntimeException(message);
+            logger.error(message);
+            throw new BuildSqlException(message);
         }
 
         String sql = new SQL(){{
@@ -262,22 +272,22 @@ public class SqlBuilder {
 
         EntityPersistentInfo entityPersistentInfo = EntityAssistant.parse(entityClass);
         final String tableName = entityPersistentInfo.getTableName();
-        final String[] columnNames = entityPersistentInfo.getColumns();
 
         if(!StringUtils.hasText(tableName)){
             String message = String.format(
                     "找不到[%s]在数据库中对应的表名，请检查该类中有关Table的定义。",
                     entityClass.getName()
             );
-            throw new RuntimeException(message);
+            throw new BuildSqlException(message);
         }
 
         if(null == ids || ids.length == 0){
             String message = String.format(
-                    "不建议使用[%s.deleteByIds]执行清表操作，请单独使用不带条件的delete from 语句。如果不是请检查调用参数。",
+                    "不建议使用[%s.deleteByIds]执行清表操作，请单独使用不带条件的delete from 语句。如果不是,请检查调用参数。",
                     entityClass.getName()
             );
-            throw new RuntimeException(message);
+            logger.error(message);
+            throw new BuildSqlException(message);
         }
 
         String sql = new SQL(){{
@@ -291,6 +301,52 @@ public class SqlBuilder {
                 }
             }
             WHERE(where.toString());
+        }}.toString();
+        return sql;
+    }
+
+    public String buildDeleteByParameters(final Entity entity){
+        final EntityPersistentInfo entityPersistentInfo = EntityAssistant.parse(entity.getClass());
+        final String tableName = entityPersistentInfo.getTableName();
+
+        if(!StringUtils.hasText(tableName)){
+            String message = String.format(
+                    "找不到[%s]在数据库中对应的表名，请检查该类中有关Table的定义。",
+                    entity.getName()
+            );
+            logger.error(message);
+            throw new BuildSqlException(message);
+        }
+
+        String sql = new SQL(){{
+            DELETE_FROM(tableName);
+
+            if(entity.getId() != null){
+                WHERE("id = #{id}");
+            }else{
+                List<String> whereList = new ArrayList<String>();
+                List<EntityPersistentInfo.MappedColumn> mappedColumns = entityPersistentInfo.getMappedColumns();
+                for (int i=0; i<mappedColumns.size(); i++){
+                    EntityPersistentInfo.MappedColumn mappedColumn = mappedColumns.get(i);
+                    String column = mappedColumn.getName();
+                    if(null != mappedColumn.getValue(entity)){
+                        String variable = String.format("#{%s}", mappedColumn.getProperty());
+                        whereList.add(String.format("%s = %s", column, variable));
+                    }
+                }
+
+                if(whereList.isEmpty()){
+                    String message = String.format(
+                            "不建议使用[%s.deleteByParameters]执行清表操作，请单独使用不带条件的delete from 语句。如果不是,请检查调用参数。",
+                            entity.getClass());
+                    logger.error(message);
+                    throw new BuildSqlException(message);
+                }
+
+                String whereString = StringUtils.arrayToDelimitedString(whereList.toArray(new String[]{}), " and ");
+                WHERE(whereString);
+            }
+
         }}.toString();
         return sql;
     }

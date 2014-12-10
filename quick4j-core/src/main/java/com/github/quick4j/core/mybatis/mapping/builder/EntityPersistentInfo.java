@@ -105,7 +105,6 @@ public class EntityPersistentInfo {
 
         Field[] fields = getAllFields(entityClass).toArray(new Field[]{});
         for(Field field : fields){
-            System.out.println(field.getName());
             if(!field.isAnnotationPresent(Column.class)){
                 continue;
             }

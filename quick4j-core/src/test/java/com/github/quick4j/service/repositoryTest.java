@@ -2,6 +2,7 @@ package com.github.quick4j.service;
 
 import static org.hamcrest.CoreMatchers.*;
 
+import com.github.quick4j.core.mybatis.mapping.BuildSqlException;
 import com.github.quick4j.core.mybatis.paging.model.DataPaging;
 import com.github.quick4j.core.mybatis.paging.model.PageRequest;
 import com.github.quick4j.core.mybatis.paging.model.Pageable;
@@ -9,6 +10,7 @@ import com.github.quick4j.core.repository.mybatis.Repository;
 import com.github.quick4j.core.repository.mybatis.support.Direction;
 import com.github.quick4j.core.repository.mybatis.support.Order;
 import com.github.quick4j.core.repository.mybatis.support.Sort;
+import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.entity.Teacher;
 import org.apache.ibatis.binding.MapperMethod;
 import org.junit.Assert;
@@ -259,4 +261,27 @@ public class repositoryTest {
             Assert.assertThat(dataPaging.getRows().size(), is(5));
         }
     }
+
+    @Test
+    @Transactional
+    public void testDeleteByParameters(){
+        Teacher teacher = new Teacher("Wang");
+        teacher.setAge(30);
+        teacher.setTel("911");
+        teacher.setBirthDay(new Date());
+
+        repository.insert(teacher);
+
+        Teacher result = repository.find(Teacher.class, teacher.getId());
+        Assert.assertNotNull(result);
+
+        Teacher param = new Teacher();
+        param.setAge(30);
+        param.setTel("911");
+        repository.delete(param);
+
+        result = repository.find(Teacher.class, teacher.getId());
+        Assert.assertNull(result);
+    }
+
 }

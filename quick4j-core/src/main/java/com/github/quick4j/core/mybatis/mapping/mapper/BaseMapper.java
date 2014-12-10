@@ -35,4 +35,7 @@ public interface BaseMapper<T> {
 
     @DeleteProvider(type = SqlBuilder.class, method = SqlBuilder.BUILD_DELETE_BY_IDS_SQL)
     void deleteByIds(@Param("type")Class<T> entityClass, @Param("ids")String[] ids);
+
+    @DeleteProvider(type = SqlBuilder.class, method = SqlBuilder.BUILD_DELETE_BY_PARAMETERS)
+    void deleteByParameters(T entity);
 }

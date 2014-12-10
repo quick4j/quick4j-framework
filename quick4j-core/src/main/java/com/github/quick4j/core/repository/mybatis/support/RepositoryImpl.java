@@ -130,6 +130,8 @@ public class RepositoryImpl implements Repository {
 
     @Override
     public <T extends Entity> void insert(T entity) {
+        if (null == entity) return;
+
         Class entityClass = entity.getClass();
         String statementName = String.format("%sMapper.%s", entityClass.getName(), SqlBuilder.INSERT);
 
@@ -159,6 +161,8 @@ public class RepositoryImpl implements Repository {
 
     @Override
     public <T extends Entity> void updateById(T entity) {
+        if(null == entity) return;
+
         Class entityClass = entity.getClass();
         String statementName = String.format("%sMapper.%s", entityClass.getName(), SqlBuilder.UPDATE_BY_ID);
 
@@ -210,6 +214,24 @@ public class RepositoryImpl implements Repository {
 
         BaseMapper<T> mapper = getEntityMapperFor(entityClass);
         mapper.deleteByIds(entityClass, ids);
+    }
+
+    @Override
+    public <T extends Entity> void delete(T entity) {
+        if(null == entity) return;
+
+        Class entityClass = entity.getClass();
+        String entityClassName = entityClass.getName();
+        String statementName = String.format("%sMapper.%s", entityClassName, SqlBuilder.DELETE_BY_PARAMETERS);
+
+        if(MappedStatementAssistant.hasStatementInSqlSession(statementName, sqlSessionTemplate)
+                && isNotProviderSqlSource(statementName)){
+            sqlSessionTemplate.delete(statementName, entity);
+            return;
+        }
+
+        BaseMapper<T> mapper = getEntityMapperFor(entityClass);
+        mapper.deleteByParameters(entity);
     }
 
     @Override
