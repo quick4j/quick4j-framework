@@ -3,6 +3,7 @@ package com.github.quick4j.core.mybatis.mapping.builder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.Id;
 import javax.persistence.Column;
 import javax.persistence.Table;
 import java.lang.reflect.Field;
@@ -105,7 +106,7 @@ public class EntityPersistentInfo {
 
         Field[] fields = getAllFields(entityClass).toArray(new Field[]{});
         for(Field field : fields){
-            if(!field.isAnnotationPresent(Column.class)){
+            if(field.isAnnotationPresent(Id.class) || !field.isAnnotationPresent(Column.class)){
                 continue;
             }
 
