@@ -52,8 +52,8 @@ public class DataGridManager implements InitializingBean, BeanPostProcessor {
             registDataGrid((DataGrid) bean);
         }
 
-        if(bean instanceof DataGridPostProcessor){
-            DataGridPostProcessor postProcessor = (DataGridPostProcessor)bean;
+        if(bean instanceof DataSetProcessor){
+            DataSetProcessor postProcessor = (DataSetProcessor)bean;
             String dataGridName = postProcessor.getName();
             DataGrid dataGrid = getDataGrid(dataGridName);
             dataGrid.setPostProcessor(postProcessor);

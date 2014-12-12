@@ -16,6 +16,6 @@ public interface DataGrid{
     Toolbar getToolbar();
     DataGrid copySelf();
     boolean isSupportPostProcess();
-    void setPostProcessor(DataGridPostProcessor postProcessor);
-    DataGridPostProcessor getPostProcessor();
+    void setPostProcessor(DataSetProcessor postProcessor);
+    DataSetProcessor getPostProcessor();
 }

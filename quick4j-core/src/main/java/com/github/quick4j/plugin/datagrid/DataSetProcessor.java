@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * @author zhaojh
  */
-public interface DataGridPostProcessor {
+public interface DataSetProcessor {
     String getName();
-    DataPaging process(DataPaging dataPaging, PageRequest<Map<String, Object>> pageRequest) throws DataGridPostProcessException;
+    DataPaging process(DataPaging dataPaging, PageRequest<Map<String, Object>> pageRequest) throws DataSetProcessException;
 }
