@@ -253,7 +253,7 @@ public class RepositoryImpl implements Repository {
             mapperClass = mapperAssistant.getMapper(mapperName);
         }else{
             String aliasName = String.format("%sMapper-InLine", entityClass.getName());
-            mapperClass = mapperAssistant.buildAndRegistMapper(aliasName, BaseMapper .class);
+            mapperClass = mapperAssistant.buildAndRegistMapper(aliasName, BaseMapper.class);
         }
 
         return (BaseMapper) sqlSessionTemplate.getMapper(mapperClass);
