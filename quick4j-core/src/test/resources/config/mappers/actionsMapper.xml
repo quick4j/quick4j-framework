@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.quick4j.entity.ActionMapper">
+
+    <resultMap id="actionResult" type="com.github.quick4j.entity.Action">
+        <result column="id" property="id"/>
+        <result column="action_code" property="code"/>
+        <result column="action_name" property="name"/>
+        <result column="action_icon" property="icon"/>
+        <result column="action_index" property="index"/>
+    </resultMap>
+
+    <select id="selectOne" resultMap="actionResult" parameterType="string">
+        select id, action_code, action_name, action_icon, action_index
+        from upm_actions
+        where id = #{id}
+    </select>
+    
+    <select id="selectListByIds" resultMap="actionResult" parameterType="List">
+        select id, action_code, action_name, action_icon, action_index
+        from upm_actions
+        <where>
+            <foreach collection="list" item="id" index="index" open="(" separator="or" close=")">
+              id = #{id}
+            </foreach>
+        </where>
+        order by action_index
+    </select>
+
+    <select id="selectList" resultMap="actionResult" parameterType="map">
+        select id, action_code, action_name, action_icon, action_index
+        from upm_actions
+        order by action_index
+    </select>
+
+    <select id="selectPaging" resultMap="actionResult" parameterType="map">
+        select id, action_code, action_name, action_icon, action_index
+        from upm_actions
+        order by action_index
+    </select>
+
+    <insert id="insert" parameterType="com.github.quick4j.entity.Action">
+        insert into upm_actions(id, action_code, action_name, action_icon, action_index)
+        values(#{id}, #{code}, #{name}, #{icon}, #{index})
+    </insert>
+
+    <update id="updateOne" parameterType="com.github.quick4j.entity.Action">
+        update upm_actions
+        <set>
+            <if test="code != null and code != ''">
+                action_code = #{code},
+            </if>
+            <if test="name != null and name != ''">
+                action_name = #{name},
+            </if>
+            <if test="icon != null and icon != ''">
+                action_icon = #{icon},
+            </if>
+            <if test="index != null">
+                action_index = #{index},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOne" parameterType="string">
+        delete from upm_actions where id = #{id}
+    </delete>
+</mapper>

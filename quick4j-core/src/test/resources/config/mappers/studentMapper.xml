@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.github.quick4j.entity.StudentMapper">
+    <resultMap id="result" type="com.github.quick4j.entity.Student">
+        <constructor>
+            <arg column="stu_name"/>
+        </constructor>
+        <result column="id" property="id"/>
+    </resultMap>
+
+    <select id="selectOne" resultMap="result" parameterType="string">
+        select id, stu_name from test_student where id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.github.quick4j.entity.Student">
+        insert into test_student(id, stu_name)values(#{id}, #{name})
+    </insert>
+</mapper>
