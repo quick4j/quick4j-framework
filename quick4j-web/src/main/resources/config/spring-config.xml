@@ -9,6 +9,12 @@
 
     <context:property-placeholder location="/WEB-INF/quick4j.properties"/>
 
+    <bean id="messageSource"
+          class="com.github.quick4j.core.spring.BatchResourceBundleMessageSource"
+          p:basename="classpath*:config/i18n/*"
+          p:cacheSeconds="60"
+          p:defaultEncoding="utf-8"/>
+
     <!-- 扫描注解Bean -->
     <context:component-scan base-package="com.github.quick4j">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
@@ -16,6 +22,7 @@
 
     <!-- 开启AOP监听 只对当前配置文件有效 -->
     <aop:aspectj-autoproxy expose-proxy="true"/>
+
 
     <bean id="dataSource"
           class="org.apache.commons.dbcp.BasicDataSource"
@@ -43,9 +50,12 @@
         <aop:advisor id="txAdvisor" advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     </aop:config>
 
-    <bean id="messageSource"
-          class="com.github.quick4j.core.spring.BatchResourceBundleMessageSource"
-          p:basename="classpath*:config/i18n/*"/>
+
+    <bean id="validator"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"
+          p:providerClass="org.hibernate.validator.HibernateValidator"
+          p:validationMessageSource-ref="messageSource"/>
+
 
     <import resource="classpath*:config/spring-config-*.xml"/>
 </beans>
