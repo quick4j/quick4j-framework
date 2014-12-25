@@ -51,10 +51,14 @@
     </aop:config>
 
 
+    <!-- validation -->
     <bean id="validator"
           class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"
           p:providerClass="org.hibernate.validator.HibernateValidator"
           p:validationMessageSource-ref="messageSource"/>
+
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"
+          p:validatorFactory-ref="validator"/>
 
 
     <import resource="classpath*:config/spring-config-*.xml"/>
