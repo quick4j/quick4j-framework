@@ -2,6 +2,7 @@ package com.github.quick4j.core.spring;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -11,8 +12,8 @@ import org.springframework.core.io.support.ResourcePatternResolver;
  * 支持Ant-style风格的国际化文件批量加载。
  * @author zhaojh
  */
-public class BatchResourceBundleMessageSource extends ResourceBundleMessageSource {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+public class BatchResourceBundleMessageSource extends ReloadableResourceBundleMessageSource {
+    private Logger logger = LoggerFactory.getLogger(BatchResourceBundleMessageSource.class);
 
     private static final String CLASSPATH_ALL_URL_PREFIX = "classpath*:";
     private static final String CLASSPATH_URL_PREFIX = "classpath:";
