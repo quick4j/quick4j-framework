@@ -6,7 +6,7 @@ import org.springframework.beans.BeanUtils;
  * @author zhaojh
  */
 public class Toolbutton implements Cloneable {
-    private String code;
+    private String id;
     private String text;
     private String iconCls;
     private String handler;
@@ -15,24 +15,24 @@ public class Toolbutton implements Cloneable {
 
     public Toolbutton(String code, String iconCls, String handler) {
         this.iconCls = iconCls;
-        this.code = code;
+        this.id = code;
         this.handler = handler;
         this.text = code;
     }
 
     public Toolbutton(String code, String text, String iconCls, String handler) {
-        this.code = code;
+        this.id = code;
         this.text = text;
         this.iconCls = iconCls;
         this.handler = handler;
     }
 
-    public String getCode() {
-        return code;
+    public String getId() {
+        return id;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getIconCls() {
