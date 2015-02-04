@@ -4,6 +4,9 @@ import com.github.quick4j.core.entity.Entity;
 import com.github.quick4j.core.exception.NotFoundException;
 import com.github.quick4j.core.mybatis.paging.model.DataPaging;
 import com.github.quick4j.core.mybatis.paging.model.PageRequest;
+import com.github.quick4j.core.repository.mybatis.support.Direction;
+import com.github.quick4j.core.repository.mybatis.support.Order;
+import com.github.quick4j.core.repository.mybatis.support.Sort;
 import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.CrudService;
 import com.github.quick4j.core.web.http.AjaxResponse;
@@ -68,6 +71,8 @@ public class DataGridAPIController {
     public AjaxResponse loadDataFor(@PathVariable("name") String name,
                                      @RequestParam(value = "page", required = false) String page,
                                      @RequestParam(value = "rows", required = false) String limit,
+                                     @RequestParam(value = "sort", required = false) String sortName,
+                                     @RequestParam(value = "order", required = false) String sortOrder,
                                      HttpServletRequest request){
 
         DataGrid dataGrid = dataGridManager.buildCopy(name);
@@ -84,6 +89,11 @@ public class DataGridAPIController {
         Class entityClass = dataGrid.getEntity();
         Criteria  criteria = simpleCrudService.createCriteria(entityClass);
         PageRequest<Map<String, Object>> pageRequest = new PageRequest(_page, _size, wrapRequestMap(request));
+
+        if(StringUtils.isNotBlank(sortName) && !sortName.contains(",")){
+            pageRequest.setSort(new Sort(new Order(Direction.valueOf(sortOrder.toUpperCase()), sortName)));
+        }
+
         DataPaging dataPaging = criteria.findAll(pageRequest);
 
         if(dataGrid.isSupportPostProcess()){
