@@ -121,7 +121,7 @@ public class RepositoryImpl implements Repository {
         }
 
         int total = rows.size();
-        if(rowBounds.getOffset() != 0 || rowBounds.getLimit() != Integer.MAX_VALUE){
+        if(pageable.getOffset() != 0 || pageable.getLimit() != Integer.MAX_VALUE){
             total = PaginationInterceptor.getPaginationTotal();
             PaginationInterceptor.clean();
         }

@@ -28,7 +28,7 @@ import java.util.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"/spring-config.xml", "/spring-config-mybatis.xml"})
-public class repositoryTest {
+public class RepositoryTest {
     @Resource
     private Repository repository;
 
@@ -259,6 +259,7 @@ public class repositoryTest {
             DataPaging<Teacher> dataPaging = repository.findPaging(Teacher.class, pageable);
             Assert.assertThat(dataPaging.getRows(), hasItem(theList.get(i*5-3)));
             Assert.assertThat(dataPaging.getRows().size(), is(5));
+            Assert.assertThat(dataPaging.getTotal(), is(20));
         }
     }
 
