@@ -20,6 +20,7 @@ import java.util.Map;
  * @author zhaojh
  */
 @Controller
+@RequestMapping("/dictionary")
 public class DictionaryController {
     private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
     private final String LOCATION = "dictionary/";
@@ -86,6 +87,7 @@ public class DictionaryController {
     @ResponseBody
     public AjaxResponse doUpdate(@PathVariable("id") String id, DicItem dicItem){
         logger.info("update dictionary.");
+        dicItem.setId(id);
         simpleCrudService.save(dicItem);
         return new AjaxResponse(AjaxResponse.Status.OK);
     }
