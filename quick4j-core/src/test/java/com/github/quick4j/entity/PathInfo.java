@@ -2,9 +2,7 @@ package com.github.quick4j.entity;
 
 import com.github.quick4j.core.entity.AbstractEntity;
 import com.github.quick4j.core.entity.Entity;
-import com.github.quick4j.core.mybatis.annotation.Mapper;
 
-import javax.persistence.Table;
 import java.util.List;
 
 /**
