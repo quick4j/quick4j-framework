@@ -2,9 +2,10 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <%@include file="/static/global.inc"%>
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <title></title>
-        <link rel="stylesheet" href="static/js/vender/easyui/themes/metro/easyui.css">
+        <link rel="stylesheet" href="static/js/vender/easyui/themes/default/easyui.css">
         <link rel="stylesheet" href="static/js/vender/easyui/themes/icon.css">
         <style>
             .datagrid-operation-button{
@@ -27,14 +28,14 @@
         <script src="static/js/vender/jquery-1.11.1.min.js"></script>
         <script src="static/js/vender/easyui/jquery.easyui.min.js"></script>
         <script src="static/js/vender/easyui/locale/easyui-lang-zh_CN.js"></script>
-        <script src="static/js/jquery.easyui.extend.min.js"></script>
-        <script src="static/js/jwadp.parser.js"></script>
-        <script src="static/js/jwadp.datagrid.js"></script>
+        <script src="static/js/jquery.easyui.extension.js"></script>
+        <script src="static/js/quick4j.parser.js"></script>
+        <script src="static/js/quick4j.datagrid.js"></script>
         <script>
             function doNew(){
                 $.showModalDialog({
                     title: '新建',
-                    content: 'url:dictionary/new',
+                    content: 'url:plugins/dictionary/new',
                     data: {operation: 'new', datagrid: $('#datagrid')},
                     buttons:[{
                         text: '保存',
@@ -52,12 +53,20 @@
 
             function doEdit(index){
                 var target = $('#datagrid');
-                var row = target.datagrid('getRows')[index];
+                var selected = target.datagrid('getRows')[index];
 
                 $.showModalDialog({
                     title: '新建',
-                    content: 'url:dictionary/'+row.id+'/edit',
-                    data: {operation: 'edit', datagrid: target, row: row},
+                    content: 'url:plugins/dictionary/'+selected.id+'/edit',
+                    data: {
+                        selected: selected,
+                        callback: function(data, dialog) {
+                            if(data.status == 200){
+                                target.datagrid('reload');
+                                dialog.close();
+                            }
+                        }
+                    },
                     locate: 'document',
                     buttons:[{
                         text: '保存',
@@ -66,19 +75,14 @@
                     },{
                         text: '关闭',
                         iconCls: 'icon-cancel',
-                        handler: function(win){
-                            win.close();
+                        handler: function(dialog){
+                            dialog.close();
                         }
                     }],
-                    onLoad: function(win, body){
-                        record = win.getData('row');
-                        console.log($.param(record));
-                        $('#id').val(record.id);
-                        $('#code').val(record.code);
-                        $('#name').val(record.name);
-                        $('#value').val(record.value);
-                        $('#text').val(record.text);
-                        $('#index').val(record.orderNum);
+                    onLoad: function(dialog, body){
+                        if(body && body.doInit){
+                            body.doInit(dialog);
+                        }
                     }
                 });
             }
@@ -90,7 +94,7 @@
                         var id = target.datagrid('getRows')[index].id;
 
                         $.ajax({
-                            url: 'dictionary/' + id + '/delete',
+                            url: 'plugins/dictionary/' + id + '/delete',
                             success: function(data){
                                 if(data.status == 200){
                                     target.datagrid('reload');
