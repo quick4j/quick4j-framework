@@ -12,7 +12,7 @@
     <context:component-scan base-package="com.github.quick4j.plugin.dictionary.web.controller"/>
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/WEB-INF/views/modules/"/>
+        <property name="prefix" value="/WEB-INF/views/plugins/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
 </beans>
