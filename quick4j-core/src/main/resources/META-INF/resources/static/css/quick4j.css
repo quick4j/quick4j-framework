@@ -1,5 +1,4 @@
 .form-field{margin: 3px 3px;}
-.form-field>input{width: 100%;}
 .inline.form-field>label, .inline.form-field>div{
     display: inline-block;
     vertical-align: middle;
