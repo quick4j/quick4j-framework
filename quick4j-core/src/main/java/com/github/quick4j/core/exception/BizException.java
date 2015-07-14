@@ -24,8 +24,11 @@ public class BizException extends BaseException{
         this.args = args;
     }
 
-    @Override
-    public String getMessage() {
-        return "";
+    public String getCode() {
+        return code;
+    }
+
+    public Object[] getArgs() {
+        return args;
     }
 }
