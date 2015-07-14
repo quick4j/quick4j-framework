@@ -56,7 +56,7 @@
                 var selected = target.datagrid('getRows')[index];
 
                 $.showModalDialog({
-                    title: '新建',
+                    title: '编辑',
                     content: 'url:plugins/dictionary/'+selected.id+'/edit',
                     data: {
                         selected: selected,

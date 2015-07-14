@@ -7,35 +7,35 @@
             <label>类别码</label>
             <div>
                 <input class="easyui-textbox" type="text" id="code"
-                       name="code" data-options="required:true" readonly>
+                       name="code" data-options="required:true, width:300" readonly>
             </div>
         </div>
         <div class="inline form-field">
             <label>类别名称</label>
             <div>
                 <input class="easyui-textbox" type="text" id="name"
-                       name="name" data-options="required:true">
+                       name="name" data-options="required:true, width:300">
             </div>
         </div>
         <div class="inline form-field">
             <label>代码</label>
             <div>
                 <input class="easyui-textbox" type="text" id="value"
-                       name="value" data-options="required:true">
+                       name="value" data-options="required:true,width:300">
             </div>
         </div>
         <div class="inline form-field">
             <label>名称</label>
             <div>
                 <input class="easyui-textbox" type="text" id="text"
-                       name="text" data-options="required:true">
+                       name="text" data-options="required:true,width:300">
             </div>
         </div>
         <div class="inline form-field">
             <label>索引号</label>
             <div>
                 <input class="easyui-numberspinner" type="text" id="index"
-                       name="index" data-options="min:1,editable:false" value="1">
+                       name="index" data-options="min:1,editable:false,width:300" value="1">
             </div>
         </div>
     </form>
