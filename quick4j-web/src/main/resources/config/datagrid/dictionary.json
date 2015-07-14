@@ -19,12 +19,12 @@
             },
             {
                 "field":"value",
-                "title":"代码",
+                "title":"条目代码",
                 "width":200
             },
             {
                 "field":"text",
-                "title":"名称",
+                "title":"条目名称",
                 "width":200
             },
             {
@@ -38,12 +38,12 @@
     "toolbar": [
         {
             "iconCls": "icon-add",
-            "text": "New",
+            "text": "新建",
             "handler": "doNew"
         },
         {
             "iconCls": "icon-edit",
-            "text": "Edit"
+            "text": "编辑"
         }
     ]
 }
