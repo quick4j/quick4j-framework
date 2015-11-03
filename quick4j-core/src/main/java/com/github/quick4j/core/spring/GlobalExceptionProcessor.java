@@ -1,14 +1,18 @@
 package com.github.quick4j.core.spring;
 
+import com.github.quick4j.core.exception.BizException;
 import com.github.quick4j.core.web.http.AjaxResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceAware;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -19,8 +23,16 @@ import java.util.Set;
  * @author zhaojh
  */
 @ControllerAdvice
-public class GlobalControllerExceptionProcessor {
-    private static final Logger logger = LoggerFactory.getLogger(GlobalControllerExceptionProcessor.class);
+public class GlobalExceptionProcessor implements MessageSourceAware{
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionProcessor.class);
+
+//    @Resource
+    private MessageSource messageSource;
+
+    @Override
+    public void setMessageSource(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @ExceptionHandler(BindException.class)
     @ResponseBody
@@ -59,6 +71,13 @@ public class GlobalControllerExceptionProcessor {
         return new AjaxResponse(false, message.toString(), url, request.getMethod());
     }
 
+    @ExceptionHandler(BizException.class)
+    @ResponseBody
+    public AjaxResponse processBizException(HttpServletRequest request, BizException e){
+        String url = request.getRequestURL().toString();
+        String message = messageSource.getMessage(e.getCode(), e.getArgs(), request.getLocale());
+        return new AjaxResponse(AjaxResponse.Status.ERROR, message, url, request.getMethod());
+    }
 
     @ExceptionHandler(Exception.class)
     @ResponseBody

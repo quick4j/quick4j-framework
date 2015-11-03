@@ -51,7 +51,7 @@ public class DataGridAPIController {
     public AjaxResponse getOptions(@PathVariable("name") String name){
         DataGrid dataGrid = dataGridManager.buildCopy(name);
         if(null == dataGrid){
-            throw new NotFoundException("datagrid.options.notfound", new Object[]{name});
+            throw new NotFoundException("exception.datagrid.options.notfound", new Object[]{name});
         }
 
         return new AjaxResponse(AjaxResponse.Status.OK, dataGrid);
