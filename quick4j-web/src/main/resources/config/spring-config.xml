@@ -3,17 +3,21 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd">
 
     <context:property-placeholder location="/WEB-INF/quick4j.properties"/>
-
-    <bean id="messageSource"
-          class="com.github.quick4j.core.spring.BatchResourceBundleMessageSource"
-          p:basename="classpath*:config/i18n/*"
-          p:cacheSeconds="60"
-          p:defaultEncoding="utf-8"/>
 
     <!-- 扫描注解Bean -->
     <context:component-scan base-package="com.github.quick4j">
@@ -22,6 +26,18 @@
 
     <!-- 开启AOP监听 只对当前配置文件有效 -->
     <aop:aspectj-autoproxy expose-proxy="true"/>
+
+    <util:list id="basenames">
+        <value>classpath*:config/i18n/messages</value>
+        <value>classpath*:config/i18n/exceptions</value>
+        <value>classpath*:config/i18n/validations</value>
+    </util:list>
+
+    <bean id="messageSource"
+          class="com.github.quick4j.core.spring.ClasspathAllResourceBundleMessageSource"
+          p:basenames-ref="basenames"
+          p:cacheSeconds="2"
+          p:defaultEncoding="utf-8"/>
 
 
     <bean id="dataSource"
@@ -49,17 +65,6 @@
         <aop:pointcut id="txPointcut" expression="execution(* com.github.quick4j..service..*+.*(..)) or execution(* com.github.quick4j.plugin.logging.support.DBLoggerImpl.*(..))"/>
         <aop:advisor id="txAdvisor" advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     </aop:config>
-
-
-    <!-- validation -->
-    <bean id="validator"
-          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"
-          p:providerClass="org.hibernate.validator.HibernateValidator"
-          p:validationMessageSource-ref="messageSource"/>
-
-    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"
-          p:validatorFactory-ref="validator"/>
-
 
     <import resource="classpath*:config/spring-config-*.xml"/>
 </beans>
