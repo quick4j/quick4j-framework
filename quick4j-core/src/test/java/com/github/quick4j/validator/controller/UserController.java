@@ -1,6 +1,6 @@
 package com.github.quick4j.validator.controller;
 
-import com.github.quick4j.core.web.http.AjaxResponse;
+import com.github.quick4j.core.web.http.JsonResponse;
 import com.github.quick4j.validator.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +22,8 @@ public class UserController {
             produces = "application/json;charset=utf-8"
     )
     @ResponseBody
-    public AjaxResponse doCreate(@Valid User user){
+    public JsonResponse doCreate(@Valid User user){
         System.out.println();
-        return new AjaxResponse(true);
+        return new JsonResponse().success();
     }
 }

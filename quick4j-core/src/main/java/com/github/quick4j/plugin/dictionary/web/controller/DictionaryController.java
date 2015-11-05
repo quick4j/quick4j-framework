@@ -2,7 +2,7 @@ package com.github.quick4j.plugin.dictionary.web.controller;
 
 import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.CrudService;
-import com.github.quick4j.core.web.http.AjaxResponse;
+import com.github.quick4j.core.web.http.JsonResponse;
 import com.github.quick4j.plugin.dictionary.entity.DicItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.swing.text.MaskFormatter;
-import java.util.Map;
 
 /**
  * @author zhaojh
@@ -57,10 +55,10 @@ public class DictionaryController {
             produces = "application/json;charset=utf-8"
     )
     @ResponseBody
-    public AjaxResponse doCreate(DicItem dicItem){
+    public JsonResponse doCreate(DicItem dicItem){
         logger.info("create dictionary.");
         simpleCrudService.save(dicItem);
-        return new AjaxResponse(AjaxResponse.Status.OK);
+        return new JsonResponse().success();
     }
 
     /**
@@ -85,11 +83,11 @@ public class DictionaryController {
             produces = "application/json;charset=utf-8"
     )
     @ResponseBody
-    public AjaxResponse doUpdate(@PathVariable("id") String id, DicItem dicItem){
+    public JsonResponse doUpdate(@PathVariable("id") String id, DicItem dicItem){
         logger.info("update dictionary.");
         dicItem.setId(id);
         simpleCrudService.save(dicItem);
-        return new AjaxResponse(AjaxResponse.Status.OK);
+        return new JsonResponse().success();
     }
 
 
@@ -104,9 +102,9 @@ public class DictionaryController {
             produces = "application/json;charset=utf-8"
     )
     @ResponseBody
-    public AjaxResponse doDelete(@PathVariable("id") String id){
+    public JsonResponse doDelete(@PathVariable("id") String id){
         Criteria<DicItem> criteria = simpleCrudService.createCriteria(DicItem.class);
         criteria.delete(id);
-        return new AjaxResponse(AjaxResponse.Status.OK);
+        return new JsonResponse().success();
     }
 }

@@ -9,7 +9,7 @@ import com.github.quick4j.core.repository.mybatis.support.Order;
 import com.github.quick4j.core.repository.mybatis.support.Sort;
 import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.CrudService;
-import com.github.quick4j.core.web.http.AjaxResponse;
+import com.github.quick4j.core.web.http.JsonResponse;
 import com.github.quick4j.plugin.datagrid.DataGrid;
 import com.github.quick4j.plugin.datagrid.DataGridManager;
 import org.apache.commons.lang3.StringUtils;
@@ -48,13 +48,13 @@ public class DataGridAPIController {
             produces = "application/json;charset=utf-8"
     )
     @ResponseBody
-    public AjaxResponse getOptions(@PathVariable("name") String name){
+    public JsonResponse getOptions(@PathVariable("name") String name){
         DataGrid dataGrid = dataGridManager.buildCopy(name);
         if(null == dataGrid){
             throw new NotFoundException("exception.datagrid.options.notfound", new Object[]{name});
         }
 
-        return new AjaxResponse(AjaxResponse.Status.OK, dataGrid);
+        return new JsonResponse().success(dataGrid);
     }
 
     /**
@@ -68,7 +68,7 @@ public class DataGridAPIController {
             produces = "application/json;charset=utf-8"
     )
     @ResponseBody
-    public AjaxResponse loadDataFor(@PathVariable("name") String name,
+    public JsonResponse loadDataFor(@PathVariable("name") String name,
                                      @RequestParam(value = "page", required = false) String page,
                                      @RequestParam(value = "rows", required = false) String limit,
                                      @RequestParam(value = "sort", required = false) String sortName,
@@ -100,7 +100,7 @@ public class DataGridAPIController {
             dataPaging = dataGrid.getPostProcessor().process(dataPaging, pageRequest);
         }
 
-        return new AjaxResponse(AjaxResponse.Status.OK, dataPaging);
+        return new JsonResponse().success(dataPaging);
     }
 
     private Map<String, Object> wrapRequestMap(HttpServletRequest request){

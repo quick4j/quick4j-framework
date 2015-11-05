@@ -1,7 +1,7 @@
 package com.github.quick4j.core.spring;
 
 import com.github.quick4j.core.exception.BizException;
-import com.github.quick4j.core.web.http.AjaxResponse;
+import com.github.quick4j.core.web.http.JsonResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -23,22 +23,15 @@ import java.util.Set;
  * @author zhaojh
  */
 @ControllerAdvice
-public class GlobalExceptionProcessor implements MessageSourceAware{
+public class GlobalExceptionProcessor{
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionProcessor.class);
 
-//    @Resource
+    @Resource
     private MessageSource messageSource;
-
-    @Override
-    public void setMessageSource(MessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
 
     @ExceptionHandler(BindException.class)
     @ResponseBody
-    public AjaxResponse processBindException(HttpServletRequest request, BindException ex){
-        String url = request.getRequestURL().toString();
-
+    public JsonResponse processBindException(HttpServletRequest request, BindException ex){
         StringBuilder message = new StringBuilder();
         List<FieldError> fieldErrors = ex.getFieldErrors();
         for (FieldError fieldError : fieldErrors){
@@ -51,16 +44,14 @@ public class GlobalExceptionProcessor implements MessageSourceAware{
             message.append(",").append(fieldError.getDefaultMessage());
         }
 
-        return new AjaxResponse(false, message.toString(), url, request.getMethod());
+        return new JsonResponse().failure(message.toString());
     }
 
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseBody
-    public AjaxResponse processConstraintViolationException(HttpServletRequest request,
+    public JsonResponse processConstraintViolationException(HttpServletRequest request,
                                                             ConstraintViolationException ex){
-        String url = request.getRequestURL().toString();
-
         StringBuilder message = new StringBuilder();
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
         for (ConstraintViolation constraintViolation : constraintViolations){
@@ -68,26 +59,25 @@ public class GlobalExceptionProcessor implements MessageSourceAware{
             logger.info(constraintViolation.getMessage());
         }
 
-        return new AjaxResponse(false, message.toString(), url, request.getMethod());
+        return new JsonResponse().failure(message.toString());
     }
 
     @ExceptionHandler(BizException.class)
     @ResponseBody
-    public AjaxResponse processBizException(HttpServletRequest request, BizException e){
-        String url = request.getRequestURL().toString();
+    public JsonResponse processBizException(HttpServletRequest request, BizException e){
         String message = messageSource.getMessage(e.getCode(), e.getArgs(), request.getLocale());
-        return new AjaxResponse(AjaxResponse.Status.ERROR, message, url, request.getMethod());
+        return new JsonResponse().failure(message);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public AjaxResponse processException(HttpServletRequest request, Exception ex){
+    public JsonResponse processException(HttpServletRequest request, Exception ex){
         String url = request.getRequestURL().toString();
         String message = ex.getMessage();
 
         logger.error("error: " + url, ex);
         ex.printStackTrace();
 
-        return new AjaxResponse(AjaxResponse.Status.ERROR, message, url, request.getMethod());
+        return new JsonResponse().failure(message);
     }
 }
