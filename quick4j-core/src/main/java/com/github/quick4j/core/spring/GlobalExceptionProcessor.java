@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Set;
 
@@ -29,33 +30,36 @@ public class GlobalExceptionProcessor{
     @Resource
     private MessageSource messageSource;
 
-    @ExceptionHandler(BindException.class)
-    @ResponseBody
-    public JsonResponse processBindException(HttpServletRequest request, BindException ex){
-        StringBuilder message = new StringBuilder();
-        List<FieldError> fieldErrors = ex.getFieldErrors();
-        for (FieldError fieldError : fieldErrors){
-            String msg = String.format(
-                    "field: [%s], message: %s",
-                    fieldError.getField(),
-                    fieldError.getDefaultMessage()
-            );
-            logger.info(msg);
-            message.append(",").append(fieldError.getDefaultMessage());
-        }
+//    @ExceptionHandler(BindException.class)
+//    @ResponseBody
+//    public JsonResponse processBindException(HttpServletRequest request, BindException ex){
+//        StringBuilder message = new StringBuilder();
+//        List<FieldError> fieldErrors = ex.getFieldErrors();
+//        for (FieldError fieldError : fieldErrors){
+//            String msg = String.format(
+//                    "field: [%s], message: %s",
+//                    fieldError.getField(),
+//                    fieldError.getDefaultMessage()
+//            );
+//            logger.info(msg);
+//            message.append(",").append(fieldError.getDefaultMessage());
+//        }
+//
+//        return new JsonResponse().failure(message.toString());
+//    }
 
-        return new JsonResponse().failure(message.toString());
-    }
 
-
-    @ExceptionHandler(ConstraintViolationException.class)
+    @ExceptionHandler(ValidationException.class)
     @ResponseBody
     public JsonResponse processConstraintViolationException(HttpServletRequest request,
                                                             ConstraintViolationException ex){
         StringBuilder message = new StringBuilder();
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
         for (ConstraintViolation constraintViolation : constraintViolations){
-            message.append(",").append(constraintViolation.getMessage());
+            message.append(",")
+                    .append(constraintViolation.getPropertyPath())
+                    .append(':')
+                    .append(constraintViolation.getMessage());
             logger.info(constraintViolation.getMessage());
         }
 

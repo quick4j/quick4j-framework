@@ -29,9 +29,12 @@ import javax.annotation.Resource;
         "/config/user-servlet.xml"
 })
 public class ValidatorTest {
+
+    private MockMvc mockMvc;
     @Resource
     private WebApplicationContext context;
-    private MockMvc mockMvc;
+    @Resource
+    private WelcomeService welcomeService;
 
     @Before
     public void setup(){
@@ -39,14 +42,55 @@ public class ValidatorTest {
     }
 
     @Test
-    public void testValidator() throws Exception {
+    public void testNameNotEmptyOnController() throws Exception {
         mockMvc.perform(
                 post("/user/new")
-                .param("name", "loafer1111")
                         .param("password", "123456")
-                .accept(MediaType.parseMediaType("application/json;charset=utf-8"))
+                        .accept(MediaType.parseMediaType("application/json;charset=utf-8"))
         )
-//        .andExpect(jsonPath("$.success").value(Boolean.FALSE))
+//        .andExpect(jsonPath("$.meta.success").value(Boolean.FALSE))
         .andDo(print());
+    }
+
+    @Test
+    public void testPasswordLengthOnController() throws Exception {
+        mockMvc.perform(
+                post("/user/new")
+                        .param("name", "loafer")
+                        .param("password", "123")
+                        .accept(MediaType.parseMediaType("application/json;charset=utf-8"))
+        )
+//        .andExpect(jsonPath("$.meta.success").value(Boolean.FALSE))
+                .andDo(print());
+    }
+
+    @Test
+    public void testMultiFieldValidateOnController() throws Exception {
+        mockMvc.perform(
+                post("/user/new")
+                        .param("password", "123")
+                        .accept(MediaType.parseMediaType("application/json;charset=utf-8"))
+        )
+//        .andExpect(jsonPath("$.meta.success").value(Boolean.FALSE))
+                .andDo(print());
+    }
+
+    @Test
+    public void testRequestMethod() throws Exception {
+        mockMvc.perform(
+                get("/user/new")
+                        .param("name","loafer")
+                        .param("password", "123")
+                        .accept(MediaType.parseMediaType("application/json;charset=utf-8"))
+        ).andDo(print());
+    }
+
+    @Test
+    public void testNameNotEmptyOnService() throws Exception {
+        mockMvc.perform(
+                post("/user/hello")
+                        .param("password", "123456")
+                        .accept(MediaType.parseMediaType("application/json;charset=utf-8"))
+        ).andDo(print());
     }
 }

@@ -1,6 +1,7 @@
 package com.github.quick4j.validator;
 
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 
@@ -8,9 +9,9 @@ import javax.validation.constraints.NotNull;
  * @author zhaojh.
  */
 public class User {
-    @Length(min = 4, max = 6)
+    @NotEmpty
     private String name;
-    @NotNull
+    @Length(min = 6, max = 20)
     private String password;
 
     public String getName() {
