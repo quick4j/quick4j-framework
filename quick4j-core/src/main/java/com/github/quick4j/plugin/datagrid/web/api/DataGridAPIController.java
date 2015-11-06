@@ -28,7 +28,7 @@ import java.util.Map;
  * @author zhaojh
  */
 @Controller
-@RequestMapping("/rest/datagrid")
+@RequestMapping("/datagrid")
 public class DataGridAPIController {
     private static final Logger logger = LoggerFactory.getLogger(DataGridAPIController.class);
 
