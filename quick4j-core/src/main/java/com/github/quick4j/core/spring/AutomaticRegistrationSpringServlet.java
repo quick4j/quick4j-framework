@@ -38,6 +38,49 @@ public class AutomaticRegistrationSpringServlet implements WebApplicationInitial
         registServlet(servletContext);
     }
 
+    private void config(ServletContext servletContext){
+        StringBuilder sb = new StringBuilder();
+        String contextConfigLocation = servletContext.getInitParameter("contextConfigLocation");
+        if(StringUtils.isNotBlank(contextConfigLocation)){
+            sb.append(contextConfigLocation);
+        }
+
+        sb.append(",classpath*:config/spring-config.xml");
+        logger.info("contextConfigLocation: {}", sb.toString());
+        servletContext.setInitParameter("contextConfigLocation", sb.toString());
+    }
+
+    private void registServlet(ServletContext servletContext){
+        List<ServletConfig> servletConfigList = getServletConfigList();
+        if(!servletConfigList.isEmpty()){
+            for(ServletConfig servletConfig : servletConfigList){
+                logger.info(
+                        "Dynamic registration servlet: {} , mapping: {}",
+                        servletConfig.getName(),
+                        servletConfig.getMapping()
+                );
+
+                XmlWebApplicationContext appContext = new XmlWebApplicationContext();
+                appContext.setConfigLocation(servletConfig.getConfigLocation());
+
+                ServletRegistration.Dynamic registration = servletContext.addServlet(
+                        servletConfig.getName(),
+                        new DispatcherServlet(appContext)
+                );
+
+                registration.setLoadOnStartup(1);
+
+                if(servletConfig.getName().equalsIgnoreCase("root")){
+                    registration.addMapping("/");
+                }else{
+                    registration.addMapping(servletConfig.getMapping());
+                }
+            }
+
+            logger.info("Dynamic registration finish.");
+        }
+    }
+
     private List<ServletConfig> getServletConfigList(){
         List<ServletConfig> configList = new ArrayList<ServletConfig>();
         ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
@@ -71,73 +114,35 @@ public class AutomaticRegistrationSpringServlet implements WebApplicationInitial
     }
 
     private class ServletConfig{
-        private String servletName;
-        private String servletConfigLocation;
-        private String servletMapping;
+        private String name;
+        private String configLocation;
+        private String mapping;
 
         private ServletConfig(String servletName, String servletConfigLocation) {
-            this.servletName = servletName;
-            this.servletConfigLocation = servletConfigLocation;
-            this.servletMapping = "/" + servletName + "/*";
+            this.name = servletName;
+            this.configLocation = servletConfigLocation;
+            this.mapping = "/" + servletName + "/*";
         }
 
-        public String getServletName() {
-            return servletName;
+        public String getName() {
+            return name;
         }
 
-        public String getServletConfigLocation() {
-            return servletConfigLocation;
+        public String getConfigLocation() {
+            return configLocation;
         }
 
-        public String getServletMapping() {
-            return servletMapping;
+        public String getMapping() {
+            return mapping;
         }
 
         @Override
         public String toString() {
             return "ServletConfig{" +
-                    "servletName='" + servletName + '\'' +
-                    ", servletConfigLocation='" + servletConfigLocation + '\'' +
-                    ", servletMapping='" + servletMapping + '\'' +
+                    "name='" + name + '\'' +
+                    ", configLocation='" + configLocation + '\'' +
+                    ", mapping='" + mapping + '\'' +
                     '}';
-        }
-    }
-
-    private void config(ServletContext servletContext){
-        StringBuilder sb = new StringBuilder();
-        String contextConfigLocation = servletContext.getInitParameter("contextConfigLocation");
-        if(StringUtils.isNotBlank(contextConfigLocation)){
-            sb.append(contextConfigLocation);
-        }
-
-        sb.append(",classpath*:config/spring-config.xml");
-        logger.info("contextConfigLocation: {}", sb.toString());
-        servletContext.setInitParameter("contextConfigLocation", sb.toString());
-    }
-
-    private void registServlet(ServletContext servletContext){
-        List<ServletConfig> servletConfigList = getServletConfigList();
-        if(!servletConfigList.isEmpty()){
-            for(ServletConfig servletConfig : servletConfigList){
-                logger.info(
-                        "Dynamic registration servlet: {} , mapping: {}",
-                        servletConfig.getServletName(),
-                        servletConfig.getServletMapping()
-                );
-
-                XmlWebApplicationContext appContext = new XmlWebApplicationContext();
-                appContext.setConfigLocation(servletConfig.getServletConfigLocation());
-
-                ServletRegistration.Dynamic registration = servletContext.addServlet(
-                        servletConfig.getServletName(),
-                        new DispatcherServlet(appContext)
-                );
-
-                registration.setLoadOnStartup(1);
-                registration.addMapping(servletConfig.getServletMapping());
-            }
-
-            logger.info("Dynamic registration finish.");
         }
     }
 }
