@@ -5,8 +5,8 @@
         <%@include file="/static/global.inc"%>
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <title></title>
-        <link rel="stylesheet" href="static/js/vender/easyui/themes/default/easyui.css">
-        <link rel="stylesheet" href="static/js/vender/easyui/themes/icon.css">
+        <link rel="stylesheet" href="static/js/vendor/easyui/themes/default/easyui.css">
+        <link rel="stylesheet" href="static/js/vendor/easyui/themes/icon.css">
         <style>
             .datagrid-operation-button{
                 width: 16px;
@@ -25,9 +25,9 @@
         </div>
 
 
-        <script src="static/js/vender/jquery-1.11.1.min.js"></script>
-        <script src="static/js/vender/easyui/jquery.easyui.min.js"></script>
-        <script src="static/js/vender/easyui/locale/easyui-lang-zh_CN.js"></script>
+        <script src="static/js/vendor/jquery-1.11.1.min.js"></script>
+        <script src="static/js/vendor/easyui/jquery.easyui.min.js"></script>
+        <script src="static/js/vendor/easyui/locale/easyui-lang-zh_CN.js"></script>
         <script src="static/js/jquery.easyui.extension.js"></script>
         <script src="static/js/quick4j.parser.js"></script>
         <script src="static/js/quick4j.datagrid.js"></script>
