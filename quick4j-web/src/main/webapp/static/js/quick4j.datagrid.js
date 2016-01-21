@@ -2,8 +2,8 @@
  * @author zhaojh
  */
 ;(function($){
-    if(typeof jwadp.ui.datagrid === 'undefined'){
-        $.namespace("jwadp.ui.datagrid");
+    if(typeof quick4j.ui.datagrid === 'undefined'){
+        $.namespace("quick4j.ui.datagrid");
     }
 
     var decorateToolbar = function(options){
@@ -53,17 +53,17 @@
             type: 'POST',
             url: opts.url,
             data: param,
-            dataType: 'json',
-            success: function(result){
-                if(result.status == '200'){
-                    successFn(result.data);
-                }else{
-                    alert(result.message);
-                }
-            },
-            error: function(){
-                errorFn.apply(this, arguments);
+            dataType: 'json'
+        })
+        .done(function(response){
+            if(response.meta.success){
+                successFn(response.data);
+            }else{
+                alert(response.meta.message);
             }
+        })
+        .fail(function(jqXHR, textStatus, errorThrown){
+            errorFn.apply(this, arguments);
         });
     },
 
@@ -71,33 +71,35 @@
         return {
             pageSize: 20,
             pageList: [10, 20, 50, 100],
-            url: 'api/rest/datagrid/' + dgname,
+            url: 'api/datagrid/' + dgname,
             loader: customJsonLoader,
             onClickCell: unselectRowWhenClickCellForOperationColumn
         }
     };
 
-    $.extend(jwadp.ui.datagrid, {
+    $.extend(quick4j.ui.datagrid, {
         parse: function(target){
             var dgName = $.parser.parseOptions(target).name;
-            $.ajax({
-                url: 'api/rest/datagrid/' + dgName + '/options',
-                success: function(result){
-                    if(result.status != '200'){
-                        alert('==>'+result.message)
-                    }
 
-                    var options = $.extend(
-                        {},
-                        getDefaultOptions(),
-                        result.data || {columns:[[{field: 'chk', checkbox: true}]]}
-                    );
-                    buildDataGrid(target, $.extend({}, options, {name: dgName}));
-                },
-                error: function(){
-                    alert('error')
-                }
+            $.ajax({
+                url: 'api/datagrid/' + dgName + '/options'
             })
+            .done(function(response){
+                if(!response.meta.success){
+                    alert('==>'+response.meta.message);
+                    return;
+                }
+
+                var options = $.extend(
+                    {},
+                    getDefaultOptions(),
+                    response.data || {columns:[[{field: 'chk', checkbox: true}]]}
+                );
+                buildDataGrid(target, $.extend({}, options, {name: dgName}));
+            })
+            .fail(function(jqXHR, textStatus, errorThrown){
+                alert('error');
+            });
         }
     });
 })(jQuery);

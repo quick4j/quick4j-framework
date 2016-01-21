@@ -17,20 +17,20 @@
         }
     });
 
-    if(typeof jwadp === 'undefined'){
-        $.namespace("jwadp");
+    if(typeof quick4j === 'undefined'){
+        $.namespace("quick4j");
     }
 
-    if(typeof jwadp.ui === 'undefined'){
-        $.namespace("jwadp.ui");
+    if(typeof quick4j.ui === 'undefined'){
+        $.namespace("quick4j.ui");
     }
 
-    $.extend(jwadp, {
+    $.extend(quick4j, {
         plugins: ['datagrid'],
         parse: function(context){
             var aa = [];
-            for(var i=0; i<jwadp.plugins.length; i++){
-                var name = jwadp.plugins[i];
+            for(var i=0; i<quick4j.plugins.length; i++){
+                var name = quick4j.plugins[i];
                 var r = $('.quick4j-' + name, context);
                 if(r.length){
                     aa.push({name: name, jq: r});
@@ -41,7 +41,7 @@
                 for(var i=0; i<aa.length; i++){
                     var name = aa[i].name;
                     $.each(aa[i].jq, function (i, n) {
-                        jwadp.ui[name].parse(n);
+                        quick4j.ui[name].parse(n);
                     })
                 }
             }
@@ -49,6 +49,6 @@
     });
 
     $(function(){
-        jwadp.parse();
+        quick4j.parse();
     });
 })(jQuery);
