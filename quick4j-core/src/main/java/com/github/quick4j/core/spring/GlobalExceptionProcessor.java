@@ -1,13 +1,11 @@
 package com.github.quick4j.core.spring;
 
 import com.github.quick4j.core.exception.BizException;
-import com.github.quick4j.core.web.http.JsonResponse;
+import com.github.quick4j.core.web.http.JsonMessage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
-import org.springframework.context.MessageSourceAware;
-import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
-import java.util.List;
+
 import java.util.Set;
 
 /**
@@ -51,7 +49,7 @@ public class GlobalExceptionProcessor{
 
     @ExceptionHandler(ValidationException.class)
     @ResponseBody
-    public JsonResponse processConstraintViolationException(HttpServletRequest request,
+    public JsonMessage processConstraintViolationException(HttpServletRequest request,
                                                             ConstraintViolationException ex){
         StringBuilder message = new StringBuilder();
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
@@ -63,25 +61,25 @@ public class GlobalExceptionProcessor{
             logger.info(constraintViolation.getMessage());
         }
 
-        return new JsonResponse().failure(message.toString());
+        return new JsonMessage().failure(message.toString());
     }
 
     @ExceptionHandler(BizException.class)
     @ResponseBody
-    public JsonResponse processBizException(HttpServletRequest request, BizException e){
+    public JsonMessage processBizException(HttpServletRequest request, BizException e){
         String message = messageSource.getMessage(e.getCode(), e.getArgs(), request.getLocale());
-        return new JsonResponse().failure(message);
+        return new JsonMessage().failure(message);
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public JsonResponse processException(HttpServletRequest request, Exception ex){
+    public JsonMessage processException(HttpServletRequest request, Exception ex){
         String url = request.getRequestURL().toString();
         String message = ex.getMessage();
 
         logger.error("error: " + url, ex);
         ex.printStackTrace();
 
-        return new JsonResponse().failure(message);
+        return new JsonMessage().failure(message);
     }
 }
