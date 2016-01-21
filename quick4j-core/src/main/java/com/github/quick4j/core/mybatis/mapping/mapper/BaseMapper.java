@@ -1,7 +1,6 @@
 package com.github.quick4j.core.mybatis.mapping.mapper;
 
 import com.github.quick4j.core.mybatis.mapping.builder.SqlBuilder;
-import com.github.quick4j.core.repository.mybatis.support.Order;
 import com.github.quick4j.core.repository.mybatis.support.Sort;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.session.RowBounds;

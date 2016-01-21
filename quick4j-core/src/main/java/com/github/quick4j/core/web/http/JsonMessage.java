@@ -3,30 +3,30 @@ package com.github.quick4j.core.web.http;
 /**
  * @author zhaojh
  */
-public class JsonResponse {
+public class JsonMessage {
     private static final String OK = "ok";
     private static final String ERROR = "error";
 
     private Meta meta;
     private Object data;
 
-    public JsonResponse success(){
+    public JsonMessage success(){
         this.meta = new Meta(true, OK);
         return this;
     }
 
-    public JsonResponse success(Object data){
+    public JsonMessage success(Object data){
         this.meta = new Meta(true, OK);
         this.data = data;
         return this;
     }
 
-    public JsonResponse failure(){
+    public JsonMessage failure(){
         this.meta = new Meta(false, ERROR);
         return this;
     }
 
-    public JsonResponse failure(String message){
+    public JsonMessage failure(String message){
         this.meta = new Meta(false, message);
         return this;
     }
