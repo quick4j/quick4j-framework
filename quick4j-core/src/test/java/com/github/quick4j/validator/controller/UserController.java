@@ -1,6 +1,6 @@
 package com.github.quick4j.validator.controller;
 
-import com.github.quick4j.core.web.http.JsonResponse;
+import com.github.quick4j.core.web.http.JsonMessage;
 import com.github.quick4j.validator.User;
 import com.github.quick4j.validator.WelcomeService;
 import org.springframework.http.MediaType;
@@ -28,14 +28,14 @@ public class UserController {
             produces = "application/json;charset=utf-8"
     )
     @ResponseBody
-    public JsonResponse doCreate(@Valid User user){
-        return new JsonResponse().success();
+    public JsonMessage doCreate(@Valid User user){
+        return new JsonMessage().success();
     }
 
     @RequestMapping(value = "/hello", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public JsonResponse hello(User user){
+    public JsonMessage hello(User user){
         welcomeService.hello(user);
-        return new JsonResponse().success();
+        return new JsonMessage().success();
     }
 }
