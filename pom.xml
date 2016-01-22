@@ -259,7 +259,10 @@
                     <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
                     <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
                     <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
-                    <includes><include>**/*</include></includes>
+                    <includes>
+                        <include>**/*</include>
+                    </includes>
+                    <merge>true</merge>
                     <repositoryName>quick4j-framework</repositoryName>      <!-- github repo name -->
                     <repositoryOwner>quick4j</repositoryOwner>    <!-- github username  -->
                 </configuration>
@@ -276,11 +279,11 @@
         </plugins>
     </build>
 
-    <distributionManagement>
-        <repository>
-            <id>internal.repo</id>
-            <name>Temporary Staging Repository</name>
-            <url>file://${project.build.directory}/mvn-repo</url>
-        </repository>
-    </distributionManagement>
+    <!--<distributionManagement>-->
+        <!--<repository>-->
+            <!--<id>internal.repo</id>-->
+            <!--<name>Temporary Staging Repository</name>-->
+            <!--<url>file://${project.build.directory}/mvn-repo</url>-->
+        <!--</repository>-->
+    <!--</distributionManagement>-->
 </project>
