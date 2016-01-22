@@ -95,7 +95,7 @@ public class DataGridManager implements InitializingBean, BeanPostProcessor {
 
     private DataGrid getDataGrid(String name){
         if(!dataGridMap.containsKey(name)){
-            throw new NotFoundException("datagrid.notfound", new Object[]{name});
+            throw new NotFoundException("exception.datagrid.notfound", new Object[]{name});
         }
         return dataGridMap.get(name);
     }

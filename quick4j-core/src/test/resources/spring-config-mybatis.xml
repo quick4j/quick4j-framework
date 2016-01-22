@@ -9,7 +9,7 @@
         <property name="properties">
             <props>
                 <prop key="dialect">Mysql</prop>
-                <prop key="stmtIdRegex">*.selectPaging</prop>
+                <prop key="stmtIdRegex">*.selectPaging*</prop>
             </props>
         </property>
     </bean>

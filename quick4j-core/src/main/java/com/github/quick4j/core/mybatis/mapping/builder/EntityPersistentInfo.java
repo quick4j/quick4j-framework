@@ -1,5 +1,6 @@
 package com.github.quick4j.core.mybatis.mapping.builder;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,8 +112,10 @@ public class EntityPersistentInfo {
             }
 
             Column column = field.getAnnotation(Column.class);
-            mappedColumns.add(new MappedColumn(column.name(), field));
-            columnNames.add(column.name());
+            if(StringUtils.isNotBlank(column.name())){
+                mappedColumns.add(new MappedColumn(column.name(), field));
+                columnNames.add(column.name());
+            }
         }
 
         columns = columnNames.toArray(new String[]{});

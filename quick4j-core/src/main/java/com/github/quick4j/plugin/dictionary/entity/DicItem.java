@@ -1,6 +1,5 @@
 package com.github.quick4j.plugin.dictionary.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.quick4j.core.entity.AbstractEntity;
 import com.github.quick4j.core.entity.Entity;
 
@@ -12,9 +11,11 @@ import java.util.List;
 /**
  * @author zhaojh
  */
+@javax.persistence.Entity
 @Table(name = "sys_dictionary")
 public class DicItem extends AbstractEntity{
     @Id
+    @Column(length = 32)
     private String id;
     @Column(name = "dic_code")
     private String code;

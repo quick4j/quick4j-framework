@@ -21,7 +21,7 @@ public class Toolbar extends ArrayList<Toolbutton> {
     public void removeToolbutton(String code){
         Iterator<Toolbutton> iterator = this.iterator();
         while (iterator.hasNext()){
-            if(code.equals(iterator.next().getCode())){
+            if(code.equals(iterator.next().getId())){
                 iterator.remove();
                 break;
             }

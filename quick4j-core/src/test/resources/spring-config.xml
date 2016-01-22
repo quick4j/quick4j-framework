@@ -46,8 +46,8 @@
     </aop:config>
 
     <bean id="messageSource"
-          class="com.github.quick4j.core.spring.BatchResourceBundleMessageSource"
-          p:basename="classpath*:config/i18n/*"/>
+          class="org.springframework.context.support.ResourceBundleMessageSource"
+          p:basename="message"/>
 
     <!--<import resource="classpath*:config/spring-config-*.xml"/>-->
 </beans>

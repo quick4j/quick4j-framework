@@ -2,7 +2,7 @@ package com.github.quick4j.plugin.dictionary.web.controller;
 
 import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.CrudService;
-import com.github.quick4j.core.web.http.AjaxResponse;
+import com.github.quick4j.core.web.http.JsonMessage;
 import com.github.quick4j.plugin.dictionary.entity.DicItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.swing.text.MaskFormatter;
-import java.util.Map;
 
 /**
  * @author zhaojh
  */
 @Controller
+@RequestMapping("/dictionary")
 public class DictionaryController {
     private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
     private final String LOCATION = "dictionary/";
@@ -56,10 +55,10 @@ public class DictionaryController {
             produces = "application/json;charset=utf-8"
     )
     @ResponseBody
-    public AjaxResponse doCreate(DicItem dicItem){
+    public JsonMessage doCreate(DicItem dicItem){
         logger.info("create dictionary.");
         simpleCrudService.save(dicItem);
-        return new AjaxResponse(AjaxResponse.Status.OK);
+        return new JsonMessage().success();
     }
 
     /**
@@ -84,10 +83,11 @@ public class DictionaryController {
             produces = "application/json;charset=utf-8"
     )
     @ResponseBody
-    public AjaxResponse doUpdate(@PathVariable("id") String id, DicItem dicItem){
+    public JsonMessage doUpdate(@PathVariable("id") String id, DicItem dicItem){
         logger.info("update dictionary.");
+        dicItem.setId(id);
         simpleCrudService.save(dicItem);
-        return new AjaxResponse(AjaxResponse.Status.OK);
+        return new JsonMessage().success();
     }
 
 
@@ -102,9 +102,9 @@ public class DictionaryController {
             produces = "application/json;charset=utf-8"
     )
     @ResponseBody
-    public AjaxResponse doDelete(@PathVariable("id") String id){
+    public JsonMessage doDelete(@PathVariable("id") String id){
         Criteria<DicItem> criteria = simpleCrudService.createCriteria(DicItem.class);
         criteria.delete(id);
-        return new AjaxResponse(AjaxResponse.Status.OK);
+        return new JsonMessage().success();
     }
 }

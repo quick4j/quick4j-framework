@@ -1,8 +1,6 @@
 package com.github.quick4j.core.repository.mybatis.support;
 
 import com.github.quick4j.core.entity.Entity;
-import com.github.quick4j.core.exception.NotFoundException;
-import com.github.quick4j.core.mybatis.annotation.Mapper;
 import com.github.quick4j.core.mybatis.mapping.builder.MappedStatementAssistant;
 import com.github.quick4j.core.mybatis.mapping.builder.MapperAssistant;
 import com.github.quick4j.core.mybatis.mapping.builder.SqlBuilder;
@@ -19,10 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * 此类仅支持最大50（包含50）条数据的批处理，
@@ -121,7 +117,7 @@ public class RepositoryImpl implements Repository {
         }
 
         int total = rows.size();
-        if(rowBounds.getOffset() != 0 || rowBounds.getLimit() != Integer.MAX_VALUE){
+        if(pageable.getOffset() != 0 || pageable.getLimit() != Integer.MAX_VALUE){
             total = PaginationInterceptor.getPaginationTotal();
             PaginationInterceptor.clean();
         }

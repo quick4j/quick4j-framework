@@ -1,1 +1,1 @@
-<base href="http://10.68.7.140:8080/upms/">
+<base href="http://localhost:8080">
