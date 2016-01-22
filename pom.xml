@@ -6,7 +6,7 @@
 
     <groupId>com.github.quick4j</groupId>
     <artifactId>quick4j-framework</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -45,6 +45,7 @@
         <javassist.version>3.18.2-GA</javassist.version>
         <jsonpath.version>1.2.0</jsonpath.version>
         <github.global.server>github</github.global.server>
+        <quick4j.version>0.3</quick4j.version>
     </properties>
 
     <dependencies>
@@ -63,6 +64,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.github.quick4j</groupId>
+                <artifactId>quick4j-core</artifactId>
+                <version>${quick4j.version}</version>
+            </dependency>
             <!-- servlet -->
             <dependency>
                 <groupId>javax.servlet</groupId>

@@ -7,7 +7,7 @@
     <parent>
         <artifactId>quick4j-framework</artifactId>
         <groupId>com.github.quick4j</groupId>
-        <version>0.3-SNAPSHOT</version>
+        <version>0.3</version>
     </parent>
 
     <properties>

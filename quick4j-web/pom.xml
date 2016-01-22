@@ -10,14 +10,13 @@
     <parent>
         <artifactId>quick4j-framework</artifactId>
         <groupId>com.github.quick4j</groupId>
-        <version>0.3-SNAPSHOT</version>
+        <version>0.3</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>com.github.quick4j</groupId>
             <artifactId>quick4j-core</artifactId>
-            <version>0.3-SNAPSHOT</version>
         </dependency>
 
         <dependency>
