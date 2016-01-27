@@ -11,5 +11,7 @@ import javax.validation.Valid;
 @Service
 @Validated
 public class WelcomeService {
-    public void hello(@Valid User user){}
+
+  public void hello(@Valid User user) {
+  }
 }

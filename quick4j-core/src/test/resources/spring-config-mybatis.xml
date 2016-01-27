@@ -30,7 +30,8 @@
     </bean>
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="markerInterface" value="com.github.quick4j.core.mybatis.mapping.mapper.BaseMapper"/>
+        <property name="markerInterface"
+                  value="com.github.quick4j.core.mybatis.mapping.mapper.BaseMapper"/>
         <property name="basePackage" value="com.github.quick4j.**.entity"/>
     </bean>
 

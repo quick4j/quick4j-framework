@@ -6,31 +6,32 @@ import org.springframework.expression.ParserContext;
  * @author zhaojh
  */
 public class CustomTemplateParserContext implements ParserContext {
-    private final String expressionPrefix;
 
-    private final String expressionSuffix;
+  private final String expressionPrefix;
 
-    public CustomTemplateParserContext(){
-        this("${", "}");
-    }
+  private final String expressionSuffix;
 
-    private CustomTemplateParserContext(String expressionPrefix, String expressionSuffix) {
-        this.expressionPrefix = expressionPrefix;
-        this.expressionSuffix = expressionSuffix;
-    }
+  public CustomTemplateParserContext() {
+    this("${", "}");
+  }
 
-    @Override
-    public boolean isTemplate() {
-        return true;
-    }
+  private CustomTemplateParserContext(String expressionPrefix, String expressionSuffix) {
+    this.expressionPrefix = expressionPrefix;
+    this.expressionSuffix = expressionSuffix;
+  }
 
-    @Override
-    public String getExpressionPrefix() {
-        return this.expressionPrefix;
-    }
+  @Override
+  public boolean isTemplate() {
+    return true;
+  }
 
-    @Override
-    public String getExpressionSuffix() {
-        return this.expressionSuffix;
-    }
+  @Override
+  public String getExpressionPrefix() {
+    return this.expressionPrefix;
+  }
+
+  @Override
+  public String getExpressionSuffix() {
+    return this.expressionSuffix;
+  }
 }

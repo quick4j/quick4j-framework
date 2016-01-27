@@ -22,11 +22,12 @@ import java.util.Set;
  * @author zhaojh
  */
 @ControllerAdvice
-public class GlobalExceptionProcessor{
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionProcessor.class);
+public class GlobalExceptionProcessor {
 
-    @Resource
-    private MessageSource messageSource;
+  private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionProcessor.class);
+
+  @Resource
+  private MessageSource messageSource;
 
 //    @ExceptionHandler(BindException.class)
 //    @ResponseBody
@@ -47,39 +48,39 @@ public class GlobalExceptionProcessor{
 //    }
 
 
-    @ExceptionHandler(ValidationException.class)
-    @ResponseBody
-    public JsonMessage processConstraintViolationException(HttpServletRequest request,
-                                                            ConstraintViolationException ex){
-        StringBuilder message = new StringBuilder();
-        Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
-        for (ConstraintViolation constraintViolation : constraintViolations){
-            message.append(",")
-                    .append(constraintViolation.getPropertyPath())
-                    .append(':')
-                    .append(constraintViolation.getMessage());
-            logger.info(constraintViolation.getMessage());
-        }
-
-        return new JsonMessage().failure(message.toString());
+  @ExceptionHandler(ValidationException.class)
+  @ResponseBody
+  public JsonMessage processConstraintViolationException(HttpServletRequest request,
+                                                         ConstraintViolationException ex) {
+    StringBuilder message = new StringBuilder();
+    Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
+    for (ConstraintViolation constraintViolation : constraintViolations) {
+      message.append(",")
+          .append(constraintViolation.getPropertyPath())
+          .append(':')
+          .append(constraintViolation.getMessage());
+      logger.info(constraintViolation.getMessage());
     }
 
-    @ExceptionHandler(BizException.class)
-    @ResponseBody
-    public JsonMessage processBizException(HttpServletRequest request, BizException e){
-        String message = messageSource.getMessage(e.getCode(), e.getArgs(), request.getLocale());
-        return new JsonMessage().failure(message);
-    }
+    return new JsonMessage().failure(message.toString());
+  }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseBody
-    public JsonMessage processException(HttpServletRequest request, Exception ex){
-        String url = request.getRequestURL().toString();
-        String message = ex.getMessage();
+  @ExceptionHandler(BizException.class)
+  @ResponseBody
+  public JsonMessage processBizException(HttpServletRequest request, BizException e) {
+    String message = messageSource.getMessage(e.getCode(), e.getArgs(), request.getLocale());
+    return new JsonMessage().failure(message);
+  }
 
-        logger.error("error: " + url, ex);
-        ex.printStackTrace();
+  @ExceptionHandler(Exception.class)
+  @ResponseBody
+  public JsonMessage processException(HttpServletRequest request, Exception ex) {
+    String url = request.getRequestURL().toString();
+    String message = ex.getMessage();
 
-        return new JsonMessage().failure(message);
-    }
+    logger.error("error: " + url, ex);
+    ex.printStackTrace();
+
+    return new JsonMessage().failure(message);
+  }
 }

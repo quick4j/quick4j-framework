@@ -9,51 +9,52 @@ import java.util.List;
  * @author zhaojh
  */
 public class Header extends ArrayList<Column> {
-    public Header addColumn(String title, String field){
-        this.add(new Column(title, field));
-        return this;
+
+  public Header addColumn(String title, String field) {
+    this.add(new Column(title, field));
+    return this;
+  }
+
+  public Header addColumn(String title, String field, int width) {
+    this.add(new Column(title, field, width));
+    return this;
+  }
+
+  public Header addColumn(Column column) {
+    this.add(column);
+    return this;
+  }
+
+  public Column getColumn(String field) {
+    for (Column column : this) {
+      if (field.equals(column.getField())) {
+        return column;
+      }
     }
 
-    public Header addColumn(String title, String field, int width){
-        this.add(new Column(title, field, width));
-        return this;
-    }
+    return null;
+  }
 
-    public Header addColumn(Column column){
-        this.add(column);
-        return this;
+  public boolean removeColumn(String field) {
+    Iterator<Column> iterator = this.iterator();
+    while (iterator.hasNext()) {
+      Column column = iterator.next();
+      if (column.getField().equals(field)) {
+        iterator.remove();
+        return true;
+      }
     }
+    return false;
+  }
 
-    public Column getColumn(String field){
-        for(Column column : this){
-            if(field.equals(column.getField())){
-                return column;
-            }
-        }
-
-        return null;
+  public void removeColumns(String[] fields) {
+    Iterator<Column> iterator = this.iterator();
+    List<String> removedFieldList = Arrays.asList(fields);
+    while (iterator.hasNext()) {
+      Column column = iterator.next();
+      if (removedFieldList.contains(column.getField())) {
+        iterator.remove();
+      }
     }
-
-    public boolean removeColumn(String field){
-        Iterator<Column> iterator = this.iterator();
-        while (iterator.hasNext()){
-            Column column = iterator.next();
-            if(column.getField().equals(field)){
-                iterator.remove();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void removeColumns(String[] fields){
-        Iterator<Column> iterator = this.iterator();
-        List<String> removedFieldList = Arrays.asList(fields);
-        while (iterator.hasNext()){
-            Column column = iterator.next();
-            if(removedFieldList.contains(column.getField())){
-                iterator.remove();
-            }
-        }
-    }
+  }
 }

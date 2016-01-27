@@ -8,25 +8,27 @@ import com.github.quick4j.plugin.logging.exception.ParseLogFailureException;
 /**
  * @author zhaojh.
  */
-public class CreateEntityLogParser extends AbstractEntityLogParser{
-    private static final String CREATE_ENTITY_LOG_CONTENT_TEMPLATE = "新建[%s]";
+public class CreateEntityLogParser extends AbstractEntityLogParser {
 
-    public CreateEntityLogParser(Object[] methodArgs) {
-        super(methodArgs);
+  private static final String CREATE_ENTITY_LOG_CONTENT_TEMPLATE = "新建[%s]";
+
+  public CreateEntityLogParser(Object[] methodArgs) {
+    super(methodArgs);
+  }
+
+  @Override
+  public LogBuilder parse() {
+    Object[] methodArgs = getMethodArgs();
+
+    if (null == methodArgs || methodArgs.length == 0) {
+      throw new ParseLogFailureException("When Create Entity.");
     }
 
-    @Override
-    public LogBuilder parse() {
-        Object[] methodArgs = getMethodArgs();
-
-        if(null == methodArgs || methodArgs.length == 0)
-            throw new ParseLogFailureException("When Create Entity.");
-
-        if(!isWrittenLog()){
-            throw new NotFoundLogException("");
-        }
-
-        Object[] entities = getEntities();
-        return new EntityLogBuilder(CREATE_ENTITY_LOG_CONTENT_TEMPLATE, entities);
+    if (!isWrittenLog()) {
+      throw new NotFoundLogException("");
     }
+
+    Object[] entities = getEntities();
+    return new EntityLogBuilder(CREATE_ENTITY_LOG_CONTENT_TEMPLATE, entities);
+  }
 }
