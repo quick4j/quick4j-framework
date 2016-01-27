@@ -1,7 +1,13 @@
-.form-field{margin: 3px 3px;}
-.inline.form-field>label, .inline.form-field>div{
+.form-field {
+    margin: 3px 3px;
+}
+
+.inline.form-field > label, .inline.form-field > div {
     display: inline-block;
     vertical-align: middle;
     width: auto;
 }
-.inline.form-field>label{width: 100px;}
+
+.inline.form-field > label {
+    width: 100px;
+}

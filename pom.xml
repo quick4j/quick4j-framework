@@ -46,6 +46,7 @@
         <jsonpath.version>1.2.0</jsonpath.version>
         <github.global.server>github</github.global.server>
         <quick4j.version>0.3</quick4j.version>
+        <assertj.version>2.3.0</assertj.version>
     </properties>
 
     <dependencies>
@@ -236,6 +237,13 @@
                 <scope>test</scope>
             </dependency>
 
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <!-- use 3.2.0 for Java 8 projects -->
+                <version>${assertj.version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -259,7 +267,10 @@
                     <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
                     <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
                     <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
-                    <includes><include>**/*</include></includes>
+                    <includes>
+                        <include>**/*</include>
+                    </includes>
+                    <merge>true</merge>
                     <repositoryName>quick4j-framework</repositoryName>      <!-- github repo name -->
                     <repositoryOwner>quick4j</repositoryOwner>    <!-- github username  -->
                 </configuration>
@@ -276,11 +287,11 @@
         </plugins>
     </build>
 
-    <distributionManagement>
-        <repository>
-            <id>internal.repo</id>
-            <name>Temporary Staging Repository</name>
-            <url>file://${project.build.directory}/mvn-repo</url>
-        </repository>
-    </distributionManagement>
+    <!--<distributionManagement>-->
+        <!--<repository>-->
+            <!--<id>internal.repo</id>-->
+            <!--<name>Temporary Staging Repository</name>-->
+            <!--<url>file://${project.build.directory}/mvn-repo</url>-->
+        <!--</repository>-->
+    <!--</distributionManagement>-->
 </project>

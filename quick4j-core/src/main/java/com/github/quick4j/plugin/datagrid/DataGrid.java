@@ -8,14 +8,23 @@ import java.util.List;
 /**
  * @author zhaojh
  */
-public interface DataGrid{
-    String getName();
-    Class getEntity();
-    List<Header> getColumns();
-    List<Header> getFrozenColumns();
-    Toolbar getToolbar();
-    DataGrid copySelf();
-    boolean isSupportPostProcess();
-    void setPostProcessor(DataSetProcessor postProcessor);
-    DataSetProcessor getPostProcessor();
+public interface DataGrid {
+
+  String getName();
+
+  Class getEntity();
+
+  List<Header> getColumns();
+
+  List<Header> getFrozenColumns();
+
+  Toolbar getToolbar();
+
+  DataGrid copySelf();
+
+  boolean isSupportPostProcess();
+
+  void setPostProcessor(DataSetProcessor postProcessor);
+
+  DataSetProcessor getPostProcessor();
 }

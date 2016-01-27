@@ -10,20 +10,21 @@ import java.util.List;
  * @author zhaojh.
  */
 public class CustomLogBuilder extends AbstractLogBuilder {
-    private List<Logging> loggings;
 
-    public CustomLogBuilder(String content, Object[] extraData) {
-        super(content, extraData);
-    }
+  private List<Logging> loggings;
 
-    @Override
-    protected void buildLogging() {
-        loggings = new ArrayList<Logging>();
-        System.out.println("=====> say~~~~~~~ Goodbye~~~~~~~~~~~~");
-    }
+  public CustomLogBuilder(String content, Object[] extraData) {
+    super(content, extraData);
+  }
 
-    @Override
-    public List<Logging> getLoggings() {
-        return loggings;
-    }
+  @Override
+  protected void buildLogging() {
+    loggings = new ArrayList<Logging>();
+    System.out.println("=====> say~~~~~~~ Goodbye~~~~~~~~~~~~");
+  }
+
+  @Override
+  public List<Logging> getLoggings() {
+    return loggings;
+  }
 }

@@ -1,54 +1,56 @@
 package com.github.quick4j.entity;
 
-import com.github.quick4j.core.entity.AbstractEntity;
-import com.github.quick4j.core.entity.Entity;
+import com.github.quick4j.core.entity.BaseEntity;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import java.util.List;
 
 /**
  * @author zhaojh
  */
+@Entity
 @Table(name = "test_student")
-public class Student extends AbstractEntity{
-    @Id
-    private String id;
-    @Column(name = "stu_name")
-    private String name;
-    @Column(name = "stu_age")
-    private int age;
-    private String masterId;
+public class Student extends BaseEntity {
 
-    public Student() {}
+  @Id
+  @Column(name = "id", length = 32)
+  private String id;
+  @Column(name = "stu_name", length = 100)
+  private String name;
+  @Column(name = "stu_age")
+  private int age;
 
-    public Student(String name) {
-        this.name = name;
-    }
+  public Student() {}
 
-    @Override
-    public String getChineseName() {
-        return "学生";
-    }
+  public Student(String name) {
+    this.name = name;
+  }
 
-    @Override
-    public String getName() {
-        return name;
-    }
+  @Override
+  public String getChineseName() {
+    return "学生";
+  }
 
-    @Override
-    public List<? extends Entity> getSlave() {
-        return null;
-    }
+  public String getName() {
+    return name;
+  }
 
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
+  @Override
+  public List<? extends BaseEntity> getSlave() {
+    return null;
+  }
 
-    @Override
-    public String getId() {
-        return id;
-    }
+  @Override
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  @Override
+  public String getId() {
+    return id;
+  }
 }

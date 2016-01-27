@@ -1,78 +1,81 @@
 package com.github.quick4j.entity;
 
-import com.github.quick4j.core.entity.AbstractEntity;
-import com.github.quick4j.core.entity.Entity;
+import com.github.quick4j.core.entity.BaseEntity;
+
+import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.List;
 
 /**
  * @author zhaojh
  */
+@Entity
 @Table(name = "upm_actions")
-public class Action extends AbstractEntity {
-    @Id
-    private String id;
-    @Column(name = "action_code")
-    private String code;
-    @Column(name = "action_name")
-    private String name;
-    @Column(name = "action_icon")
-    private String icon;
-    @Column(name = "action_index")
-    private int index;
+public class Action extends BaseEntity {
 
-    @Override
-    public String getChineseName() {
-        return "操作按钮";
-    }
+  @Id
+  private String id;
+  @Column(name = "action_code")
+  private String code;
+  @Column(name = "action_name")
+  private String name;
+  @Column(name = "action_icon")
+  private String icon;
+  @Column(name = "action_index")
+  private int index;
 
-    @Override
-    public List<? extends Entity> getSlave() {
-        return null;
-    }
+  @Override
+  public String getChineseName() {
+    return "操作按钮";
+  }
 
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
+  @Override
+  public List<? extends BaseEntity> getSlave() {
+    return null;
+  }
 
-    @Override
-    public String getId() {
-        return id;
-    }
+  @Override
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public String getCode() {
-        return code;
-    }
+  @Override
+  public String getId() {
+    return id;
+  }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+  public String getCode() {
+    return code;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setCode(String code) {
+    this.code = code;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getIcon() {
-        return icon;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
+  public String getIcon() {
+    return icon;
+  }
 
-    public int getIndex() {
-        return index;
-    }
+  public void setIcon(String icon) {
+    this.icon = icon;
+  }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
+  public int getIndex() {
+    return index;
+  }
+
+  public void setIndex(int index) {
+    this.index = index;
+  }
 }
