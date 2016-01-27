@@ -14,13 +14,13 @@ import java.util.Map;
 /**
  * @author zhaojh.
  */
-public class SimpleCriteria<T extends BaseEntity> {
+public class Criteria<T extends BaseEntity> {
 
   private Class<T> entityClass;
   private MybatisRepository mybatisRepository;
 
-  SimpleCriteria(Class<T> entityClass,
-                 MybatisRepository mybatisRepository) {
+  Criteria(Class<T> entityClass,
+           MybatisRepository mybatisRepository) {
     this.entityClass = entityClass;
     this.mybatisRepository = mybatisRepository;
   }

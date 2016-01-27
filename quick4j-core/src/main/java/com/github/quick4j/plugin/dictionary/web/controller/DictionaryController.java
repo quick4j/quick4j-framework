@@ -1,6 +1,6 @@
 package com.github.quick4j.plugin.dictionary.web.controller;
 
-import com.github.quick4j.core.service.SimpleCriteria;
+import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.SimpleCrudService;
 import com.github.quick4j.core.web.http.JsonMessage;
 import com.github.quick4j.plugin.dictionary.entity.DicItem;
@@ -94,7 +94,7 @@ public class DictionaryController {
   )
   @ResponseBody
   public JsonMessage doDelete(@PathVariable("id") String id) {
-    SimpleCriteria<DicItem> criteria = simpleCrudService.newCriteria(DicItem.class);
+    Criteria<DicItem> criteria = simpleCrudService.newCriteria(DicItem.class);
     criteria.delete(id);
     return new JsonMessage().success();
   }

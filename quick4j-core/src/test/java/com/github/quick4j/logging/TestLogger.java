@@ -1,6 +1,6 @@
 package com.github.quick4j.logging;
 
-import com.github.quick4j.core.service.SimpleCriteria;
+import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.SimpleCrudService;
 import com.github.quick4j.entity.User;
 
@@ -109,7 +109,7 @@ public class TestLogger {
     jack.setPassword("123");
     simpleCrudService.save(jack);
 
-    SimpleCriteria<User> criteria = simpleCrudService.newCriteria(User.class);
+    Criteria<User> criteria = simpleCrudService.newCriteria(User.class);
     criteria.delete(jack);
   }
 
@@ -122,7 +122,7 @@ public class TestLogger {
     jack.setPassword("123");
     simpleCrudService.save(jack);
 
-    SimpleCriteria<User> criteria = simpleCrudService.newCriteria(User.class);
+    Criteria<User> criteria = simpleCrudService.newCriteria(User.class);
     criteria.delete(jack.getId());
   }
 
@@ -141,7 +141,7 @@ public class TestLogger {
     zhang.setPassword("123");
     simpleCrudService.save(zhang);
 
-    SimpleCriteria<User> criteria = simpleCrudService.newCriteria(User.class);
+    Criteria<User> criteria = simpleCrudService.newCriteria(User.class);
     criteria.delete(new String[]{zhang.getId(), jack.getId()});
   }
 

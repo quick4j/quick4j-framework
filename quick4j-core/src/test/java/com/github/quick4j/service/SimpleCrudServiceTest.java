@@ -2,7 +2,7 @@ package com.github.quick4j.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.github.quick4j.core.service.SimpleCriteria;
+import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.SimpleCrudService;
 import com.github.quick4j.entity.Teacher;
 
@@ -262,7 +262,7 @@ public class SimpleCrudServiceTest {
     List<Teacher> teachers = prepareData();
     crudService.save(teachers);
 
-    SimpleCriteria<Teacher> criteria = crudService.newCriteria(Teacher.class);
+    Criteria<Teacher> criteria = crudService.newCriteria(Teacher.class);
     assertThat(criteria.selectList()).containsAll(teachers);
   }
 
@@ -294,7 +294,7 @@ public class SimpleCrudServiceTest {
     }
     crudService.save(teachers);
 
-    SimpleCriteria<Teacher> criteria = crudService.newCriteria(Teacher.class);
+    Criteria<Teacher> criteria = crudService.newCriteria(Teacher.class);
     assertThat(criteria.selectList()).containsAll(teachers);
   }
 
@@ -325,7 +325,7 @@ public class SimpleCrudServiceTest {
 
     crudService.save(t1);
 
-    SimpleCriteria<Teacher> criteria = crudService.newCriteria(Teacher.class);
+    Criteria<Teacher> criteria = crudService.newCriteria(Teacher.class);
 
     assertThat(criteria.selectOne(t1.getId())).isEqualTo(t1);
 
@@ -339,7 +339,7 @@ public class SimpleCrudServiceTest {
     List<Teacher> teachers = prepareData();
     crudService.save(teachers);
 
-    SimpleCriteria<Teacher> criteria = crudService.newCriteria(Teacher.class);
+    Criteria<Teacher> criteria = crudService.newCriteria(Teacher.class);
     assertThat(criteria.selectList()).containsAll(teachers);
 
     List<String> ids = new ArrayList<String>();
@@ -356,7 +356,7 @@ public class SimpleCrudServiceTest {
     List<Teacher> teachers = prepareData();
     crudService.save(teachers);
 
-    SimpleCriteria<Teacher> criteria = crudService.newCriteria(Teacher.class);
+    Criteria<Teacher> criteria = crudService.newCriteria(Teacher.class);
     assertThat(criteria.selectList()).containsAll(teachers);
 
     criteria.delete(teachers);
@@ -369,7 +369,7 @@ public class SimpleCrudServiceTest {
     List<Teacher> teachers = prepareData();
     crudService.save(teachers);
 
-    SimpleCriteria<Teacher> criteria = crudService.newCriteria(Teacher.class);
+    Criteria<Teacher> criteria = crudService.newCriteria(Teacher.class);
     assertThat(criteria.selectList()).containsAll(teachers);
 
     Teacher template = new Teacher("zhang");

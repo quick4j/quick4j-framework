@@ -21,8 +21,8 @@ public class SimpleCrudService<T extends BaseEntity> {
   @Resource
   private MybatisRepository mybatisRepository;
 
-  public <P extends BaseEntity> SimpleCriteria<P> newCriteria(Class<P> entityClass) {
-    return new SimpleCriteria<P>(entityClass, mybatisRepository);
+  public <P extends BaseEntity> Criteria<P> newCriteria(Class<P> entityClass) {
+    return new Criteria<P>(entityClass, mybatisRepository);
   }
 
   public T save(T entity) {

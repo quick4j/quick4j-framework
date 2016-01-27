@@ -5,7 +5,7 @@ import com.github.quick4j.core.exception.NotFoundException;
 import com.github.quick4j.core.mybatis.paging.model.DataPaging;
 import com.github.quick4j.core.mybatis.paging.model.PageRequest;
 import com.github.quick4j.core.repository.mybatis.support.Sort;
-import com.github.quick4j.core.service.SimpleCriteria;
+import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.SimpleCrudService;
 import com.github.quick4j.core.web.http.JsonMessage;
 import com.github.quick4j.plugin.datagrid.DataGrid;
@@ -83,7 +83,7 @@ public class DataGridAPIController {
     logger.info("dataGrid: {}, page: {}, size: {}", name, _page, _size);
 
     Class entityClass = dataGrid.getEntity();
-    SimpleCriteria criteria = simpleCrudService.newCriteria(entityClass);
+    Criteria criteria = simpleCrudService.newCriteria(entityClass);
     PageRequest<Map<String, Object>>
         pageRequest =
         new PageRequest(_page, _size, wrapRequestMap(request));
