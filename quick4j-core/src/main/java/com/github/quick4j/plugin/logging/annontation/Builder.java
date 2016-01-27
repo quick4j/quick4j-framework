@@ -14,6 +14,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Builder {
-    Class<? extends AbstractLogBuilder> type();
-    Class<? extends Logging> build();
+
+  Class<? extends AbstractLogBuilder> type();
+
+  Class<? extends Logging> build();
 }

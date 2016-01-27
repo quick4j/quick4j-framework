@@ -12,26 +12,27 @@ import java.util.List;
  * @author zhaojh.
  */
 public class DefaultMethodLogBuilder extends AbstractLogBuilder {
-    private List<Logging> loggings;
 
-    public DefaultMethodLogBuilder(String content, Object[] extraData) {
-        super(content, extraData);
-    }
+  private List<Logging> loggings;
 
-    @Override
-    public List<Logging> getLoggings() {
-        return loggings;
-    }
+  public DefaultMethodLogBuilder(String content, Object[] extraData) {
+    super(content, extraData);
+  }
 
-    @Override
-    protected void buildLogging() {
-        loggings = new ArrayList<Logging>();
-        loggings.add(new DefaultLogging(
-                "123456",
-                "guest",
-                getCreateTime(),
-                getContent(),
-                JsonUtils.toJson(getExtraData())
-        ));
-    }
+  @Override
+  public List<Logging> getLoggings() {
+    return loggings;
+  }
+
+  @Override
+  protected void buildLogging() {
+    loggings = new ArrayList<Logging>();
+    loggings.add(new DefaultLogging(
+        "123456",
+        "guest",
+        getCreateTime(),
+        getContent(),
+        JsonUtils.toJson(getExtraData())
+    ));
+  }
 }

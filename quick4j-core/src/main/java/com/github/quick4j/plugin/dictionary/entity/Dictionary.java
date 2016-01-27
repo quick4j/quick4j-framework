@@ -7,40 +7,41 @@ import java.util.List;
  * @author zhaojh
  */
 public class Dictionary {
-    private String code;
-    private String name;
-    private List<DicItem> items;
-    private String type = "dynamic";
 
-    public Dictionary(String code, String name) {
-        this.code = code;
-        this.name = name;
-        items = new ArrayList<DicItem>();
-    }
+  private String code;
+  private String name;
+  private List<DicItem> items;
+  private String type = "dynamic";
 
-    public Dictionary(String code, String name, List<DicItem> items) {
-        this.code = code;
-        this.name = name;
-        this.items = items;
-    }
+  public Dictionary(String code, String name) {
+    this.code = code;
+    this.name = name;
+    items = new ArrayList<DicItem>();
+  }
 
-    public String getCode() {
-        return code;
-    }
+  public Dictionary(String code, String name, List<DicItem> items) {
+    this.code = code;
+    this.name = name;
+    this.items = items;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getCode() {
+    return code;
+  }
 
-    public List<DicItem> getItems() {
-        return items;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getType() {
-        return type;
-    }
+  public List<DicItem> getItems() {
+    return items;
+  }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
 }

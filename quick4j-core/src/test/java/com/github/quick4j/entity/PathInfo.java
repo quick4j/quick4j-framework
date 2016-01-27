@@ -1,68 +1,67 @@
 package com.github.quick4j.entity;
 
-import com.github.quick4j.core.entity.AbstractEntity;
-import com.github.quick4j.core.entity.Entity;
+import com.github.quick4j.core.entity.BaseEntity;
 
 import java.util.List;
 
 /**
  * @author zhaojh
  */
-public class PathInfo extends AbstractEntity {
-    private String id;
-    private String name;
-    private String icon;
-    private String pid;
-    private List<Action> actions;
-    private String masterId;
+public class PathInfo extends BaseEntity {
 
-    @Override
-    public String getChineseName() {
-        return "资源";
-    }
+  private String id;
+  private String name;
+  private String icon;
+  private String pid;
+  private List<Action> actions;
 
-    @Override
-    public List<? extends Entity> getSlave() {
-        return null;
-    }
+  @Override
+  public String getChineseName() {
+    return "资源";
+  }
 
-    public String getId() {
-        return id;
-    }
+  @Override
+  public List<? extends BaseEntity> getSlave() {
+    return null;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getIcon() {
-        return icon;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
+  public String getIcon() {
+    return icon;
+  }
 
-    public String getPid() {
-        return pid;
-    }
+  public void setIcon(String icon) {
+    this.icon = icon;
+  }
 
-    public void setPid(String pid) {
-        this.pid = pid;
-    }
+  public String getPid() {
+    return pid;
+  }
 
-    public List<Action> getActions() {
-        return actions;
-    }
+  public void setPid(String pid) {
+    this.pid = pid;
+  }
 
-    public void setActions(List<Action> actions) {
-        this.actions = actions;
-    }
+  public List<Action> getActions() {
+    return actions;
+  }
+
+  public void setActions(List<Action> actions) {
+    this.actions = actions;
+  }
 }

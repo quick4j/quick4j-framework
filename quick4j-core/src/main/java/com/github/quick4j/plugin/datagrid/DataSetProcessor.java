@@ -9,6 +9,9 @@ import java.util.Map;
  * @author zhaojh
  */
 public interface DataSetProcessor {
-    String getName();
-    DataPaging process(DataPaging dataPaging, PageRequest<Map<String, Object>> pageRequest) throws DataSetProcessException;
+
+  String getName();
+
+  DataPaging process(DataPaging dataPaging, PageRequest<Map<String, Object>> pageRequest)
+      throws DataSetProcessException;
 }

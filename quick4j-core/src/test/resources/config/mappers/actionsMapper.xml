@@ -17,13 +17,13 @@
         from upm_actions
         where id = #{id}
     </select>
-    
+
     <select id="selectListByIds" resultMap="actionResult" parameterType="List">
         select id, action_code, action_name, action_icon, action_index
         from upm_actions
         <where>
             <foreach collection="list" item="id" index="index" open="(" separator="or" close=")">
-              id = #{id}
+                id = #{id}
             </foreach>
         </where>
         order by action_index

@@ -8,5 +8,6 @@ import java.util.List;
  * @author zhaojh.
  */
 public interface LogBuilder {
-    List<Logging> getLoggings();
+
+  List<Logging> getLoggings();
 }

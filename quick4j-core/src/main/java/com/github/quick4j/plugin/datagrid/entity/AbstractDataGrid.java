@@ -9,62 +9,63 @@ import com.github.quick4j.plugin.datagrid.meta.Toolbar;
  * @author zhaojh
  */
 public abstract class AbstractDataGrid implements DataGrid {
-    private String name;
-    private Class entityClass;
-    private Toolbar toolbar;
-    private DataSetProcessor postProcessor;
 
-    protected AbstractDataGrid(String name, Class entityClass) {
-        this.name = name;
-        this.entityClass = entityClass;
-    }
+  private String name;
+  private Class entityClass;
+  private Toolbar toolbar;
+  private DataSetProcessor postProcessor;
 
-    @Override
-    public String getName() {
-        return name;
-    }
+  protected AbstractDataGrid(String name, Class entityClass) {
+    this.name = name;
+    this.entityClass = entityClass;
+  }
 
-    @Override
-    @JsonIgnore
-    public Class getEntity() {
-        return entityClass;
-    }
+  @Override
+  public String getName() {
+    return name;
+  }
 
-    @Override
-    public Toolbar getToolbar() {
-        return toolbar;
-    }
+  @Override
+  @JsonIgnore
+  public Class getEntity() {
+    return entityClass;
+  }
 
-    @Override
-    public void setPostProcessor(DataSetProcessor postProcessor) {
-        this.postProcessor = postProcessor;
-    }
+  @Override
+  public Toolbar getToolbar() {
+    return toolbar;
+  }
 
-    @Override
-    @JsonIgnore
-    public DataSetProcessor getPostProcessor() {
-        return postProcessor;
-    }
+  @Override
+  public void setPostProcessor(DataSetProcessor postProcessor) {
+    this.postProcessor = postProcessor;
+  }
 
-    @Override
-    public boolean isSupportPostProcess() {
-        return null != postProcessor;
-    }
+  @Override
+  @JsonIgnore
+  public DataSetProcessor getPostProcessor() {
+    return postProcessor;
+  }
 
-    public void setToolbar(Toolbar toolbar) {
-        this.toolbar = toolbar;
-    }
+  @Override
+  public boolean isSupportPostProcess() {
+    return null != postProcessor;
+  }
 
-    public Toolbar newToolbar(){
-        if(!isExistToolbar()){
-            toolbar = new Toolbar();
-        }
-        return toolbar;
-    }
+  public void setToolbar(Toolbar toolbar) {
+    this.toolbar = toolbar;
+  }
 
-    protected boolean isExistToolbar(){
-        return toolbar != null;
+  public Toolbar newToolbar() {
+    if (!isExistToolbar()) {
+      toolbar = new Toolbar();
     }
+    return toolbar;
+  }
+
+  protected boolean isExistToolbar() {
+    return toolbar != null;
+  }
 
 //    @Override
 //    public List<Header> getColumns() {

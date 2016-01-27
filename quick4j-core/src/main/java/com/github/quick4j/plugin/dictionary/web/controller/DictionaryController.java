@@ -1,9 +1,10 @@
 package com.github.quick4j.plugin.dictionary.web.controller;
 
-import com.github.quick4j.core.service.Criteria;
-import com.github.quick4j.core.service.CrudService;
+import com.github.quick4j.core.service.SimpleCriteria;
+import com.github.quick4j.core.service.SimpleCrudService;
 import com.github.quick4j.core.web.http.JsonMessage;
 import com.github.quick4j.plugin.dictionary.entity.DicItem;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -20,91 +21,81 @@ import javax.annotation.Resource;
 @Controller
 @RequestMapping("/dictionary")
 public class DictionaryController {
-    private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
-    private final String LOCATION = "dictionary/";
 
-    @Resource
-    private CrudService<DicItem> simpleCrudService;
+  private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
+  private final String LOCATION = "dictionary/";
 
-    /**
-     * listing
-     * @return
-     */
-    @RequestMapping(method = RequestMethod.GET)
-    public String listing(){
-        return LOCATION + "index";
-    }
+  @Resource
+  private SimpleCrudService<DicItem> simpleCrudService;
 
-    /**
-     * show new form
-     * @return
-     */
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String showAddPage(){
-        return LOCATION + "new";
-    }
+  /**
+   * listing
+   */
+  @RequestMapping(method = RequestMethod.GET)
+  public String listing() {
+    return LOCATION + "index";
+  }
 
-    /**
-     * create
-     * @param dicItem
-     * @return
-     */
-    @RequestMapping(
-            value = "/new",
-            method = RequestMethod.POST,
-            produces = "application/json;charset=utf-8"
-    )
-    @ResponseBody
-    public JsonMessage doCreate(DicItem dicItem){
-        logger.info("create dictionary.");
-        simpleCrudService.save(dicItem);
-        return new JsonMessage().success();
-    }
+  /**
+   * show new form
+   */
+  @RequestMapping(value = "/new", method = RequestMethod.GET)
+  public String showAddPage() {
+    return LOCATION + "new";
+  }
 
-    /**
-     * show edit form
-     * @param id
-     * @return
-     */
-    @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
-    public String showEditPage(@PathVariable("id") String id){
-        return LOCATION + "edit";
-    }
+  /**
+   * create
+   */
+  @RequestMapping(
+      value = "/new",
+      method = RequestMethod.POST,
+      produces = "application/json;charset=utf-8"
+  )
+  @ResponseBody
+  public JsonMessage doCreate(DicItem dicItem) {
+    logger.info("create dictionary.");
+    simpleCrudService.save(dicItem);
+    return new JsonMessage().success();
+  }
 
-    /**
-     * edit
-     * @param id
-     * @param dicItem
-     * @return
-     */
-    @RequestMapping(
-            value = "/{id}/edit",
-            method = RequestMethod.POST,
-            produces = "application/json;charset=utf-8"
-    )
-    @ResponseBody
-    public JsonMessage doUpdate(@PathVariable("id") String id, DicItem dicItem){
-        logger.info("update dictionary.");
-        dicItem.setId(id);
-        simpleCrudService.save(dicItem);
-        return new JsonMessage().success();
-    }
+  /**
+   * show edit form
+   */
+  @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+  public String showEditPage(@PathVariable("id") String id) {
+    return LOCATION + "edit";
+  }
+
+  /**
+   * edit
+   */
+  @RequestMapping(
+      value = "/{id}/edit",
+      method = RequestMethod.POST,
+      produces = "application/json;charset=utf-8"
+  )
+  @ResponseBody
+  public JsonMessage doUpdate(@PathVariable("id") String id, DicItem dicItem) {
+    logger.info("update dictionary.");
+    dicItem.setId(id);
+    simpleCrudService.save(dicItem);
+    return new JsonMessage().success();
+  }
 
 
-    /**
-     * delete
-     * @param id
-     * @return
-     */
-    @RequestMapping(
-            value = "/{id}/delete",
-            method = RequestMethod.GET,
-            produces = "application/json;charset=utf-8"
-    )
-    @ResponseBody
-    public JsonMessage doDelete(@PathVariable("id") String id){
-        Criteria<DicItem> criteria = simpleCrudService.createCriteria(DicItem.class);
-        criteria.delete(id);
-        return new JsonMessage().success();
-    }
+  /**
+   * delete
+   */
+  @RequestMapping(
+      value = "/{id}/delete",
+      method = RequestMethod.GET,
+      produces = "application/json;charset=utf-8"
+  )
+  @ResponseBody
+  public JsonMessage doDelete(@PathVariable("id") String id) {
+    SimpleCriteria<DicItem> criteria = simpleCrudService.newCriteria(DicItem.class);
+    criteria.delete(id);
+    return new JsonMessage().success();
+  }
 }

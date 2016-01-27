@@ -6,11 +6,12 @@ import com.github.quick4j.core.repository.mybatis.support.Sort;
  * @author zhaojh
  */
 public interface Pageable<T> {
-    int getOffset();
 
-    int getLimit();
+  int getOffset();
 
-    T getParameters();
+  int getLimit();
 
-    Sort getSort();
+  T getParameters();
+
+  Sort getSort();
 }

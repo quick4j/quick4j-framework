@@ -6,72 +6,74 @@ import org.springframework.beans.BeanUtils;
  * @author zhaojh
  */
 public class Toolbutton implements Cloneable {
-    private String id;
-    private String text;
-    private String iconCls;
-    private String handler;
 
-    public Toolbutton(){}
+  private String id;
+  private String text;
+  private String iconCls;
+  private String handler;
 
-    public Toolbutton(String code, String iconCls, String handler) {
-        this.iconCls = iconCls;
-        this.id = code;
-        this.handler = handler;
-        this.text = code;
-    }
+  public Toolbutton() {
+  }
 
-    public Toolbutton(String code, String text, String iconCls, String handler) {
-        this.id = code;
-        this.text = text;
-        this.iconCls = iconCls;
-        this.handler = handler;
-    }
+  public Toolbutton(String code, String iconCls, String handler) {
+    this.iconCls = iconCls;
+    this.id = code;
+    this.handler = handler;
+    this.text = code;
+  }
 
-    public String getId() {
-        return id;
-    }
+  public Toolbutton(String code, String text, String iconCls, String handler) {
+    this.id = code;
+    this.text = text;
+    this.iconCls = iconCls;
+    this.handler = handler;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public String getIconCls() {
-        return iconCls;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public void setIconCls(String iconCls) {
-        this.iconCls = iconCls;
-    }
+  public String getIconCls() {
+    return iconCls;
+  }
 
-    public String getText() {
-        return text;
-    }
+  public void setIconCls(String iconCls) {
+    this.iconCls = iconCls;
+  }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+  public String getText() {
+    return text;
+  }
 
-    public String getHandler() {
-        return handler;
-    }
+  public void setText(String text) {
+    this.text = text;
+  }
 
-    public void setHandler(String handler) {
-        this.handler = handler;
-    }
+  public String getHandler() {
+    return handler;
+  }
 
-    @Override
-    public Toolbutton clone() throws CloneNotSupportedException {
-        Toolbutton toolbutton = new Toolbutton();
-        BeanUtils.copyProperties(this, toolbutton);
-        return toolbutton;
-    }
+  public void setHandler(String handler) {
+    this.handler = handler;
+  }
 
-    @Override
-    public String toString() {
-        return "Toolbutton{" +
-                "text='" + text + '\'' +
-                ", iconCls='" + iconCls + '\'' +
-                ", handler='" + handler + '\'' +
-                '}';
-    }
+  @Override
+  public Toolbutton clone() throws CloneNotSupportedException {
+    Toolbutton toolbutton = new Toolbutton();
+    BeanUtils.copyProperties(this, toolbutton);
+    return toolbutton;
+  }
+
+  @Override
+  public String toString() {
+    return "Toolbutton{" +
+           "text='" + text + '\'' +
+           ", iconCls='" + iconCls + '\'' +
+           ", handler='" + handler + '\'' +
+           '}';
+  }
 }

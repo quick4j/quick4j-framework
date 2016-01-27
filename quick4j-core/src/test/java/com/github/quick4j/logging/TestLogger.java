@@ -1,17 +1,17 @@
 package com.github.quick4j.logging;
 
-import com.github.quick4j.core.service.Criteria;
-import com.github.quick4j.core.service.CrudService;
+import com.github.quick4j.core.service.SimpleCriteria;
+import com.github.quick4j.core.service.SimpleCrudService;
 import com.github.quick4j.entity.User;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.jws.soap.SOAPBinding;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,122 +21,158 @@ import java.util.Map;
  * @author zhaojh
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"/spring-config.xml", "/spring-config-mybatis.xml"})
+@ContextConfiguration({
+                          "/spring-config.xml",
+                          "/spring-config-mybatis.xml",
+                          "/spring-config-jpa.xml"
+                      })
 public class TestLogger {
-    @Resource
-    private CrudService<User> simpleCrudService;
-    @Resource
-    private HelloService helloService;
 
-    @Test
-    @Transactional
-    public void testCreateEntity(){
-        User jack = new User();
-        jack.setName("Jack Chen");
-        jack.setLoginName("jack");
-        jack.setPassword("123");
+  @Resource
+  private SimpleCrudService<User> simpleCrudService;
+  @Resource
+  private HelloService helloService;
 
-        simpleCrudService.save(jack);
-    }
+  @Test
+  @Transactional
+  public void testCreateEntity() {
+    User jack = new User();
+    jack.setName("Jack Chen");
+    jack.setLoginName("jack");
+    jack.setPassword("123");
 
-    @Test
-    @Transactional
-    public void testCreateManyEntity(){
-        User jack = new User();
-        jack.setName("Jack Chen");
-        jack.setLoginName("jack");
-        jack.setPassword("123");
+    simpleCrudService.save(jack);
+  }
 
-        User tom = new User();
-        tom.setName("Tom Wang");
-        tom.setLoginName("tom");
-        tom.setPassword("123");
+  @Test
+  @Transactional
+  public void testCreateManyEntity() {
+    User jack = new User();
+    jack.setName("Jack Chen");
+    jack.setLoginName("jack");
+    jack.setPassword("123");
 
-        List<User> list = new ArrayList<User>();
-        list.add(jack);
-        list.add(tom);
+    User tom = new User();
+    tom.setName("Tom Wang");
+    tom.setLoginName("tom");
+    tom.setPassword("123");
 
-        simpleCrudService.save(list);
-    }
+    List<User> list = new ArrayList<User>();
+    list.add(jack);
+    list.add(tom);
 
-    @Test
-    @Transactional
-    public void testModifyEntity(){
-        User jack = new User();
-        jack.setName("Jack Chen");
-        jack.setLoginName("jack");
-        jack.setPassword("123");
-        simpleCrudService.save(jack);
+    simpleCrudService.save(list);
+  }
 
-        jack.setPassword("456");
-        simpleCrudService.save(jack);
-    }
+  @Test
+  @Transactional
+  public void testModifyEntity() {
+    User jack = new User();
+    jack.setName("Jack Chen");
+    jack.setLoginName("jack");
+    jack.setPassword("123");
+    simpleCrudService.save(jack);
 
-    @Test
-    @Transactional
-    public void testModifyManyEntity(){
-        User jack = new User();
-        jack.setName("Jack Chen");
-        jack.setLoginName("jack");
-        jack.setPassword("123");
-        simpleCrudService.save(jack);
+    jack.setPassword("456");
+    simpleCrudService.save(jack);
+  }
 
+  @Test
+  @Transactional
+  public void testModifyManyEntity() {
+    User jack = new User();
+    jack.setName("Jack Chen");
+    jack.setLoginName("jack");
+    jack.setPassword("123");
+    simpleCrudService.save(jack);
 
-        jack.setPassword("456");
+    jack.setPassword("456");
 
-        User tom = new User();
-        tom.setName("Tom Wang");
-        tom.setLoginName("tom");
-        tom.setPassword("123");
+    User tom = new User();
+    tom.setName("Tom Wang");
+    tom.setLoginName("tom");
+    tom.setPassword("123");
 
-        List<User> list = new ArrayList<User>();
-        list.add(jack);
-        list.add(tom);
+    List<User> list = new ArrayList<User>();
+    list.add(jack);
+    list.add(tom);
 
-        simpleCrudService.save(list);
-    }
+    simpleCrudService.save(list);
+  }
 
-    @Test
-    @Transactional
-    public void testDeleteEntity(){
-        User jack = new User();
-        jack.setName("Jack Chen");
-        jack.setLoginName("jack");
-        jack.setPassword("123");
-        simpleCrudService.save(jack);
+  @Test
+  @Transactional
+  public void testDeleteEntity() {
+    User jack = new User();
+    jack.setName("Jack Chen");
+    jack.setLoginName("jack");
+    jack.setPassword("123");
+    simpleCrudService.save(jack);
 
-        Criteria<User> criteria = simpleCrudService.createCriteria(User.class);
-        criteria.delete(jack.getId());
-    }
+    SimpleCriteria<User> criteria = simpleCrudService.newCriteria(User.class);
+    criteria.delete(jack);
+  }
 
-    @Test
-    @Transactional
-    public void testWriteLogAnnontation(){
-        User boy = new User();
-        boy.setName("Jack");
-        helloService.sayHello(boy);
+  @Test
+  @Transactional
+  public void testDeleteById() {
+    User jack = new User();
+    jack.setName("Jack Chen");
+    jack.setLoginName("jack");
+    jack.setPassword("123");
+    simpleCrudService.save(jack);
 
-        System.out.println("===========================");
+    SimpleCriteria<User> criteria = simpleCrudService.newCriteria(User.class);
+    criteria.delete(jack.getId());
+  }
 
-        User girl = new User();
-        girl.setName("Marry");
-        helloService.sayLove(boy, girl);
+  @Test
+  @Transactional
+  public void testDeleteByIds(){
+    User jack = new User();
+    jack.setName("Jack Chen");
+    jack.setLoginName("jack");
+    jack.setPassword("123");
+    simpleCrudService.save(jack);
 
-        System.out.println("===========================");
+    User zhang = new User();
+    zhang.setName("zhang");
+    zhang.setLoginName("zhang");
+    zhang.setPassword("123");
+    simpleCrudService.save(zhang);
 
-        Map<String, String> one = new HashMap<String, String>();
-        one.put("name","Jack");
+    SimpleCriteria<User> criteria = simpleCrudService.newCriteria(User.class);
+    criteria.delete(new String[]{zhang.getId(), jack.getId()});
+  }
 
-        Map<String, String> other = new HashMap<String, String>();
-        other.put("name", "Marry");
-        helloService.saySorry(one, other);
+  @Test
+  @Transactional
+  public void testWriteLogAnnontation() {
+    User boy = new User();
+    boy.setName("Jack");
+    helloService.sayHello(boy);
 
-        helloService.sayLala();
-    }
+    System.out.println("===========================");
 
-    @Test
-    @Transactional
-    public void testCustomLogBuilder(){
-        helloService.sayGoodbye();
-    }
+    User girl = new User();
+    girl.setName("Marry");
+    helloService.sayLove(boy, girl);
+
+    System.out.println("===========================");
+
+    Map<String, String> one = new HashMap<String, String>();
+    one.put("name", "Jack");
+
+    Map<String, String> other = new HashMap<String, String>();
+    other.put("name", "Marry");
+    helloService.saySorry(one, other);
+
+    helloService.sayLala();
+  }
+
+  @Test
+  @Transactional
+  public void testCustomLogBuilder() {
+    helloService.sayGoodbye();
+  }
 }

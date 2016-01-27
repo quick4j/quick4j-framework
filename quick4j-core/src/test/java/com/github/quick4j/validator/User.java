@@ -9,24 +9,25 @@ import javax.validation.constraints.NotNull;
  * @author zhaojh.
  */
 public class User {
-    @NotEmpty
-    private String name;
-    @Length(min = 6, max = 20)
-    private String password;
 
-    public String getName() {
-        return name;
-    }
+  @NotEmpty
+  private String name;
+  @Length(min = 6, max = 20)
+  private String password;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
 }

@@ -8,25 +8,27 @@ import com.github.quick4j.plugin.logging.exception.ParseLogFailureException;
 /**
  * @author zhaojh.
  */
-public class DeleteEntityLogParser extends AbstractEntityLogParser{
-    private static final String DELETE_ENTITY_LOG_CONTENT_TEMPLATE = "删除[%s]";
+public class DeleteEntityLogParser extends AbstractEntityLogParser {
 
-    public DeleteEntityLogParser(Object[] methodArgs) {
-        super(methodArgs);
+  private static final String DELETE_ENTITY_LOG_CONTENT_TEMPLATE = "删除[%s]";
+
+  public DeleteEntityLogParser(Object[] methodArgs) {
+    super(methodArgs);
+  }
+
+  @Override
+  public LogBuilder parse() {
+    Object[] methodArgs = getMethodArgs();
+
+    if (null == methodArgs || methodArgs.length == 0) {
+      throw new ParseLogFailureException("When Delete Entity.");
     }
 
-    @Override
-    public LogBuilder parse() {
-        Object[] methodArgs = getMethodArgs();
-
-        if(null == methodArgs || methodArgs.length == 0)
-            throw new ParseLogFailureException("When Delete Entity.");
-
-        if(!isWrittenLog()){
-            throw new NotFoundLogException("");
-        }
-
-        Object[] entities = getEntities();
-        return new EntityLogBuilder(DELETE_ENTITY_LOG_CONTENT_TEMPLATE, entities);
+    if (!isWrittenLog()) {
+      throw new NotFoundLogException("");
     }
+
+    Object[] entities = getEntities();
+    return new EntityLogBuilder(DELETE_ENTITY_LOG_CONTENT_TEMPLATE, entities);
+  }
 }

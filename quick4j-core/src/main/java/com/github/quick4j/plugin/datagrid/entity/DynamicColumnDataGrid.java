@@ -1,21 +1,23 @@
 package com.github.quick4j.plugin.datagrid.entity;
 
-import com.github.quick4j.core.repository.mybatis.Repository;
+
+import com.github.quick4j.core.repository.mybatis.MybatisRepository;
 
 import javax.annotation.Resource;
 
 /**
  * @author zhaojh
  */
-public abstract class DynamicColumnDataGrid extends AbstractDataGrid{
-    @Resource
-    private Repository repository;
+public abstract class DynamicColumnDataGrid extends AbstractDataGrid {
 
-    protected DynamicColumnDataGrid(String name, Class entity) {
-        super(name, entity);
-    }
+  @Resource
+  private MybatisRepository mybatisRepository;
 
-    protected Repository getRepository(){
-        return repository;
-    }
+  protected DynamicColumnDataGrid(String name, Class entity) {
+    super(name, entity);
+  }
+
+  protected MybatisRepository getRepository() {
+    return mybatisRepository;
+  }
 }

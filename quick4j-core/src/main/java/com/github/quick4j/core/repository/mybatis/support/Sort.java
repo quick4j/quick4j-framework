@@ -7,22 +7,24 @@ import java.util.List;
  * @author zhaojh.
  */
 public class Sort {
-    private List<Order> orders;
 
-    public Sort() {
-        orders = new ArrayList<Order>();
-    }
+  private List<Order> orders;
 
-    public Sort(Order order) {
-        orders = new ArrayList<Order>();
-        orders.add(order);
-    }
+  public Sort(String property) {
+    orders = new ArrayList<Order>();
+    orders.add(new Order(property, Order.ASC));
+  }
 
-    public Sort(List<Order> orders){
-        this.orders = orders;
-    }
+  public Sort(String property, String direction) {
+    orders = new ArrayList<Order>();
+    orders.add(new Order(property, direction));
+  }
 
-    public List<Order> getOrders() {
-        return orders;
-    }
+  public Sort(List<Order> orders) {
+    this.orders = orders;
+  }
+
+  public List<Order> getOrders() {
+    return orders;
+  }
 }

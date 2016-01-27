@@ -15,7 +15,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface WriteLog {
-    String value();
-    String data() default "";
-    Class<? extends AbstractLogBuilder> builder() default DefaultMethodLogBuilder.class;
+
+  String value();
+
+  String data() default "";
+
+  Class<? extends AbstractLogBuilder> builder() default DefaultMethodLogBuilder.class;
 }
