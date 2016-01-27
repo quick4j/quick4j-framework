@@ -94,7 +94,7 @@ public class Teacher extends BaseEntity {
   @Override
   @JsonIgnore
   public List<? extends BaseEntity> getSlave() {
-    return null;
+    return students;
   }
 
   public void addStudent(Student student) {

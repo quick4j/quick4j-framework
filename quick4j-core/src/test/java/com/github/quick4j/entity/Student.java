@@ -23,10 +23,8 @@ public class Student extends BaseEntity {
   private String name;
   @Column(name = "stu_age")
   private int age;
-  private String masterId;
 
-  public Student() {
-  }
+  public Student() {}
 
   public Student(String name) {
     this.name = name;

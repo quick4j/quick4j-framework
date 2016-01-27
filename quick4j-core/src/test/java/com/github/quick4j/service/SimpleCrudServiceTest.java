@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.github.quick4j.core.service.Criteria;
 import com.github.quick4j.core.service.SimpleCrudService;
+import com.github.quick4j.entity.Student;
 import com.github.quick4j.entity.Teacher;
 
 import org.junit.Test;
@@ -377,6 +378,25 @@ public class SimpleCrudServiceTest {
     assertThat(criteria.selectList()).doesNotContain(teachers.get(0))
         .contains(teachers.get(1), teachers.get(2));
   }
+
+    @Test
+    @Transactional
+    public void testSaveMasterAndSlave(){
+        Teacher wang = new Teacher("wang");
+        Student jack = new Student("Jack");
+        Student marry = new Student("Marry");
+
+        wang.addStudent(jack);
+        wang.addStudent(marry);
+
+        crudService.save(wang);
+
+        Criteria<Teacher> teacherCriteria = crudService.newCriteria(Teacher.class);
+        assertThat(teacherCriteria.selectOne(wang.getId())).isEqualTo(wang);
+
+        Criteria<Student> studentCriteria = crudService.newCriteria(Student.class);
+        assertThat(studentCriteria.selectList()).contains(jack, marry);
+    }
 
   private List<Teacher> prepareData() {
     List<Teacher> teachers = new ArrayList<Teacher>();
