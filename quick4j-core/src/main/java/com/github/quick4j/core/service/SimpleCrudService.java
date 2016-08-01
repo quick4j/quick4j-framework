@@ -55,7 +55,7 @@ public class SimpleCrudService<T extends BaseEntity> {
     return mybatisRepository;
   }
 
-  private T insert(T entity) {
+  protected T insert(T entity) {
     mybatisRepository.insert(entity);
 
     List<BaseEntity> slaveList = (List<BaseEntity>) entity.getSlave();
@@ -69,23 +69,23 @@ public class SimpleCrudService<T extends BaseEntity> {
     return (T) mybatisRepository.selectById(entity.getClass(), entity.getId());
   }
 
-  private void insert(List<T> entities) {
+  protected void insert(List<T> entities) {
     mybatisRepository.insert(entities);
   }
 
-  public T update(T entity) {
+  protected T update(T entity) {
     mybatisRepository.updateById(entity);
     return (T) mybatisRepository.selectById(entity.getClass(), entity.getId());
   }
 
-  private void update(List<T> entities) {
+  protected void update(List<T> entities) {
     mybatisRepository.updateById(entities);
   }
 
-  private Class getGenericType() {
-    Type genType = getClass().getGenericSuperclass();
-    Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
-    System.out.println("===>" + ((Class) params[0]).getName());
-    return (Class) params[0];
-  }
+//  private Class getGenericType() {
+//    Type genType = getClass().getGenericSuperclass();
+//    Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
+//    System.out.println("===>" + ((Class) params[0]).getName());
+//    return (Class) params[0];
+//  }
 }
